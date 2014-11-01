@@ -62,6 +62,7 @@ public class CopyFilesFromProperties {
 			if(!destFile.exists())
 				destFile.createNewFile();
 			Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			sourceFile.delete();
 		}
 	}
 	
