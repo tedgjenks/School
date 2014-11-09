@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_3jCQcGgpEeSOXt288_CeBw" name="NewModel">
+  <packagedElement xmi:type="uml:Interface" xmi:id="_eM__0GgqEeSOXt288_CeBw" name="Account">
+    <ownedOperation xmi:id="__A1pUGgqEeSOXt288_CeBw" name="withdraw" isAbstract="true">
+      <ownedParameter xmi:id="_BTlIAGgrEeSOXt288_CeBw" name="amount"/>
+      <ownedParameter xmi:id="_Pjx3MGgrEeSOXt288_CeBw" name="Amount Withdrawn" direction="return"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_-kpAEGgrEeSOXt288_CeBw" name="deposit" isAbstract="true">
+      <ownedParameter xmi:id="__4HaIGgrEeSOXt288_CeBw" name="amount"/>
+      <ownedParameter xmi:id="_BfeZgGgsEeSOXt288_CeBw" name="Amount Deposited" direction="return"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_lawsYGg9EeSOXt288_CeBw" name="applyInterest" isAbstract="true"/>
+    <ownedOperation xmi:id="_ocs2kGhBEeSOXt288_CeBw" name="transfer" isAbstract="true">
+      <ownedParameter xmi:id="_pmjakGhBEeSOXt288_CeBw" name="amount"/>
+      <ownedParameter xmi:id="_qd7HcGhBEeSOXt288_CeBw" name="account" type="_eM__0GgqEeSOXt288_CeBw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_k_7_UGhCEeSOXt288_CeBw" name="getBalance" isAbstract="true"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_iBONcGgsEeSOXt288_CeBw" name="AccountGen" isAbstract="true">
+    <ownedAttribute xmi:id="_vPqksGgsEeSOXt288_CeBw" name="balance">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_5C3kIGgsEeSOXt288_CeBw" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_3YDoIGgsEeSOXt288_CeBw" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_ZaaoUGgvEeSOXt288_CeBw" name="effectiveAnnualYield"/>
+    <ownedAttribute xmi:id="_2ydgYGgvEeSOXt288_CeBw" name="dateInterestLastApplied"/>
+    <interfaceRealization xmi:id="_swmhQGgsEeSOXt288_CeBw" client="_iBONcGgsEeSOXt288_CeBw" supplier="_eM__0GgqEeSOXt288_CeBw" contract="_eM__0GgqEeSOXt288_CeBw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Bjx1QGgtEeSOXt288_CeBw" name="CheckingAccountGen">
+    <generalization xmi:id="_QVlcsGgtEeSOXt288_CeBw" general="_iBONcGgsEeSOXt288_CeBw"/>
+    <ownedAttribute xmi:id="_wVTFIGguEeSOXt288_CeBw" name="linkedSavingsAccount" type="_V4KUcGgtEeSOXt288_CeBw" aggregation="composite">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0ELxsGguEeSOXt288_CeBw"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_80o6sGguEeSOXt288_CeBw" name="minBalance">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FlpdUGgvEeSOXt288_CeBw" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GPHREGgvEeSOXt288_CeBw" value="1"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_KxhsUGgvEeSOXt288_CeBw" name="numberOverdrafts"/>
+    <interfaceRealization xmi:id="_Fv9vkGgyEeSOXt288_CeBw" client="_Bjx1QGgtEeSOXt288_CeBw" supplier="_ykeyIGgxEeSOXt288_CeBw" contract="_ykeyIGgxEeSOXt288_CeBw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_V4KUcGgtEeSOXt288_CeBw" name="SavingsAccountGen">
+    <generalization xmi:id="_Z5SAgGgtEeSOXt288_CeBw" general="_iBONcGgsEeSOXt288_CeBw"/>
+    <ownedAttribute xmi:id="_KJWXYGhCEeSOXt288_CeBw" name="maxWithdrawals"/>
+    <ownedAttribute xmi:id="_MaON0GhCEeSOXt288_CeBw" name="numberWithdrawals"/>
+    <interfaceRealization xmi:id="_GiFJAGgyEeSOXt288_CeBw" client="_V4KUcGgtEeSOXt288_CeBw" supplier="_4V5-MGgxEeSOXt288_CeBw" contract="_4V5-MGgxEeSOXt288_CeBw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ZuxSQGgwEeSOXt288_CeBw" name="GenBank">
+    <ownedAttribute xmi:id="_EGbJcGgzEeSOXt288_CeBw" name="customers">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FcHKAGgzEeSOXt288_CeBw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GhhS4GgzEeSOXt288_CeBw" value="*"/>
+    </ownedAttribute>
+    <interfaceRealization xmi:id="_5v8oYGgzEeSOXt288_CeBw" client="_ZuxSQGgwEeSOXt288_CeBw" supplier="_DRy5cGgxEeSOXt288_CeBw" contract="_DRy5cGgxEeSOXt288_CeBw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_zEUlQGgwEeSOXt288_CeBw" name="Customer" isAbstract="true">
+    <ownedOperation xmi:id="_rnLMUGgyEeSOXt288_CeBw" name="addSavingsAccount" isAbstract="true">
+      <ownedParameter xmi:id="_s7iXMGgyEeSOXt288_CeBw" name="savingsAccount" type="_4V5-MGgxEeSOXt288_CeBw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_wWSm0GgyEeSOXt288_CeBw" name="addCheckingAccount" isAbstract="true">
+      <ownedParameter xmi:id="_yPvbwGgyEeSOXt288_CeBw" name="checkingAccount" type="_ykeyIGgxEeSOXt288_CeBw"/>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_DRy5cGgxEeSOXt288_CeBw" name="Bank" isAbstract="true">
+    <ownedOperation xmi:id="_Mn-lsGgxEeSOXt288_CeBw" name="addCustomer" isAbstract="true">
+      <ownedParameter xmi:id="_ndi58GgxEeSOXt288_CeBw" name="customer" type="_zEUlQGgwEeSOXt288_CeBw"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_uV_tkGgzEeSOXt288_CeBw" name="authenticate" isAbstract="true">
+      <ownedParameter xmi:id="_vl8SgGgzEeSOXt288_CeBw" name="name"/>
+      <ownedParameter xmi:id="_wXRBwGgzEeSOXt288_CeBw" name="pin"/>
+      <ownedParameter xmi:id="_xF9TwGgzEeSOXt288_CeBw" name="customer" type="_zEUlQGgwEeSOXt288_CeBw" direction="return"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_-1_8MGgzEeSOXt288_CeBw" name="logoff" isAbstract="true"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_ykeyIGgxEeSOXt288_CeBw" name="CheckingAccount" isAbstract="true">
+    <generalization xmi:id="__t11EGgxEeSOXt288_CeBw" general="_eM__0GgqEeSOXt288_CeBw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_4V5-MGgxEeSOXt288_CeBw" name="SavingsAccount" isAbstract="true">
+    <generalization xmi:id="_Ae6ssGgyEeSOXt288_CeBw" general="_eM__0GgqEeSOXt288_CeBw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_jc4rcGgyEeSOXt288_CeBw" name="CustomerGen">
+    <ownedAttribute xmi:id="_Tq-R4GgyEeSOXt288_CeBw" name="checkingAccount" type="_ykeyIGgxEeSOXt288_CeBw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VYHJIGgyEeSOXt288_CeBw"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_YFk08GgyEeSOXt288_CeBw" name="savingsAccount" type="_4V5-MGgxEeSOXt288_CeBw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cYie8GgyEeSOXt288_CeBw"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_nO9ZcGgzEeSOXt288_CeBw" name="name"/>
+    <ownedAttribute xmi:id="_qapSUGgzEeSOXt288_CeBw" name="pin"/>
+    <interfaceRealization xmi:id="_m8SxkGgyEeSOXt288_CeBw" client="_jc4rcGgyEeSOXt288_CeBw" supplier="_zEUlQGgwEeSOXt288_CeBw" contract="_zEUlQGgwEeSOXt288_CeBw"/>
+  </packagedElement>
+</uml:Model>
