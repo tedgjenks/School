@@ -4,7 +4,7 @@ Created on Oct 8, 2014
 @author: JenksT
 '''
 import math
-import edu.prime_factorization.scates.collin.prime_factorization as student_prime_factorization
+import patterson.prime_factorization as student_prime_factorization
 
 from jenks.math.prime_factorization import is_prime as expected_is_prime
 from jenks.math.prime_factorization import factor as expected_factor
