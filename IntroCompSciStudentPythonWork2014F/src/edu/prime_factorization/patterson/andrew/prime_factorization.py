@@ -1,20 +1,21 @@
 '''
 Created on Oct 13, 2014
 
-@author: RHODCA80
+@author: PATTLE25
 '''
 
 def is_prime(number):
     if number > 1:
         prime = True
         prime1 = 2
+        if number==2:
+            return prime
         divisor = prime1
         while prime and divisor < number:
             if number % divisor == 0:
-                return False
+                prime = False
             divisor = divisor + 1 
-        else:
-            return True
+    return prime
    
 def factor(number, factors):
     divisor = 2
@@ -52,10 +53,11 @@ def format_factors(factors):
                 factors.append((str(a)+"^"+str(count2)))
         else:
                 factors.append(a)
+ 
 
 def display_factors(number, factors):
     if is_prime(number) == True:
-        return(str(number) + " is prime!")
+        return(str(factors[0]) + " is prime!")
     else:
         display = (str(number)+' = ')
         for x in range(len(factors)):
