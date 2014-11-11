@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.jenks.banking;
+package edu.jenks.dist.banking;
 
 /**
  * @author JenksT
