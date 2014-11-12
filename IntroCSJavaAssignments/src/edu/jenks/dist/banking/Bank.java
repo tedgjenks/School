@@ -10,5 +10,6 @@ package edu.jenks.dist.banking;
 public interface Bank {
 
 	void addCustomer(Customer customer);
+	
 	void logoff(Customer customer);
 }
