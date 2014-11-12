@@ -20,7 +20,7 @@ public interface Customer {
 	String getName();
 	
 	/**
-	 * @param name - unique identifier for this customer
+	 * @param name unique identifier for this customer
 	 */
 	void setName(String name);
 }
