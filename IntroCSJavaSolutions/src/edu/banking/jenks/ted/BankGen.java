@@ -5,6 +5,7 @@ package edu.banking.jenks.ted;
 
 import edu.jenks.dist.banking.Bank;
 import edu.jenks.dist.banking.Customer;
+
 import java.util.*;
 
 /**
@@ -13,7 +14,7 @@ import java.util.*;
  */
 public class BankGen implements Bank {
 
-	private Map customers = new HashMap();
+	private Map<String, Customer> customers = new HashMap<String, Customer>();
 	
 	/**
 	 * 
@@ -30,14 +31,4 @@ public class BankGen implements Bank {
 		// TODO Auto-generated method stub
 
 	}
-
-	/* (non-Javadoc)
-	 * @see edu.jenks.dist.banking.Bank#logoff(edu.jenks.dist.banking.Customer)
-	 */
-	@Override
-	public void logoff(Customer customer) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

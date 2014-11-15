@@ -67,9 +67,6 @@
       <ownedParameter xmi:id="_wXRBwGgzEeSOXt288_CeBw" name="pin"/>
       <ownedParameter xmi:id="_xF9TwGgzEeSOXt288_CeBw" name="customer" type="_zEUlQGgwEeSOXt288_CeBw" direction="return"/>
     </ownedOperation>
-    <ownedOperation xmi:id="_-1_8MGgzEeSOXt288_CeBw" name="logoff" isAbstract="true">
-      <ownedParameter xmi:id="_bqfbAGtEEeSWAJzZ2Cppkw" name="customer" type="_zEUlQGgwEeSOXt288_CeBw"/>
-    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_ykeyIGgxEeSOXt288_CeBw" name="CheckingAccount" isAbstract="true">
     <generalization xmi:id="__t11EGgxEeSOXt288_CeBw" general="_eM__0GgqEeSOXt288_CeBw"/>

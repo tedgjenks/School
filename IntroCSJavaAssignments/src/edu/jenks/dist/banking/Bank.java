@@ -9,7 +9,10 @@ package edu.jenks.dist.banking;
  */
 public interface Bank {
 
+	/**
+	 * Add a customer to the valid customers for this bank.
+	 * 
+	 * @param customer
+	 */
 	void addCustomer(Customer customer);
-	
-	void logoff(Customer customer);
 }
