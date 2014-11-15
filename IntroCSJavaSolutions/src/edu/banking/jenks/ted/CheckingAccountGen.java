@@ -44,10 +44,10 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 	 * @return the amount actually transferred
 	 */
 	@Override
-	public double transfer(double amount, Account account) {
+	public double transfer(double amount, Account targetAccount) {
 		double amtWithdrawn = withdraw(amount);
 		if(amtWithdrawn > 0)
-			account.deposit(amtWithdrawn);
+			targetAccount.deposit(amtWithdrawn);
 		return amtWithdrawn;
 	}
 
