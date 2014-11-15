@@ -144,7 +144,7 @@
               <styles xmi:type="notation:FilteringStyle" xmi:id="_6e2ns2gxEeSOXt288_CeBw"/>
             </children>
             <styles xmi:type="notation:ShapeStyle" xmi:id="_6e2AoWgxEeSOXt288_CeBw" fontName="Segoe UI" bold="true"/>
-            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6e2AomgxEeSOXt288_CeBw" x="12" y="264"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6e2AomgxEeSOXt288_CeBw" x="108" y="264"/>
           </children>
           <children xmi:type="notation:Node" xmi:id="_lV_iIGgyEeSOXt288_CeBw" type="2003" element="_lVhBAGgyEeSOXt288_CeBw">
             <children xmi:type="notation:Node" xmi:id="_lWAJMGgyEeSOXt288_CeBw" type="5007"/>
@@ -696,7 +696,7 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@edgeMappings[name='CD_Generalization']"/>
       </ownedDiagramElements>
-      <ownedDiagramElements xmi:type="diagram:DNodeList" xmi:id="_lXNVAGgwEeSOXt288_CeBw" name="GenBank" outgoingEdges="_5v8oYWgzEeSOXt288_CeBw" width="12" height="10">
+      <ownedDiagramElements xmi:type="diagram:DNodeList" xmi:id="_lXNVAGgwEeSOXt288_CeBw" name="BankGen" outgoingEdges="_5v8oYWgzEeSOXt288_CeBw" width="12" height="10">
         <target xmi:type="uml:Class" href="banking.uml#_ZuxSQGgwEeSOXt288_CeBw"/>
         <semanticElements xmi:type="uml:Class" href="banking.uml#_ZuxSQGgwEeSOXt288_CeBw"/>
         <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
@@ -797,9 +797,10 @@
           </ownedStyle>
           <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']"/>
         </ownedElements>
-        <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="__x7Y8GgzEeSOXt288_CeBw" name="logoff()">
+        <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="__x7Y8GgzEeSOXt288_CeBw" name="logoff(customer : Customer)">
           <target xmi:type="uml:Operation" href="banking.uml#_-1_8MGgzEeSOXt288_CeBw"/>
           <semanticElements xmi:type="uml:Operation" href="banking.uml#_-1_8MGgzEeSOXt288_CeBw"/>
+          <semanticElements xmi:type="uml:Parameter" href="banking.uml#_bqfbAGtEEeSWAJzZ2Cppkw"/>
           <ownedStyle xmi:type="diagram:Square" xmi:id="__x7Y9WgzEeSOXt288_CeBw" labelFormat="italic" labelAlignment="LEFT" description="__x7Y82gzEeSOXt288_CeBw">
             <labelColor xmi:type="viewpoint:RGBValues" xmi:id="__x7Y9mgzEeSOXt288_CeBw"/>
             <borderColor xmi:type="viewpoint:RGBValues" xmi:id="__x7Y92gzEeSOXt288_CeBw"/>

@@ -43,7 +43,7 @@
     <ownedAttribute xmi:id="_MaON0GhCEeSOXt288_CeBw" name="numberWithdrawals"/>
     <interfaceRealization xmi:id="_GiFJAGgyEeSOXt288_CeBw" client="_V4KUcGgtEeSOXt288_CeBw" supplier="_4V5-MGgxEeSOXt288_CeBw" contract="_4V5-MGgxEeSOXt288_CeBw"/>
   </packagedElement>
-  <packagedElement xmi:type="uml:Class" xmi:id="_ZuxSQGgwEeSOXt288_CeBw" name="GenBank">
+  <packagedElement xmi:type="uml:Class" xmi:id="_ZuxSQGgwEeSOXt288_CeBw" name="BankGen">
     <ownedAttribute xmi:id="_EGbJcGgzEeSOXt288_CeBw" name="customers">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_FcHKAGgzEeSOXt288_CeBw"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_GhhS4GgzEeSOXt288_CeBw" value="*"/>
@@ -67,7 +67,9 @@
       <ownedParameter xmi:id="_wXRBwGgzEeSOXt288_CeBw" name="pin"/>
       <ownedParameter xmi:id="_xF9TwGgzEeSOXt288_CeBw" name="customer" type="_zEUlQGgwEeSOXt288_CeBw" direction="return"/>
     </ownedOperation>
-    <ownedOperation xmi:id="_-1_8MGgzEeSOXt288_CeBw" name="logoff" isAbstract="true"/>
+    <ownedOperation xmi:id="_-1_8MGgzEeSOXt288_CeBw" name="logoff" isAbstract="true">
+      <ownedParameter xmi:id="_bqfbAGtEEeSWAJzZ2Cppkw" name="customer" type="_zEUlQGgwEeSOXt288_CeBw"/>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Interface" xmi:id="_ykeyIGgxEeSOXt288_CeBw" name="CheckingAccount" isAbstract="true">
     <generalization xmi:id="__t11EGgxEeSOXt288_CeBw" general="_eM__0GgqEeSOXt288_CeBw"/>
