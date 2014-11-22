@@ -18,6 +18,7 @@ public class BankingFrame extends JFrame {
 	private static final Pattern AMOUNT_PATTERN = Pattern.compile("\\d*(\\.\\d{0,2})?");
 	private static final double DOLLAR_DELTA = 0.001;
 	private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
+	private static final String GENERAL_DIRECTIONS = "Please enter an amount and execute a transaction, or logoff.";
 	
 	private Customer customer = new CustomerGen("Mr. Jenks");
 	private JPanel contentPane;
@@ -103,10 +104,12 @@ public class BankingFrame extends JFrame {
 					CheckingAccount ca = customer.getCheckingAccount();
 					double amount = Double.parseDouble(amountText);
 					double amountWithdrawn = ca.withdraw(amount);
+					String message;
 					if(MathUtil.equals(amount, amountWithdrawn, DOLLAR_DELTA))
-						messageTextArea.setText(CURRENCY_FORMATTER.format(amountWithdrawn) + " was withdrawn.");
+						message = CURRENCY_FORMATTER.format(amountWithdrawn) + " was withdrawn.";
 					else
-						messageTextArea.setText("The transaction could not be completed - low funds.");
+						message = "The transaction could not be completed - low funds.";
+					displayMessage(message);
 				}
 			}
 		});
@@ -120,7 +123,7 @@ public class BankingFrame extends JFrame {
 					CheckingAccount ca = customer.getCheckingAccount();
 					double amount = Double.parseDouble(amountText);
 					double deposit = ca.deposit(amount);
-					messageTextArea.setText(CURRENCY_FORMATTER.format(deposit) + " was deposited.");
+					displayMessage(CURRENCY_FORMATTER.format(deposit) + " was deposited.");
 				}
 			}
 		});
@@ -131,7 +134,7 @@ public class BankingFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				CheckingAccount ca = customer.getCheckingAccount();
 				double balance = ca.getBalance();
-				messageTextArea.setText("Your available balance is " + CURRENCY_FORMATTER.format(balance));
+				displayMessage("Your available balance is " + CURRENCY_FORMATTER.format(balance));
 			}
 		});
 		functionPanel.add(balanceButton);
@@ -167,7 +170,7 @@ public class BankingFrame extends JFrame {
 	private boolean validateAmount(String amountText) {
 		boolean valid = AMOUNT_PATTERN.matcher(amountText).matches();
 		if(!valid) {
-			messageTextArea.setText(amountText + " is not a valid amount!  Enter a whole number followed by a maximum of two decimal places.");
+			displayMessage(amountText + " is not a valid amount!  Enter a whole number followed by a maximum of two decimal places.");
 			amountTextField.setBackground(Color.YELLOW);
 		}
 		return valid;
@@ -181,8 +184,13 @@ public class BankingFrame extends JFrame {
 		pinTextField.setText(customer == null ? "Pin" : "");
 		pinTextField.setVisible(customer == null);
 		logonButton.setVisible(customer == null);
-		messageTextArea.setText(customer == null ? "Please logon." : "Please enter an amount, select an account, and execute a transaction.");
+		messageTextArea.setText(customer == null ? "Please logon." : GENERAL_DIRECTIONS);
 		amountPanel.setVisible(customer != null);
 		functionPanel.setVisible(customer != null);
+	}
+	
+	private void displayMessage(String message) {
+		StringBuilder sb = new StringBuilder(message).append("\n").append(GENERAL_DIRECTIONS);
+		messageTextArea.setText(sb.toString());
 	}
 }
