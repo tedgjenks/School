@@ -4,4 +4,7 @@
 <import-control pkg="edu">
 	<allow pkg="java.text"/>
 	<allow pkg="edu.jenks"/>
+	<subpackage name="banking">
+		<allow pkg="java.util"/>
+	</subpackage>
 </import-control>
