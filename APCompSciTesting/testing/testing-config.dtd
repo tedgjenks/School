@@ -1,0 +1,17 @@
+<!ELEMENT projects (eclipse-student-root, google-drive, project+)>
+<!ELEMENT eclipse-student-root (#PCDATA)>
+
+<!ELEMENT google-drive (turnin-root, turnin-dir-suffix)>
+<!ELEMENT turnin-root (#PCDATA)>
+<!ELEMENT turnin-dir-suffix (#PCDATA)>
+
+<!ELEMENT project (name, package-root, test-class, files, students)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT package-root (#PCDATA)>
+<!ELEMENT test-class (#PCDATA)>
+<!ELEMENT files (file+)>
+<!ELEMENT students (student*)>
+<!ELEMENT file (#PCDATA)>
+<!ELEMENT student (last-name, first-name)>
+<!ELEMENT last-name (#PCDATA)>
+<!ELEMENT first-name (#PCDATA)>
