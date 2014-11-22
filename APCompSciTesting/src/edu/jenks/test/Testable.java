@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import edu.jenks.google.drive.Student;
 import edu.jenks.util.LoggingUtil;
 import edu.jenks.util.StringUtil;
 
@@ -25,37 +26,27 @@ public abstract class Testable {
 	protected boolean continueTesting = true;
 	//protected static final String LOG_FILE_PATH_START = "src/edu/jenks/";
 	
-	protected final Class<?>[] EMPTY_CLASS_ARRAY = {};
+	//protected final Class<?>[] EMPTY_CLASS_ARRAY = {};
 	protected final Object[] EMPTY_OJBECT_ARRAY = {};
 	
 	//public abstract String[] getTestMethods();
 	//public abstract String getLogFilePath();
 	//public abstract Testable getSingleton();
+	public abstract void verifySuperClass();
+	public abstract int getPointsAvailable();
+	
 	public void setLogFilePathGrades(String path) throws IOException {
-		gradesLogger = Logger.getLogger(getClass().getName());
+		gradesLogger = Logger.getLogger("Grades: " + getClass().getName());
 		LoggingUtil.initLocalFileLogger(gradesLogger, path);
 	}
 	
-	public void setLogFilePathFeedback(String path) throws IOException {
-		feedbackLogger = Logger.getLogger(getClass().getName());
+	public void setLogFilePathFeedback(String path, Student student) throws IOException {
+		feedbackLogger = Logger.getLogger(student + " Feedback: " + getClass().getName());
 		LoggingUtil.initLocalFileLogger(feedbackLogger, path);
 	}
 	
 	public void setUp() {
 		continueTesting = true;
-	}
-	
-	public void verifySuperclass(String expectedSuperclassName, Object studentObject) {
-		continueTesting = false;
-		if(studentObject != null) {
-			// verify that Object is the superclass
-			String superclassName = studentObject.getClass().getSuperclass().getName();
-			continueTesting = expectedSuperclassName.equals(superclassName);
-			if(!continueTesting)
-				feedbackLogger.log(Level.WARNING, "Expected superclass: " + expectedSuperclassName + "; actual superclass: " + superclassName);
-			else
-				feedbackLogger.log(Level.FINE, "Superclass validated.");
-		}
 	}
 	
 	public void test() {

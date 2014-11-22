@@ -7,6 +7,7 @@ import org.jdom2.*;
 
 import edu.jenks.test.TestRunner;
 import edu.jenks.xml.JDOMHelper;
+import static java.lang.System.out;
 
 public class CopyFilesFromXML {
 	
@@ -26,6 +27,7 @@ public class CopyFilesFromXML {
 			sourceRoot = new File(googleDriveElement.getChildText("turnin-root"));
 			turninDirSuffix = googleDriveElement.getChildText("turnin-dir-suffix");
 			File[] studentDirs = CopyFileHelper.getStudentDirectories(sourceRoot, turninDirSuffix);
+			out.println(studentDirs.length + " directories examined.");
 			processProjects(rootElement.getChildren("project"), studentDirs);
 			JDOMHelper.updateXml(document, TestRunner.XML_FILE_PATH);
 		} catch (JDOMException | IOException e) {
@@ -45,7 +47,7 @@ public class CopyFilesFromXML {
 					//System.out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetRoot + packageRoot + ", " + turninDirSuffix);
 					String source = studentDirs[index].getPath() + "\\" + fileName;
 					Student student = CopyFileHelper.getStudent(source, turninDirSuffix);
-					if(CopyFileHelper.copyStudentFiles(source, fileName, targetRoot + packageRoot, student))
+					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, targetRoot + packageRoot, student))
 						studentsToProcess.add(student);
 				}
 			}
@@ -61,6 +63,8 @@ public class CopyFilesFromXML {
 				studentElement.addContent(firstNameElement);
 				studentsElement.addContent(studentElement);
 			}
+			out.println(studentsToProcess.size() + " students processed for project " + project.getChildText("name"));
 		}
+		out.println(projects.size() + " projects processed.");
 	}
 }

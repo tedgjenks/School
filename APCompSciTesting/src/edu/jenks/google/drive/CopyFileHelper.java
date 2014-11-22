@@ -23,26 +23,29 @@ public class CopyFileHelper {
 		return parentFile.listFiles(textFilter);
 	}
 	
-	public static boolean copyStudentFiles(String source, final String fileName, String generalDest, Student student) throws IOException {
-		//String source = parentDirPath + "\\" + fileName;
+	public static boolean copyStudentFilesFromTurnIn(String source, final String fileName, String generalDest, Student student) throws IOException {
 		File sourceFile = new File(source);
 		boolean sourceFileExists = sourceFile.exists();
 		if(sourceFileExists) {
-			System.out.println(source);
+			//System.out.println(source);
 			String dest = generalDest + buildDestPackage(student);
-			System.out.println(dest);
+			//System.out.println(dest);
 			File destFile = new File(dest);
 			if(!destFile.exists())
 				destFile.mkdirs();
 			dest += fileName;
 			destFile = new File(dest);
-			System.out.println(dest);
+			//System.out.println(dest);
 			if(!destFile.exists())
 				destFile.createNewFile();
 			Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			//TODO uncomment sourceFile.delete();
+			sourceFile.delete();
 		}
 		return sourceFileExists;
+	}
+	
+	public static void copyFeedbackLogFromEclipse(File source, File target) throws IOException {
+		Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	}
 	
 	public static Student getStudent(String source, String gdStudentDirSuffix) {

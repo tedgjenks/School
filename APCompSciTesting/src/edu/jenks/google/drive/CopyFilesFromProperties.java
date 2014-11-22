@@ -21,7 +21,7 @@ public class CopyFilesFromProperties {
 				String fileName = props.getProperty("filename");
 				String source = studentDirs[index].getPath() + "\\" + fileName;
 				Student student = CopyFileHelper.getStudent(source, props.getProperty("google.drive.studentdir.suffix"));
-				CopyFileHelper.copyStudentFiles(source, fileName, props.getProperty("eclipse.student.python.sourcecode") + props.getProperty("eclipse.package"), student);
+				CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, props.getProperty("eclipse.student.python.sourcecode") + props.getProperty("eclipse.package"), student);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
