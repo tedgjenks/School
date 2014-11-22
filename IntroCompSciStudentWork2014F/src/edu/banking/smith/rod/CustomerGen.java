@@ -1,4 +1,4 @@
-package edu.banking.jenks.ted;
+package edu.banking.smith.rod;
 
 import edu.jenks.dist.banking.CheckingAccount;
 import edu.jenks.dist.banking.Customer;
@@ -16,11 +16,13 @@ public class CustomerGen implements Customer {
 	@Override
 	public void addCheckingAccount(CheckingAccount checkingAccount) {
 		this.checkingAccount = checkingAccount;
+		
 	}
 
 	@Override
 	public void addSavingsAccount(SavingsAccount savingsAccount) {
 		this.savingsAccount = savingsAccount;
+
 	}
 
 	@Override
@@ -29,18 +31,19 @@ public class CustomerGen implements Customer {
 	}
 
 	@Override
-	public SavingsAccount getSavingsAccount() {
-		return savingsAccount;
-	}
-
-	@Override
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setName(String name) {
+	public SavingsAccount getSavingsAccount() {
+		return savingsAccount;
+	}
+
+	@Override
+	public void setName(String arg0) {
 		this.name = name;
+
 	}
 
 }

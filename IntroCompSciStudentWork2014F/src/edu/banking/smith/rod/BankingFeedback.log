@@ -1,0 +1,20 @@
+Nov 22, 2014 1:12:09 PM edu.jenks.test.TestRunner processStudents
+INFO: Begin test of package edu.banking.smith.rod
+************************************************************
+Nov 22, 2014 1:12:09 PM edu.jenks.banking.test.BankingP1Test setUp
+INFO: checking account instantiated
+Nov 22, 2014 1:12:09 PM edu.jenks.banking.test.BankingP1Test setUp
+INFO: customer instantiated
+Nov 22, 2014 1:12:09 PM edu.jenks.banking.test.BankingP1Test testCustomer
+INFO: Add and get checking account to customer passed
+Nov 22, 2014 1:12:09 PM edu.jenks.banking.test.BankingP1Test testDeposit
+INFO: Deposit passed.
+Nov 22, 2014 1:12:09 PM edu.jenks.banking.test.BankingP1Test testWithdraw
+WARNING: Basic withdraw failed.
+Nov 22, 2014 1:12:09 PM edu.jenks.test.TestRunner processStudents
+INFO: Total for edu.banking.smith.rod:
+25 points.
+************************************************************
+
+Nov 22, 2014 1:12:09 PM edu.jenks.test.TestRunner processStudents
+INFO: You can earn another 15 points.

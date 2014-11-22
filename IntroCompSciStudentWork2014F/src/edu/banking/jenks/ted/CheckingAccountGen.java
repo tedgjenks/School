@@ -3,7 +3,9 @@
  */
 package edu.banking.jenks.ted;
 
-import edu.jenks.dist.banking.*;
+import edu.jenks.dist.banking.Account;
+import edu.jenks.dist.banking.AccountGen;
+import edu.jenks.dist.banking.CheckingAccount;
 
 /**
  * @author JenksT
