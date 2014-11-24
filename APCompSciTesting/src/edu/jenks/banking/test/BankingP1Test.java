@@ -17,9 +17,8 @@ import edu.jenks.util.ReflectionUtil;
  */
 public class BankingP1Test extends Testable {
 	
-	public static final String C_ACCOUNT_EXPECTED_SUPERCLASS = "edu.jenks.dist.banking.AccountGen";
-	public static final String CUSTOMER_EXPECTED_SUPERCLASS = "java.lang.Object";
-	
+	private static final String C_ACCOUNT_EXPECTED_SUPERCLASS = "edu.jenks.dist.banking.AccountGen";
+	private static final String CUSTOMER_EXPECTED_SUPERCLASS = "java.lang.Object";
 	private static final double DOLLAR_DELTA = 0.005;
 	private static final Class<?>[] C_ACCOUNT_CONSTRUCTOR_PARAM_TYPES = {double.class};
 	private static double C_ACCOUNT_INIT_BALANCE = 150;

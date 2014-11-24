@@ -75,7 +75,7 @@ public class TestRunner {
 					tester.feedbackLogger.log(Level.INFO, "Congratulation!  You earned all available points!");
 				else
 					tester.feedbackLogger.log(Level.INFO, "You can earn another " + (tester.getPointsAvailable() - tester.totalPoints) + " points.");
-				String percent = NumberFormat.getPercentInstance().format(tester.totalPoints / tester.getPointsAvailable());
+				String percent = NumberFormat.getPercentInstance().format(tester.totalPoints / (double)tester.getPointsAvailable());
 				tester.gradesLogger.log(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + tester.totalPoints + " => " + percent);
 			} catch(Exception e) {
 				tester.feedbackLogger.log(Level.SEVERE, e.getMessage());
