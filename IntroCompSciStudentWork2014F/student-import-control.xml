@@ -7,4 +7,7 @@
 	<subpackage name="banking">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="cb.scrambler">
+		<allow pkg="java.util"/>
+	</subpackage>
 </import-control>
