@@ -6,3 +6,5 @@
 /testing/googleDrive.properties
 /testing/testing-config.xml
 /testing/testPackages.txt
+*.log.*
+*.log

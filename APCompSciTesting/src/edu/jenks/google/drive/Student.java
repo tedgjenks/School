@@ -1,8 +1,11 @@
 package edu.jenks.google.drive;
 
+import org.jdom2.Element;
+
 public class Student {
 	private String firstName;
 	private String lastName;
+	private Element studentElement;
 
 	public Student(String firstName, String lastName) {
 		this.firstName = firstName;
@@ -23,6 +26,14 @@ public class Student {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	
+	public Element getStudentElement() {
+		return studentElement;
+	}
+
+	public void setStudentElement(Element studentElement) {
+		this.studentElement = studentElement;
 	}
 	
 	@Override

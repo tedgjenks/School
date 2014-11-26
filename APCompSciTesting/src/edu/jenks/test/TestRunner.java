@@ -1,9 +1,11 @@
 package edu.jenks.test;
 
 import java.io.*;
-import java.text.NumberFormat;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.lang.System.out;
 
@@ -15,14 +17,25 @@ import edu.jenks.xml.JDOMHelper;
 
 public class TestRunner {
 	
-	public final static String XML_FILE_PATH = "testing/testing-config.xml";
-	private final static String PACKAGE_ROOT_TAG = "package-root";
+	public static final String XML_FILE_PATH = "testing/testing-config.xml";
+	private static final String PACKAGE_ROOT_TAG = "package-root";
+	private static final String PROJECT_NAME_TAG = "name";
+	private static final String PROJECT_MAX_RUNTIME_SECS_TAG = "max-runtime-secs";
+	private static final String FORMATTED_DATE;
 	
 	private static Document document;
 	private static String eclipseStudentRoot;
 	private static String googleDriveTurninRoot;
 	private static String turninDirSuffix;
 	private static List<Element> projects;
+	private static Map<String, Logger> gradesLoggers = new HashMap<String, Logger>();
+	
+	static {
+		DateFormat sdf = SimpleDateFormat.getInstance();
+		((SimpleDateFormat)sdf).applyPattern("yyyy-MM-dd_HH-mm-ss");
+		FORMATTED_DATE = sdf.format(new Date());
+		System.out.println(FORMATTED_DATE);
+	}
 
 	public static void main(String[] args) {
 		out.println("Begin TestRunner");
@@ -46,50 +59,48 @@ public class TestRunner {
 		String testClass = project.getChildText("test-class");
 		if(students.size() > 0) {
 			out.println("Begin test: " + testClass);
-			Testable tester = (Testable)ReflectionUtil.newInstance(testClass);
-			initGradesLogger(tester, project);
-			processStudents(tester, project, studentsElement, students);
+			processStudents(testClass, project, studentsElement, students);
 			out.println("End test: " + testClass);
 		} else
 			out.println("No students for " + testClass);
 	}
 	
-	private static void processStudents(Testable tester, Element project, Element studentsElement, List<Element> students) throws IOException {
-		List<Element> studentsToRemove = new ArrayList<Element>(students.size());
+	private static void processStudents(String testClass, Element project, Element studentsElement, List<Element> students) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		ThreadGroup threadGroup = new ThreadGroup(project.getChildText(PROJECT_NAME_TAG));
+		Map<Student, String> studentFeedbackLogPath = new HashMap<Student, String>();
 		for(Element studentElement : students) {
+			Testable tester = (Testable)ReflectionUtil.newInstance(testClass);
+			initGradesLogger(tester, project);
 			Student student = new Student(studentElement.getChildText("first-name"), studentElement.getChildText("last-name"));
-			out.println("Begin student " + student.getLastName() + ", " + student.getFirstName());
+			student.setStudentElement(studentElement);
 			initStudentPackage(tester, project, student);
 			String feedbackLogPath = initFeedbackLogger(tester, project, student);
-			try {
-				tester.feedbackLogger.log(Level.INFO, "Begin test of package " + tester.studentPackage + "\r\n" + LoggingUtil.ASTERISKS);
-				tester.totalPoints = 0;
-				long startTime = System.currentTimeMillis();
-				tester.setUp();
-				tester.verifySuperClass();
-				tester.test();
-				long elapsedMillis = System.currentTimeMillis() - startTime;
-				tester.feedbackLogger.log(Level.FINE, "Test time in milliseconds: " + elapsedMillis);
-				tester.feedbackLogger.log(Level.INFO, "Total for " + tester.studentPackage + ":\n" + tester.totalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
-				if(tester.getPointsAvailable() == tester.totalPoints)
-					tester.feedbackLogger.log(Level.INFO, "Congratulation!  You earned all available points!");
-				else
-					tester.feedbackLogger.log(Level.INFO, "You can earn another " + (tester.getPointsAvailable() - tester.totalPoints) + " points.");
-				String percent = NumberFormat.getPercentInstance().format(tester.totalPoints / (double)tester.getPointsAvailable());
-				tester.gradesLogger.log(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + tester.totalPoints + " => " + percent);
-			} catch(Exception e) {
-				tester.feedbackLogger.log(Level.SEVERE, e.getMessage());
-			}
-			try {
-				sendFeedbackLog(feedbackLogPath, student);
-				studentsToRemove.add(studentElement);
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-			}
-			out.println("End student " + student.getLastName() + ", " + student.getFirstName());
+			studentFeedbackLogPath.put(student, feedbackLogPath);
+			tester.setThreadGroup(threadGroup);
+			tester.setStudent(student);
+			tester.start();
 		}
-		for(Element student : studentsToRemove)
-			studentsElement.removeContent(student);
+		TestableMonitor monitor = new TestableMonitor(threadGroup, project.getChildText(PROJECT_NAME_TAG), calcMaxRuntimeMillis(project));
+		monitor.start();
+		try {
+			monitor.getThread().join();
+		} catch (InterruptedException e) {
+			e.printStackTrace(System.err);
+		}
+		try {
+			for(Student student : studentFeedbackLogPath.keySet()) {
+				String feedbackLogPath = studentFeedbackLogPath.get(student);
+				sendFeedbackLog(feedbackLogPath, student);
+				studentsElement.removeContent(student.getStudentElement());
+			}
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+		}	
+	}
+	
+	private static long calcMaxRuntimeMillis(Element project) {
+		String maxRuntimeSecs = project.getChildText(PROJECT_MAX_RUNTIME_SECS_TAG);
+		return Long.parseLong(maxRuntimeSecs) * 1000;
 	}
 	
 	private static void sendFeedbackLog(String source, Student student) throws IOException {
@@ -107,7 +118,8 @@ public class TestRunner {
 		StringBuilder sb = new StringBuilder(50);
 		sb.append(eclipseStudentRoot).append(project.getChildText(PACKAGE_ROOT_TAG));
 		sb.append(student.getLastName().toLowerCase()).append("/").append(student.getFirstName().toLowerCase()).append("/");
-		sb.append(project.getChildText("name")).append("Feedback").append(".log");
+		sb.append(project.getChildText(PROJECT_NAME_TAG)).append("Feedback");
+		sb.append(FORMATTED_DATE).append(".log");
 		String path = sb.toString();
 		tester.setLogFilePathFeedback(path, student);
 		return path;
@@ -118,10 +130,16 @@ public class TestRunner {
 		StringBuilder sb = new StringBuilder(50);
 		for(int index = 0; index < directories.length - 1; index++)
 			sb.append(directories[index]).append("/");
-		String projectName = project.getChildText("name");
+		String projectName = project.getChildText(PROJECT_NAME_TAG);
 		sb.append("grades").append(projectName).append(".log");
-		tester.setLogFilePathGrades(sb.toString());
-		tester.gradesLogger.log(Level.INFO, "Grades for " + projectName);
+		Logger gradesLogger = gradesLoggers.get(projectName);
+		if(gradesLogger == null) {
+				gradesLogger = Logger.getLogger("Grades: " + tester.getClass().getName());
+				LoggingUtil.initLocalFileLogger(gradesLogger, sb.toString());
+				gradesLogger.log(Level.INFO, "Grades for " + projectName);
+				gradesLoggers.put(projectName, gradesLogger);
+		}
+		tester.setGradesLogger(gradesLogger);
 	}
 	
 	private static void initXml() throws JDOMException, IOException {

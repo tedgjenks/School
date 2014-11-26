@@ -3,6 +3,7 @@ package edu.jenks.test;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,36 +14,47 @@ import edu.jenks.google.drive.Student;
 import edu.jenks.util.LoggingUtil;
 import edu.jenks.util.StringUtil;
 
-public abstract class Testable {
+public abstract class Testable implements Runnable {
 	
 	private static final String TEST_METHOD_PREFIX = "test";
-	private static final TestMethodComparator TEST_METHOD_COMPARATOR = new TestMethodComparator();
+	protected static final Object[] EMPTY_OJBECT_ARRAY = {};
 	
 	protected String studentPackage;
-	//protected Logger logger;
-	protected Logger gradesLogger;
 	protected Logger feedbackLogger;
 	protected int totalPoints;
 	protected boolean continueTesting = true;
-	//protected static final String LOG_FILE_PATH_START = "src/edu/jenks/";
 	
-	//protected final Class<?>[] EMPTY_CLASS_ARRAY = {};
-	protected final Object[] EMPTY_OJBECT_ARRAY = {};
+	private Logger gradesLogger;
+	private final TestMethodComparator TEST_METHOD_COMPARATOR = new TestMethodComparator();
+	private Thread thread;
+	private ThreadGroup threadGroup;
+	private Student student;
 	
-	//public abstract String[] getTestMethods();
-	//public abstract String getLogFilePath();
-	//public abstract Testable getSingleton();
 	public abstract void verifySuperClass();
 	public abstract int getPointsAvailable();
 	
-	public void setLogFilePathGrades(String path) throws IOException {
-		gradesLogger = Logger.getLogger("Grades: " + getClass().getName());
-		LoggingUtil.initLocalFileLogger(gradesLogger, path);
+	public void start() {
+		feedbackLogger.log(Level.INFO, "Begin test of package " + studentPackage + "\r\n" + LoggingUtil.ASTERISKS);
+		setUp();
+		verifySuperClass();
+		if(thread == null && continueTesting) {
+			thread = threadGroup == null ? new Thread(this, student.toString()) : new Thread(threadGroup, this, student.toString());
+			thread.start();
+		}
 	}
 	
-	public void setLogFilePathFeedback(String path, Student student) throws IOException {
-		feedbackLogger = Logger.getLogger(student + " Feedback: " + getClass().getName());
-		LoggingUtil.initLocalFileLogger(feedbackLogger, path);
+	public void run() {
+		long startTime = System.currentTimeMillis();
+		test();
+		long elapsedMillis = System.currentTimeMillis() - startTime;
+		feedbackLogger.log(Level.FINE, "Test time in milliseconds: " + elapsedMillis);
+		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":\n" + totalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
+		if(getPointsAvailable() == totalPoints)
+			feedbackLogger.log(Level.INFO, "Congratulation!  You earned all available points!");
+		else
+			feedbackLogger.log(Level.INFO, "You can earn another " + (getPointsAvailable() - totalPoints) + " points.");
+		String percent = NumberFormat.getPercentInstance().format(totalPoints / (double)getPointsAvailable());
+		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + totalPoints + " => " + percent);
 	}
 	
 	public void setUp() {
@@ -90,14 +102,41 @@ public abstract class Testable {
 		if(message != null)
 			sb.append(" - ").append(message);
 		Throwable t = e.getCause();
-		if(t != null) {
+		if(t != null)
 			sb.append("; CAUSE: ").append(t.toString());
-			/*message = t.getMessage();
-			if(message != null)
-				sb.append(" - ").append(message);*/
-		}
 		sb.append("\n").append(notice).append("End unhandled exception").append(notice);
 		feedbackLogger.log(Level.WARNING, sb.toString());
+	}
+	
+	public void setLogFilePathFeedback(String path, Student student) throws IOException {
+		feedbackLogger = Logger.getLogger(student + " Feedback: " + getClass().getName());
+		LoggingUtil.initLocalFileLogger(feedbackLogger, path);
+	}
+	
+	public Logger getGradesLogger() {
+		return gradesLogger;
+	}
+	
+	public void setGradesLogger(Logger gradesLogger) {
+		this.gradesLogger = gradesLogger;
+	}
+	
+	public synchronized void logGradesMessage(Level level, String msg) {
+		gradesLogger.log(level, msg);
+	}
+	
+	public Student getStudent() {
+		return student;
+	}
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+	
+	public ThreadGroup getThreadGroup() {
+		return threadGroup;
+	}
+	public void setThreadGroup(ThreadGroup threadGroup) {
+		this.threadGroup = threadGroup;
 	}
 	
 	/*public void execute() {
