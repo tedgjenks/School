@@ -1,0 +1,19 @@
+grant codeBase "file:${{java.ext.dirs}}/*" {
+	permission java.security.AllPermission;
+};
+
+grant codeBase "file:/C:/Program Files/Java/-" {
+	permission java.security.AllPermission;
+};
+
+grant codeBase "file:/D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/APCompSciTesting/bin/-" {
+	permission java.security.AllPermission;
+};
+
+grant codeBase "file:/D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/APCompSciUtils/bin/-" {
+	permission java.security.AllPermission;
+};
+
+Set TestRunner VM arguments:
+-Djava.security.manager -Djava.security.policy=${git_work_tree}${project_path}/security/java.policy
+OR -Djava.security.manager -Djava.security.policy=${workspace_loc}${project_path}/security/java.policy

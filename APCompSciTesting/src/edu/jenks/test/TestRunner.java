@@ -34,12 +34,12 @@ public class TestRunner {
 		DateFormat sdf = SimpleDateFormat.getInstance();
 		((SimpleDateFormat)sdf).applyPattern("yyyy-MM-dd_HH-mm-ss");
 		FORMATTED_DATE = sdf.format(new Date());
-		System.out.println(FORMATTED_DATE);
 	}
 
 	public static void main(String[] args) {
 		out.println("Begin TestRunner");
 		try {
+			System.setSecurityManager(new CustomSecurityManager());
 			initXml();
 			for(Element project : projects) {
 				processProject(project);

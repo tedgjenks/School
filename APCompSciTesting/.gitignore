@@ -8,3 +8,4 @@
 /testing/testPackages.txt
 *.log.*
 *.log
+*java.policy
