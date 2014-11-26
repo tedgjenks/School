@@ -4,7 +4,7 @@
 .project
 *.log
 /testing/googleDrive.properties
-/testing/testing-config.xml
+/testing/*.xml
 /testing/testPackages.txt
 *.log.*
 *.log
