@@ -36,7 +36,7 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 		}
 		double newbalance = balance - withdrawnum;
 		setBalance(newbalance);
-		return arg0;
+		return withdrawnum;
 	}
 
 }

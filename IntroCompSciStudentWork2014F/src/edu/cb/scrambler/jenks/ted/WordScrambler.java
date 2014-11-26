@@ -3,7 +3,7 @@
  */
 package edu.cb.scrambler.jenks.ted;
 
-import java.util.List;
+import java.util.*;
 
 import edu.jenks.dist.cb.scrambler.Scrambler;
 

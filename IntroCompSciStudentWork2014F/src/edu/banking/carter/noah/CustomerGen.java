@@ -1,7 +1,4 @@
-package edu.banking.smith.eli;
-
-import java.lang.Override;
-import java.lang.String;
+package edu.banking.carter.noah;
 
 import edu.jenks.dist.banking.CheckingAccount;
 import edu.jenks.dist.banking.Customer;
@@ -11,23 +8,24 @@ public class CustomerGen implements Customer {
 	private CheckingAccount checkingAccount;
 	private SavingsAccount savingsAccount;
 	private String name;
-
-	public CustomerGen(String name) {
+	
+	public CustomerGen() {
+		
+		
+	}
+	public CustomerGen(String name){
 		this.name = name;
 	}
-
 	@Override
 	public void addCheckingAccount(CheckingAccount checkingAccount) {
 		this.checkingAccount = checkingAccount;
-
 	}
 
 	@Override
-	public void addSavingsAccount(SavingsAccount savingsAccount) {
-		this.savingsAccount = savingsAccount;
+	public void addSavingsAccount(SavingsAccount arg0) {
+		// TODO Auto-generated method stub
 
 	}
-
 	@Override
 	public CheckingAccount getCheckingAccount() {
 		return checkingAccount;
@@ -40,11 +38,12 @@ public class CustomerGen implements Customer {
 
 	@Override
 	public SavingsAccount getSavingsAccount() {
-		return savingsAccount;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void setName(String name) {
+	public void setName(String arg0) {
 		this.name = name;
 
 	}
