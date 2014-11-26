@@ -46,10 +46,7 @@ public class BankingP1Test extends Testable {
 			studentCustomer = (Customer)ReflectionUtil.newInstance(studentPackage + ".CustomerGen", CUSTOMER_CONSTRUCTOR_PARAM_TYPES, CUSTOMER_CONSTRUCTOR_ARGS);
 			feedbackLogger.log(Level.INFO, "customer instantiated");
 			totalPoints += 5;
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (Exception e) {
 			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
 			continueTesting = false;
 		}

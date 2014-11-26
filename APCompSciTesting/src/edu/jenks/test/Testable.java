@@ -40,7 +40,8 @@ public abstract class Testable implements Runnable {
 		if(thread == null && continueTesting) {
 			thread = threadGroup == null ? new Thread(this, student.toString()) : new Thread(threadGroup, this, student.toString());
 			thread.start();
-		}
+		} else
+			logEnd();
 	}
 	
 	public void run() {
@@ -48,6 +49,10 @@ public abstract class Testable implements Runnable {
 		test();
 		long elapsedMillis = System.currentTimeMillis() - startTime;
 		feedbackLogger.log(Level.FINE, "Test time in milliseconds: " + elapsedMillis);
+		logEnd();
+	}
+	
+	private void logEnd() {
 		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":\n" + totalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
 		if(getPointsAvailable() == totalPoints)
 			feedbackLogger.log(Level.INFO, "Congratulation!  You earned all available points!");

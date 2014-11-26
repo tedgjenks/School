@@ -57,8 +57,7 @@ public class ScramblerTest extends Testable {
 		try {
 			studentScrambler = (Scrambler)ReflectionUtil.newInstance(studentPackage + ".WordScrambler");
 			feedbackLogger.log(Level.INFO, "scrambler instantiated");
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException e) {
+		} catch (Exception e) {
 			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
 			continueTesting = false;
 		}
