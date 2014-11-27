@@ -10,4 +10,7 @@
 	<subpackage name="cb.scrambler">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="cb.lunch">
+		<allow pkg="java.util"/>
+	</subpackage>
 </import-control>
