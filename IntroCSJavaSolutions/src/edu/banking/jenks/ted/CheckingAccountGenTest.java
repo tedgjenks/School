@@ -1,10 +1,9 @@
-package edu.banking.jenks.ted.test;
+package edu.banking.jenks.ted;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import edu.banking.jenks.ted.CheckingAccountGen;
 import edu.jenks.dist.banking.CheckingAccount;
 
 public class CheckingAccountGenTest {
