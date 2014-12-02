@@ -20,40 +20,21 @@ public class WordScrambler implements Scrambler {
 
 	@Override
 	public String scrambleWord(String wordList) {
-		String word = "The Scramble is: ";
-        char[] wordArray = wordList.toCharArray();
-        int i, len = wordList.length();
-        for (i = 0; i <= len; i++){
-           char temp = wordArray[i];
-           if (temp != 'A') {
-           word = "" + temp;
-           } else {
-            i = i + 1;
-           	temp = wordArray[i];
-           	word = "" + temp;
-           	i = i - 1;
-           	temp = wordArray[i];
-           	word = "" + temp;
-           	i = i + 1;
-           }
-        
-        }
-		/*ArrayList al = new ArrayList();
-		ArrayList aln = new ArrayList();
-		al.add(wordList);
-		int i, len = al.size();
-		for (i = 0; i <= len; i++) {
-			if (i != 'A') {
-				aln.add(i);
-			} else {
-				al.set(i, i + 1);
-				aln.add(i);
-				al.set(i, i - 1);
-				aln.add(i);
-				i = i + 1;
+
+		String word = "";
+		int i, len = wordList.length();
+		String test = "A";
+		for (i = 0; i < len; i++){
+			if (i+1 > len) {
+				String temp = wordList.substring(i);
+				word = word + temp;
 			}
-		}*/
-		return /*aln.toString()*/ word;
+			String temp = wordList.substring(i, i+1);
+			if (temp.equals(test)) {
+				
+			}
+		}
+		return word;
 
 	}
 	

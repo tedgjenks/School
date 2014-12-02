@@ -24,6 +24,7 @@ public class TestRunner {
 	private static final String FORMATTED_DATE;
 	
 	private static Document document;
+	private static boolean feedbackEnabled;
 	private static String eclipseStudentRoot;
 	private static String googleDriveTurninRoot;
 	private static String turninDirSuffix;
@@ -87,15 +88,20 @@ public class TestRunner {
 		} catch (InterruptedException e) {
 			e.printStackTrace(System.err);
 		}
-		try {
-			for(Student student : studentFeedbackLogPath.keySet()) {
-				String feedbackLogPath = studentFeedbackLogPath.get(student);
-				sendFeedbackLog(feedbackLogPath, student);
-				studentsElement.removeContent(student.getStudentElement());
+		if(feedbackEnabled) {
+			out.println("Sending feedback " + StringUtil.buildString('*', 50));
+			try {
+				for(Student student : studentFeedbackLogPath.keySet()) {
+					String feedbackLogPath = studentFeedbackLogPath.get(student);
+					sendFeedbackLog(feedbackLogPath, student);
+					studentsElement.removeContent(student.getStudentElement());
+				}
+				System.out.println("Feedback sent " + StringUtil.buildString('*', 50));
+			} catch (IOException e) {
+				e.printStackTrace(System.err);
 			}
-		} catch (IOException e) {
-			e.printStackTrace(System.err);
-		}	
+		} else
+			out.println("TESTING MODE - no feedback sent & testing-config.xml not cleared!");
 	}
 	
 	private static long calcMaxRuntimeMillis(Element project) {
@@ -145,6 +151,7 @@ public class TestRunner {
 	private static void initXml() throws JDOMException, IOException {
 		document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
 		Element rootElement = document.getRootElement();
+		feedbackEnabled = Boolean.valueOf(rootElement.getAttributeValue("feedback-enabled"));
 		eclipseStudentRoot = rootElement.getChildText("eclipse-student-root");
 		Element googleDriveElement = rootElement.getChild("google-drive");
 		googleDriveTurninRoot = googleDriveElement.getChildText("turnin-root");

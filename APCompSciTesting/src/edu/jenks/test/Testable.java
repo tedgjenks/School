@@ -59,7 +59,7 @@ public abstract class Testable implements Runnable {
 		else
 			feedbackLogger.log(Level.INFO, "You can earn another " + (getPointsAvailable() - totalPoints) + " points.");
 		String percent = NumberFormat.getPercentInstance().format(totalPoints / (double)getPointsAvailable());
-		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + totalPoints + " => " + percent);
+		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + totalPoints + " -> " + percent);
 	}
 	
 	public void setUp() {
@@ -126,8 +126,10 @@ public abstract class Testable implements Runnable {
 		this.gradesLogger = gradesLogger;
 	}
 	
-	public synchronized void logGradesMessage(Level level, String msg) {
-		gradesLogger.log(level, msg);
+	public void logGradesMessage(Level level, String msg) {
+		synchronized(gradesLogger) {
+			gradesLogger.log(level, msg);
+		}
 	}
 	
 	public Student getStudent() {
@@ -143,10 +145,4 @@ public abstract class Testable implements Runnable {
 	public void setThreadGroup(ThreadGroup threadGroup) {
 		this.threadGroup = threadGroup;
 	}
-	
-	/*public void execute() {
-		Testable testable = getSingleton();
-		TestPackageList.testPackages(testable, testable.getLogFilePath());
-		logger.log(Level.INFO, "End execute Testable.");
-	}*/
 }

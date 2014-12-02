@@ -1,4 +1,5 @@
 <!ELEMENT projects (eclipse-student-root, google-drive, project+)>
+<!ATTLIST projects feedback-enabled (true|false) "true">
 <!ELEMENT eclipse-student-root (#PCDATA)>
 
 <!ELEMENT google-drive (turnin-root, turnin-dir-suffix)>
