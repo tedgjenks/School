@@ -13,40 +13,54 @@ public class WordScrambler implements Scrambler {
 	
 	@Override
 	public String scrambleWord(String word) {
-		String split = "A";
+		String switchindex = "A";
 		StringBuffer t = new StringBuffer();
 		String[] wordsplit = word.split("");
-		for (int i = 0; i < wordsplit.length; i++){	
-				try{
-					if (wordsplit[i].equals(split)){
-						t.append(wordsplit[i+1]);
-						t.append(wordsplit[i]);
-						i++;
-					}else{
-						t.append(wordsplit[i]);
-					}
-				}catch (ArrayIndexOutOfBoundsException e){
+		for (int i = 0; i < wordsplit.length - 1; i++){	
+				if (wordsplit[i].equals(switchindex) && !wordsplit[i+1].equals(switchindex)){
+					t.append(wordsplit[i+1]);
+					t.append(wordsplit[i]);
+					i++;
+				}else{
 					t.append(wordsplit[i]);
 				}
+		}
+		if (wordsplit.length != t.length()){
+			t.append(wordsplit[wordsplit.length-1]);
 		}
 		return (t.toString());
 	}
 	
 	@Override
 	public void scrambleOrRemove(List<String> wordlist) {
-		List<String> wordscrambled = new ArrayList<String>();
-		List<String> wordremoved = new ArrayList<String>();
-		String currentword = null;
-		for (int i = 0; i < wordlist.size(); i ++){
-			currentword = scrambleWord(wordlist.get(i));
-			wordscrambled.add(currentword);
-		}
-		for (int c = 0; c < wordlist.size(); c++){
-			if (wordlist.get(c).equals(wordscrambled.get(c))){
+		String scrambledword = null;
+		int count = 0;
+		for (int i = 0; i < wordlist.size(); i++){
+			scrambledword = scrambleWord(wordlist.get(i));
+			if (scrambledword.equals(wordlist.get(i))){
+				wordlist.set(i, "");
+				count++;
 			}else{
-				wordremoved.add(wordscrambled.get(c));
+				wordlist.set(i, scrambledword);
 			}
+		}
+		for (;count >= 0; count--){
+			wordlist.remove("");
 		}
 	}
 
+	public static void main(String[] arg0){
+		List<String> list = new ArrayList<String>();
+		list.add("TAN");
+		list.add("ABRACADABRA");
+		list.add("WHOA");
+		list.add("APPLE");
+		list.add("EGGS");
+		list.add("BANANA");
+		list.add("AARON");
+		list.add("ANTEATER");
+		WordScrambler phrase = new WordScrambler();
+		phrase.scrambleOrRemove(list);
+		System.out.println(list);
+	}
 }

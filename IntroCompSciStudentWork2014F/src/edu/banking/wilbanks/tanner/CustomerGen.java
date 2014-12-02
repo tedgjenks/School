@@ -9,8 +9,8 @@ public class CustomerGen implements Customer {
 	private CheckingAccount checkingAccount;
 	private SavingsAccount savingsAccount;
 	
-	public CustomerGen() {
-		this.name = "John Titus";
+	public CustomerGen(String name) {
+		this.name = name;
 	}
 
 	@Override

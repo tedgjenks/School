@@ -3,34 +3,36 @@ import java.util.*;
 
 import edu.jenks.dist.cb.scrambler.Scrambler;
 public class WordScrambler extends java.lang.Object implements Scrambler{
+	
+	private static final char TOKEN = 'A';
 	public WordScrambler() {
 		
 	}
 	public String scrambleWord(String word){
-		String switchindex = "A";
-		StringBuffer dorw = new StringBuffer();
-		String [] wordsplit = word.split("");
-		for (int i=0; i< wordsplit.length; i++)
-			try{
-				if(wordsplit[i].equals(switchindex)){
-					dorw.append(wordsplit[i+1]);
-					dorw.append(wordsplit[i]);
-					i++;
-				}else{
-					dorw.append(wordsplit[i]);
-				}
-				}catch(ArrayIndexOutOfBoundsException ex){
-					dorw.append(wordsplit[i]);
-				}
-				return dorw.toString();
+		StringBuilder sb = new StringBuilder(word.length());
+		for (int i = 0; i <word.length()-1; i++) {
+			char currentChar = word.charAt(i);
+			char nextChar = word.charAt(i+1);
+			if (currentChar == TOKEN && nextChar != TOKEN) {
+				sb.append(nextChar).append(currentChar);
+				i++;
+			}else{
+				sb.append(currentChar);
 			}
-		
-		
-		
+		}
+		if (word.length() > sb.length())
+			sb.append(word.charAt(word.length()-1));
+		return sb.toString();
+	}	
 		
 		@Override
-	public void scrambleOrRemove(List<String> arg0) {
-			// TODO Auto-generated method stub
+	public void scrambleOrRemove(List<String> wordList) {
+		for (int i = 0; i< wordList.size(); i++) {
+			if (wordList.get(i) == scrambleWord(wordList.get(i))){
+				wordList.remove(i);
+				i-=1;
+			}
+		}
 			
 		}
 	}

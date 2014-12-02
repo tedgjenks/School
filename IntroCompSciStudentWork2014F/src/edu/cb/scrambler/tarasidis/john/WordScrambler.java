@@ -1,6 +1,7 @@
 package edu.cb.scrambler.tarasidis.john;
 
 import java.util.List;
+
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
 public class WordScrambler implements Scrambler {
@@ -19,7 +20,6 @@ public class WordScrambler implements Scrambler {
 				 		wordList.add(scrambleWord(wordList.get(i)));
 				 	}
 			 }
-					 
 	}
 
 	@Override
@@ -29,13 +29,10 @@ public class WordScrambler implements Scrambler {
 		// int sizeOfList = letterList.length;
 		for (int len = letterList.length - 2; len >= 0; len--){
 			if (letterList[len] == 'A'){
-				len -= 1;
-				letterList[len] = 'A';
+				letterList[len] = letterList[len + 1];
+				letterList[len + 1] = 'A';
 			}
 		}
-		
 		return new String(letterList);
 	}
-	
-
 }

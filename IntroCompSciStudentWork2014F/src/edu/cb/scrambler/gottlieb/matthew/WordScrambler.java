@@ -4,23 +4,22 @@ import java.util.*;
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
 public class WordScrambler extends java.lang.Object implements Scrambler{
+	private static final char TOKEN = 'A';
 
 	public String scrambleWord(String word) {
-		String retWord="";
-		for(int i=0; i<word.length();i++){
-			String compWord= word.substring(i, i+1);
-			String compWord2= word.substring(i+1,i+2);
-			if (compWord== "A"){
-				if (compWord2 != "A"){
-					retWord= compWord2 +compWord;
-				}
+		StringBuilder sb= new StringBuilder(word.length());
+		for(int i=0; i < word.length(); i++){
+			char curChar = word.charAt(i);
+			char nextChar= word.charAt(i+1);
+			if (curChar== TOKEN && nextChar !=TOKEN){
+				sb.append(nextChar).append(curChar);
+				i++;
+			} else {
+				sb.append(curChar);
 			}
-			retWord= retWord + compWord + compWord2;
 		}
-		
-		return retWord;
+		return sb.toString();
 	}
-		
 	public void scrambleOrRemove(List <String> wordlist){
 	}
 }

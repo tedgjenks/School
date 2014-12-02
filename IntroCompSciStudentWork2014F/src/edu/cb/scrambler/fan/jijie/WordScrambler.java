@@ -5,6 +5,9 @@ import java.util.*;
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
 public class WordScrambler implements Scrambler {
+	
+	
+	private static final char TOKEN = 'A';
 
 	public WordScrambler() {
 		// TODO Auto-generated constructor stub
@@ -18,30 +21,33 @@ public class WordScrambler implements Scrambler {
 
 	@Override
 	public String scrambleWord(String word) {
-		// TODO Auto-generated method stub
-		Random r = new Random();
-	    char a[] = word.toCharArray();
-	    for( int i=0 ; i<a.length-1 ; i++ ) {
-	        int j = r.nextInt(a.length-1);
-	        char temp = a[i]; a[i] = a[j];  a[j] = temp;
-	    }      
-	    
-		/*String vowelA = "A";
-		char a[] = word.toCharArray();
-		for(int i=0;i<a.length-1;i=i+2) {
-             char temp= a[i];
-             a[i]=a[i+1];
-             a[i+1]=temp; 
-         }
-		*/
-	    return new String(a);
+		StringBuilder sb = new StringBuilder(word.length());
+		for(int index= 0; index < word.length() -1 ; index++) {
+			char curChar = word.charAt(index);
+			char nextChar = word.charAt(index + 1);
+			if(curChar == TOKEN && nextChar != TOKEN){
+				sb.append(nextChar).append(curChar);
+				index++;
+			}else{
+				
+				sb.append(curChar);
+			}
+		}
+		if(word.length()> sb.length()){
+			sb.append(word.charAt(word.length() -1 ));
+		}
+ 
+
+		return sb.toString();
 	}
+	    
 	
-	/*public static void main(String [] args){
+	
+	public static void main(String [] args){
 		WordScrambler sw= new WordScrambler();
-		String cat = "ANIMALS";
+	String cat = "APPLE";
 		System.out.println(sw.scrambleWord(cat));
 	}
-	*/
+	
 	
 }

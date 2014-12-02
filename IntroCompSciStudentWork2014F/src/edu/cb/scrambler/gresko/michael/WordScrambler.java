@@ -14,29 +14,38 @@ public class WordScrambler implements Scrambler {
 
 	@Override
 	public void scrambleOrRemove(List<String> wordList) {
-		// TODO Auto-generated method stub
-
+		String scrambledWord = null;
+		for (int index = 0; index < wordList.size(); index++) {
+			scrambledWord = scrambleWord(wordList.get(index));
+			if (wordList.get(index).equals(scrambledWord)) {
+				wordList.remove(wordList.get(index));
+				index--;
+			
+			}else{
+				wordList.set(index, scrambledWord);
+			}
+		}
 	}
 
 	@Override
 	public String scrambleWord(String wordList) {
-
-		String word = "";
 		int i, len = wordList.length();
+		StringBuilder word = new StringBuilder(len);
 		String test = "A";
-		for (i = 0; i < len; i++){
-			if (i+1 > len) {
-				String temp = wordList.substring(i);
-				word = word + temp;
-			}
-			String temp = wordList.substring(i, i+1);
-			if (temp.equals(test)) {
-				
+		for (i = 0; i < len - 1; i++){
+			String temp = wordList.substring(i, i + 1);
+			String tem = wordList.substring(i + 1, i + 2);
+			if (temp.equals(test) && !tem.equals(test)) {
+				word.append(tem).append(temp);
+				i = i + 1;
+			} else { 
+				word.append(temp);
 			}
 		}
-		return word;
+		if (len > word.length()) {
+			word.append(wordList.substring(wordList.length() - 1));
+		}
+		return word.toString();
 
 	}
-	
-
 }

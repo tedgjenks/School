@@ -1,10 +1,46 @@
 package edu.cb.scrambler.rhodes.carter;
 
-import java.util.List;
+import java.util.List; 
 
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
 public class WordScrambler implements Scrambler {
+
+	private static final char TOKEN ='A';
+	
+	public static void main(String[] args){WordScrambler ws = new WordScrambler();
+		String arg = "ABRACADABRA";
+		String exp = "BARCADABARA";
+		String act = ws.scrambleWord(arg);
+		System.out.println(arg);
+		System.out.println(exp);
+		System.out.println(act);
+	    arg = "EGGS";
+		exp = "EGGS";
+		act = ws.scrambleWord(arg);
+		System.out.println(arg);
+		System.out.println(exp);
+		System.out.println(act);
+		arg = "TAN";
+		exp = "TNA";
+		act = ws.scrambleWord(arg);
+		System.out.println(arg);
+		System.out.println(exp);
+		System.out.println(act);
+		arg = "WHOA";
+		exp = "WHOA";
+		act = ws.scrambleWord(arg);
+		System.out.println(arg);
+		System.out.println(exp);
+		System.out.println(act);
+		arg = "AARDVARK";
+		exp = "ARADVRAK";
+		act = ws.scrambleWord(arg);
+		System.out.println(arg);
+		System.out.println(exp);
+		System.out.println(act);
+		
+	}
 
 	public WordScrambler() {
 		// TODO Auto-generated constructor stub
@@ -17,13 +53,21 @@ public class WordScrambler implements Scrambler {
 	}
 
 	@Override
-	public String scrambleWord(String word) {
-		String newWord = "";
-		for(int i = word.length()-1; i>=0;i--){
-			newWord = newWord + word.charAt(i+1); 
+	public String scrambleWord(String word){
+		StringBuilder sb = new StringBuilder(word.length());
+		for(int index = 0; index < word.length() - 1;index ++){
+			char curChar = word.charAt(index);
+			char nextChar = word.charAt(index + 1);
+			if(curChar == TOKEN && nextChar != TOKEN){
+				sb.append(nextChar).append(curChar);
+				index++;
+			}else{
+				sb.append(curChar);
 			}
-		
-		return newWord;
+		}
+		if(word.length() > sb.length())
+			sb.append(word.charAt(word.length() - 1));
+		return sb.toString();
 	}
 
 }
