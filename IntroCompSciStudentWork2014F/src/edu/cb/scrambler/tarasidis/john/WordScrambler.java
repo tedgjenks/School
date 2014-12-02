@@ -10,7 +10,16 @@ public class WordScrambler implements Scrambler {
 
 	@Override
 	public void scrambleOrRemove(List<String> wordList) {
-
+			 for (int i = 0; i >= wordList.size(); i++) {
+				 String tempWord = scrambleWord(wordList.get(i));
+				 	if (tempWord.equals(wordList.get(i))) {
+				 		wordList.remove(i);
+				 	}
+				 	else {
+				 		wordList.add(scrambleWord(wordList.get(i)));
+				 	}
+			 }
+					 
 	}
 
 	@Override
@@ -20,11 +29,13 @@ public class WordScrambler implements Scrambler {
 		// int sizeOfList = letterList.length;
 		for (int len = letterList.length - 2; len >= 0; len--){
 			if (letterList[len] == 'A'){
-				len += 1;
+				len -= 1;
 				letterList[len] = 'A';
 			}
 		}
-		return letterList.toString();
+		
+		return new String(letterList);
 	}
+	
 
 }
