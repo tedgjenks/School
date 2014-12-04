@@ -28,9 +28,11 @@ public class WordScrambler extends java.lang.Object implements Scrambler{
 		@Override
 	public void scrambleOrRemove(List<String> wordList) {
 		for (int i = 0; i< wordList.size(); i++) {
-			if (wordList.get(i) == scrambleWord(wordList.get(i))){
+			if (wordList.get(i).equals(scrambleWord(wordList.get(i)))){
 				wordList.remove(i);
 				i-=1;
+			}else{
+				wordList.set(i, scrambleWord(wordList.get(i)));
 			}
 		}
 			

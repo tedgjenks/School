@@ -1,4 +1,5 @@
 package edu.cb.scrambler.carter.noah;
+import java.util.ArrayList;
 import java.util.List;
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
@@ -13,32 +14,35 @@ public class WordScrambler implements Scrambler {
 		String swapindex = "A";
 		StringBuffer dorw = new StringBuffer();
 		String[] wordsplit = word.split("");
-		for (int i = 0; i < wordsplit.length - 1; i++){	
-					if (wordsplit[i].equals(swapindex) && !wordsplit[i+1].equals(swapindex)){
+		for (int i = 0; i < wordsplit.length; i++){	
+				try{
+					if (wordsplit[i].equals(swapindex)){
 						dorw.append(wordsplit[i+1]);
 						dorw.append(wordsplit[i]);
 						i++;
 					}else{
 						dorw.append(wordsplit[i]);
 					}
-		}
-		if(wordsplit.length > dorw.length()){
-			dorw.append(wordsplit[wordsplit.length - 1]);
+				}catch (ArrayIndexOutOfBoundsException e){
+					dorw.append(wordsplit[i]);
+				}
 		}
 		return (dorw.toString());
 	}
 	
 	@Override
 	public void scrambleOrRemove(List<String> wordlist) {
+		List<String> scramlist = new ArrayList<String>(wordlist);
 		String oldword = null;
 		int cnt = 0;
 		for (int i = 0; i < wordlist.size(); i++){
 			oldword = scrambleWord(wordlist.get(i));
-			if (oldword.equals(wordlist.get(i))){
+			wordlist.set(i, oldword);
+		}
+		for (int i = 0; i < wordlist.size(); i++){
+			if (scramlist.get(i).equals(wordlist.get(i))){
 				wordlist.set(i, "");
-				cnt ++;
-			}else{
-				wordlist.set(i, oldword);
+				cnt++;
 			}
 		}
 		for (;cnt >= 0; cnt--){
@@ -46,4 +50,5 @@ public class WordScrambler implements Scrambler {
 		}
 	}
 	
-}
+	}
+

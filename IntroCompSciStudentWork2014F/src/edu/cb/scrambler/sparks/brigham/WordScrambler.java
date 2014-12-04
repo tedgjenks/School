@@ -11,7 +11,7 @@ public class WordScrambler extends java.lang.Object implements Scrambler {
 	}
 	public String scrambleWord(String word){
 		StringBuilder sb = new StringBuilder(word.length());
-		for (int i = 0; i < word.length();i++){
+		for (int i = 0; i < word.length()-1;i++){
 			char curChar = word. charAt(i);
 			char nextChar = word.charAt(i+1);
 			if (curChar == TOKEN && nextChar != TOKEN){
@@ -21,27 +21,20 @@ public class WordScrambler extends java.lang.Object implements Scrambler {
 				sb.append(curChar);
 			}
 		}
-		if (word.length() > sb.length()){
+		if (word.length() > sb.length())
 			sb.append(word.charAt(word.length()-1));
-		}
 		return sb.toString();
-		/*word = word.toLowerCase();
-		String ret_value = "";
-		for (int i = 0; i < (word.length()-1); i ++){
-			String compval = word.substring(i, i+1);
-			String compval2 = word. substring(i+1, i+2);
-			if(compval == "a "){
-				if(compval2 !="a"){
-					ret_value = ret_value + compval2 + compval;
-				}
-			}
-			ret_value = ret_value + compval +compval2;
-		}
-		ret_value = ret_value.toUpperCase();
-		return ret_value; */
+		
 	}
 	public void scrambleOrRemove(List<String> wordList){
-		
+		for(int i = 0; i < wordList.size(); i++){
+			if(wordList.get(i).equals(scrambleWord(wordList.get(i)))){
+				wordList.remove(i);
+				i-=1;
+			}else{
+				wordList.set(i, scrambleWord(wordList.get(i)));
+			}
+		}
 	}
 
 }

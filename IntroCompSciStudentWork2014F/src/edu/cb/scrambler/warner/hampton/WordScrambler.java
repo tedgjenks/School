@@ -8,15 +8,22 @@ public class WordScrambler implements Scrambler {
 	
 	private static final char TOKEN = 'A';
 
-	public WordScrambler() {
-		
-		
-	}
+	
 
 	@Override
-	public void scrambleOrRemove(List<String> arg0) {
-		
+	public void scrambleOrRemove(List<String> wordList) {
+		String scrambledWord = null;
+		for(int index = 0; index < wordList.size() - 1; index++){
+			scrambledWord = scrambleWord(wordList.get(index));
+			if (wordList.get(index).equals(scrambledWord)){
+				wordList.remove(wordList.get(index));
+				index--;
+			}else{
+				wordList.set(index, scrambledWord);
+			}
+		}
 	}
+	
 
 	@Override
 	public String scrambleWord(String word) {

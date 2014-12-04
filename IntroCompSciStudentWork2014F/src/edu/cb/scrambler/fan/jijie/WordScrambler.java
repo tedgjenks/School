@@ -6,19 +6,26 @@ import edu.jenks.dist.cb.scrambler.Scrambler;
 
 public class WordScrambler implements Scrambler {
 	
-	
 	private static final char TOKEN = 'A';
 
 	public WordScrambler() {
 		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public void scrambleOrRemove(List<String> wordList) {
 		// TODO Auto-generated method stub
-
+		for(int index = 0; index < wordList.size(); index++){
+			if (wordList.get(index).equals(scrambleWord(wordList.get(index)))){
+				wordList.remove(index);
+				index -= 1;
+			}else{
+				wordList.set(index, scrambleWord(wordList.get(index)));
+			}
+		}
 	}
-
+	
 	@Override
 	public String scrambleWord(String word) {
 		StringBuilder sb = new StringBuilder(word.length());
@@ -42,12 +49,15 @@ public class WordScrambler implements Scrambler {
 	}
 	    
 	
-	
+	/*
 	public static void main(String [] args){
 		WordScrambler sw= new WordScrambler();
 	String cat = "APPLE";
+	List <String> dog = Arrays.asList("foo", "bar");
 		System.out.println(sw.scrambleWord(cat));
+		System.out.println(sw.scrambleOrRemove(dog));
+		
 	}
-	
+	*/
 	
 }

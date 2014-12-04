@@ -1,4 +1,4 @@
-package edu.cb.scrambler.cromer.kaminer;
+package edu.cb.scrambler.li.zhilin;
 
 import java.util.List;
 
@@ -7,39 +7,35 @@ import edu.jenks.dist.cb.scrambler.Scrambler;
 public class WordScrambler implements Scrambler {
 
 	private static final char TOKEN = 'A';
-	
-	public WordScrambler() {
-		
+
+	public WordScrambler(String s) {
+		String retVal = new String(s);
+		if (s != null && s.length() > 0) {
+			retVal = s.substring(0, s.length() - 1);
+		}
 	}
 
 	@Override
-	public void scrambleOrRemove(List<String> wordList) {
-		for(int index = 0; index < wordList.size(); index++){
-			if (wordList.get(index).equals(scrambleWord(wordList.get(index)))){
-				wordList.remove(index);
-				index -= 1;
-			}else{
-				wordList.set(index, scrambleWord(wordList.get(index)));
-			}
-		}
+	public void scrambleOrRemove(List<String> word) {
+
 	}
+
 	@Override
 	public String scrambleWord(String word) {
-		char TOKEN ='A';
 		StringBuilder sb = new StringBuilder(word.length());
 		for(int index = 0; index < word.length() - 1; index++){
 			char curChar = word.charAt(index);
 			char nextChar = word.charAt(index + 1);
-			if(curChar == TOKEN && nextChar != TOKEN){
+			if(curChar == TOKEN && nextChar != TOKEN) {
 				sb.append(nextChar).append(curChar);
 				index++;
 			}else{
 				sb.append(curChar);
 			}
 		}
-		if(word.length() > sb.length()){
+		if(word.length() > sb.length())
 			sb.append(word.charAt(word.length() - 1));
-		}
 		return sb.toString();
 	}
+
 }
