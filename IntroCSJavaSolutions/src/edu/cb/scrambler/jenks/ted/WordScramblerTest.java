@@ -29,21 +29,21 @@ public class WordScramblerTest {
 
 	@Test
 	public void testScrambleOrRemove() {
-		for(String originalWord : expWordScramble.keySet()) {
-			String expected = expWordScramble.get(originalWord);
-			String actual = ws.scrambleWord(originalWord);
-			assertEquals(expected, actual);
-		}
-	}
-
-	@Test
-	public void testScrambleWord() {
 		List<String> wordList = new ArrayList<String>(5);
 		wordList.addAll(Arrays.asList("TAN", "ABRACADABRA", "WHOA", "APPLE", "EGGS"));
 		List<String> expected = new ArrayList<String>(3);
 		expected.addAll(Arrays.asList("TNA", "BARCADABARA", "PAPLE"));
 		ws.scrambleOrRemove(wordList);
 		assertEquals(expected, wordList);
+	}
+
+	@Test
+	public void testScrambleWord() {
+		for(String originalWord : expWordScramble.keySet()) {
+			String expected = expWordScramble.get(originalWord);
+			String actual = ws.scrambleWord(originalWord);
+			assertEquals(expected, actual);
+		}
 	}
 
 }
