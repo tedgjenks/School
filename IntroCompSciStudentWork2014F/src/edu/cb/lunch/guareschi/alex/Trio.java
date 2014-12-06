@@ -14,33 +14,40 @@ public class Trio extends AbstractTrio {
 	@Override
 	public String getName() {
 		String trioName = "";
-		String sandwich = getSandwich().toString();
-		String salad = getSalad().toString();
-		String drink = getDrink().toString();
-		trioName= (sandwich + "/" + salad + "/" + drink + "Trio");
+		Sandwich sandwich = getSandwich();
+		String sandwichName = sandwich.getName();
+		Salad salad = getSalad();
+		String saladName = salad.getName();
+		Drink drink = getDrink();
+		String drinkName = drink.getName();
+		trioName= (sandwichName + "/" + saladName + "/" + drinkName + " Trio");
 		return trioName;
 	}
 
 	@Override
 	public double getPrice() {
-		double price = 0.00;
-		String trioName = getName();
-		if (trioName.equals("Cheeseburger/Spinach Salad/Orange Soda Trio"));
-			price += 4.00;
-		if (trioName.equals("Cheeseburger/Spinach Salad/Cappuccino Trio"));
-			price += 6.25;
-		if (trioName.equals("Cheeseburger/Coleslaw/Orange Soda Trio"));
-			price += 4.00;
-		if (trioName.equals("Cheeseburger/Coleslaw/Cappuccino Trio"));
-			price += 6.25;
-		if (trioName.equals("Club Sandwich/Spinach Salad/Orange Soda Trio"));
-			price += 4.00;		
-		if (trioName.equals("Club Sandwich/Coleslaw/Orange Soda Trio"));
-			price += 4.00;
-		if (trioName.equals("Club Sandwich/Spinach Salad/Cappuccino Trio"));
-			price += 6.25;
-		if (trioName.equals("Club Sandwich/Coleslaw/Cappuccino Trio"));
-			price += 6.25;
+		double price = 0.00d;
+		Sandwich sandwich = getSandwich();
+		double sandwichPrice= sandwich.getPrice();
+		Salad salad = getSalad();
+		double saladPrice= salad.getPrice();
+		Drink drink = getDrink();
+		double drinkPrice= drink.getPrice();
+		double price1 = sandwichPrice + saladPrice;
+		double price2 = sandwichPrice + drinkPrice;
+		double price3 = saladPrice+drinkPrice;
+		if (price1 >= price2 && price1>= price3){
+			return price1;
+		}
+		if (price2 >= price1 && price2>=price3){
+			return price2;
+		}
+		if (price3>=price1 && price3>=price2){
+			return price3;
+			
+		}
+		
+
 		return price;
 	}
 

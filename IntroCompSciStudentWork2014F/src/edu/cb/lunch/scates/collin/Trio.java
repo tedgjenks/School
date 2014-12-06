@@ -1,38 +1,37 @@
 package edu.cb.lunch.scates.collin;
-import edu.jenks.dist.cb.lunch.AbstractTrio;
-import edu.jenks.dist.cb.lunch.Drink;
-import edu.jenks.dist.cb.lunch.MenuItem;
-import edu.jenks.dist.cb.lunch.Salad;
-import edu.jenks.dist.cb.lunch.Sandwich;
+import edu.jenks.dist.cb.lunch.*;
 
-public class Trio extends AbstractTrio {
+public class Trio extends AbstractTrio implements MenuItem {
+	private Sandwich sandwich;
+	private Salad salad;
+	private Drink drink;
 
 	public Trio(Sandwich sandwich, Salad salad, Drink drink) {
 		super(sandwich, salad, drink);
-		String[] sandwich1 = {"Cheeseburger, Clubsandwich"};
-		String [] salad1 = {"Spinach salad, Coleslaw"};
-		String [] drink1 = {"Orange Soda, Cappuccino"};
+		this.sandwich = sandwich;
+		this.salad = salad;
+		this.drink = drink;
+		
 	}
 
 	@Override
 	public String getName(){
-		return null;
+		Sandwich Sandwich = new Sandwich ("Cheeseburger", 2.00);
+		Salad Salad = new Salad ("Cesar", 1.00);
+		Drink Drink = new Drink ("Soft Drink", 1.00);
+		return getName();
 	}
 	
 	@Override
 	public double getPrice() {
-		String cheeseburger = "$2.75";
-		String Clubsandwich = "$2.75";
-		String Spinachsalad = "$1.25";
-		String Coleslaw = "$1.25";
-		String Orangesoda = "$1.25";
-		String Cappuccino = "$3.50";
+		sandwich.getPrice();
+		salad.getPrice();
+		drink.getPrice();
 		return 0;
 	}
 	
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 	}
 

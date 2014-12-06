@@ -14,27 +14,50 @@ public class Trio extends AbstractTrio {
 
 	@Override
 	public String getName() {
-		Sandwich sandwichObj = getSandwich();
-		Salad saladObj = getSalad();
-		Drink drinkObj = getDrink();
+		String sandwichObj = getSandwich().getName();
+		String saladObj = getSalad().getName();
+		String drinkObj = getDrink().getName();
 		StringBuilder name = new StringBuilder();
-		name.append(sandwichObj + "/");
-		name.append(saladObj + "/");
-		name.append(drinkObj);
+		name.append(sandwichObj + "/").append(saladObj + "/").append(drinkObj + " Trio");
 		return name.toString();
 	}
 
 	@Override
 	public double getPrice() {
-		int price = 0;
-		String[] name = getName().split("/");
-		String sandwich = name[0];
-		String salad = name[1];
-		String drink = name[2];
-		String sChoiceOne = "Cheeseburger";
-		if (sandwich.equals(sChoiceOne)) { 
-			//price = price + 2.75;
+		double price = 0;
+		double sandwichPrice = getSandwich().getPrice();
+		double saladPrice = getSalad().getPrice();
+		double drinkPrice = getDrink().getPrice();
+		double lowestValue = 0;
+		price = sandwichPrice + saladPrice + drinkPrice;
+		if (sandwichPrice > saladPrice && sandwichPrice > drinkPrice) {
+			price = price + 0;
+		} else if (sandwichPrice < saladPrice && sandwichPrice > drinkPrice) {
+			price = price + 0;
+		} else if (sandwichPrice > saladPrice && sandwichPrice < drinkPrice) {
+			price = price + 0;
+		} else {
+			lowestValue = sandwichPrice;
 		}
+		if (sandwichPrice < saladPrice && saladPrice > drinkPrice) {
+			price = price + 0;
+		} else if (sandwichPrice < saladPrice && saladPrice < drinkPrice) {
+			price = price + 0;
+		} else if (sandwichPrice > saladPrice && saladPrice > drinkPrice) {
+			price = price + 0;
+		} else {
+			lowestValue = saladPrice;
+		}
+		if (drinkPrice > saladPrice && sandwichPrice < drinkPrice) {
+			price = price + 0;
+		} else if (drinkPrice > saladPrice && sandwichPrice > drinkPrice) {
+			price = price + 0;
+		} else if (drinkPrice < saladPrice && sandwichPrice < drinkPrice) {
+			price = price + 0;
+		} else {
+			lowestValue = drinkPrice;
+		}
+		price = price - lowestValue;
 		return price;
 	}
 

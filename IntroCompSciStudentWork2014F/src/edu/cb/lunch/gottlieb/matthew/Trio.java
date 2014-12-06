@@ -13,12 +13,19 @@ public class Trio extends AbstractTrio {
 		String sandwich = getSandwich().toString();
 		String salad = getSalad().toString();
 		String drink = getDrink().toString();
-		String trio = "";
-		return null;	
+		String trioName= "";
+		trioName = (sandwich+"/"+salad+"/"+drink+" Trio");
+		return trioName;
 	}
 
 	@Override
 	public double getPrice() {
+		double sandwich = getSandwich().getPrice();
+		double salad = getSalad().getPrice();
+		double drink = getDrink().getPrice();
+		
+		
+		
 		
 		return 0;
 	 

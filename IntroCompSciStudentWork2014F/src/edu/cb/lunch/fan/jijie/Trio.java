@@ -18,11 +18,13 @@ public class Trio extends AbstractTrio implements MenuItem {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		Sandwich sandwich= null;
-		Salad salad = null;
-		Drink drink = null; 
-		//String name= 
-		return null;
+		Sandwich sandwich= getSandwich();
+		Salad salad = getSalad();
+		Drink drink = getDrink(); 
+		StringBuilder name = new StringBuilder(); 
+		name.append(sandwich + "/").append(salad + "/").append(drink + "Trio");
+		
+		return name.toString();
 	}
 
 	@Override
@@ -31,4 +33,11 @@ public class Trio extends AbstractTrio implements MenuItem {
 		return 0;
 	}
 
+	/*
+	
+	public static void main(String [] args){
+		Sandwich sandwich = "PBJ";
+		
+	}
+	*/
 }

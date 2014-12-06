@@ -10,13 +10,15 @@ public class Trio extends AbstractTrio {
 
 	@Override
 	public String getName() {
-		String getString = null;
-		return getString;
+		String sandwich = getSandwich().getName();
+		String salad = getSalad().getName();
+		String drink = getDrink().getName();
+		return getName();
 	}
 
 	@Override
 	public double getPrice() {
-		getPrice();
+		
 		return getPrice();
 	}
 

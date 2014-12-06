@@ -8,59 +8,31 @@ public class WordScrambler implements Scrambler {
 
 	private static final char TOKEN ='A';
 	
-	public static void main(String[] args){WordScrambler ws = new WordScrambler();
-		String arg = "ABRACADABRA";
-		String exp = "BARCADABARA";
-		String act = ws.scrambleWord(arg);
-		System.out.println(arg);
-		System.out.println(exp);
-		System.out.println(act);
-	    arg = "EGGS";
-		exp = "EGGS";
-		act = ws.scrambleWord(arg);
-		System.out.println(arg);
-		System.out.println(exp);
-		System.out.println(act);
-		arg = "TAN";
-		exp = "TNA";
-		act = ws.scrambleWord(arg);
-		System.out.println(arg);
-		System.out.println(exp);
-		System.out.println(act);
-		arg = "WHOA";
-		exp = "WHOA";
-		act = ws.scrambleWord(arg);
-		System.out.println(arg);
-		System.out.println(exp);
-		System.out.println(act);
-		arg = "AARDVARK";
-		exp = "ARADVRAK";
-		act = ws.scrambleWord(arg);
-		System.out.println(arg);
-		System.out.println(exp);
-		System.out.println(act);
-		
-	}
 
 	public WordScrambler() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void scrambleOrRemove(List<String> arg0) {
-		// TODO Auto-generated method stub
-
+	public void scrambleOrRemove(List<String> wordList) {
+		for(int i = 0; i <=wordList.size()-1; i++){
+			if(wordList.get(i).equals(scrambleWord(wordList.get(i)))){
+				wordList.remove(i);
+			}else{
+				wordList.set(i, scrambleWord(wordList.get(i)));
+			}
+		}	
 	}
 
 	@Override
 	public String scrambleWord(String word){
 		StringBuilder sb = new StringBuilder(word.length());
-		for(int index = 0; index < word.length() - 1;index ++){
-			char curChar = word.charAt(index);
-			char nextChar = word.charAt(index + 1);
+		for(int i = 0; i < word.length() - 1;i ++){
+			char curChar = word.charAt(i);
+			char nextChar = word.charAt(i + 1);
 			if(curChar == TOKEN && nextChar != TOKEN){
 				sb.append(nextChar).append(curChar);
-				index++;
+				i++;
 			}else{
 				sb.append(curChar);
 			}
