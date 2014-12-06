@@ -8,7 +8,7 @@ public class WordScrambler implements Scrambler {
 	public WordScrambler() {
 		
 	}
-
+/*
 	@Override
 	public void scrambleOrRemove(List<String> wordList) {
 			 for (int i = 0; i >= wordList.size(); i++) {
@@ -16,23 +16,39 @@ public class WordScrambler implements Scrambler {
 				 	if (tempWord.equals(wordList.get(i))) {
 				 		wordList.remove(i);
 				 	}
-				 	else {
-				 		wordList.add(scrambleWord(wordList.get(i)));
-				 	}
+				 	
 			 }
 	}
-
+*/
 	@Override
-	public String scrambleWord(String word) {
-		char[] letterList = word.toCharArray();
-		// int a = 0;
-		// int sizeOfList = letterList.length;
-		for (int len = letterList.length - 2; len >= 0; len--){
-			if (letterList[len] == 'A'){
-				letterList[len] = letterList[len + 1];
-				letterList[len + 1] = 'A';
+	public void scrambleOrRemove(List<String> wordList) {
+		for (int index = wordList.size() - 1; index >= 0; index --){
+			String word = wordList.get(index);
+			String scrambled = scrambleWord(word);
+			if (word.equals(scrambled)) {
+				wordList.remove(index);
+			} else {
+				wordList.set(index, scrambled);
 			}
 		}
-		return new String(letterList);
+	}
+	private final static char TOKEN = 'A';
+	@Override
+	public String scrambleWord(String word) {
+		int wordLength = word.length();
+		StringBuilder result = new StringBuilder(wordLength);
+		int index = 0;
+		for (; index < wordLength -1; index++){
+			char curChar = word.charAt(index), nextChar = word.charAt(index + 1);
+			if (curChar == TOKEN && nextChar != TOKEN) {
+				result.append(nextChar);
+				index++;
+			}
+			result.append(curChar);
+		}
+		if (index < wordLength) {
+			result.append(word.substring(index));
+		}
+		return result.toString();
 	}
 }
