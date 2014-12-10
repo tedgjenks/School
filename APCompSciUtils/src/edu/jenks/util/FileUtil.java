@@ -1,11 +1,8 @@
 package edu.jenks.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
 
 public class FileUtil {
 
@@ -31,5 +28,17 @@ public class FileUtil {
 		}
 		scanner.close();
 		return packages.iterator();
+	}
+	
+	public static File[] listFiles(File directory, final Pattern pattern) {
+		FilenameFilter textFilter = new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				Matcher matcher = pattern.matcher(name);
+				return  matcher.matches();
+			}
+			
+		};
+		return directory.listFiles(textFilter);
 	}
 }

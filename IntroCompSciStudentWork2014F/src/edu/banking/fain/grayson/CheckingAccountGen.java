@@ -1,4 +1,4 @@
-package edu.banking.sparks.brigham;
+package edu.banking.fain.grayson;
 
 import edu.jenks.dist.banking.Account;
 import edu.jenks.dist.banking.AccountGen;
@@ -16,11 +16,9 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 	}
 
 	@Override
-	public double deposit(double amountDeposited) {
-		// TODO Auto-generated method stub
-		double newBalance = getBalance() + amountDeposited;
-		setBalance(newBalance);
-		return amountDeposited;
+	public double deposit(double amtD) {
+		setBalance(getBalance()+amtD);
+		return amtD;
 	}
 
 	@Override
@@ -30,15 +28,12 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 	}
 
 	@Override
-	public double withdraw(double amountWithdrawn) {
-		// TODO Auto-generated method stub
-		if(amountWithdrawn > getBalance()){
-			amountWithdrawn = 0;
-			return amountWithdrawn;
-		}else{
-			double balance = getBalance() - amountWithdrawn;
-			setBalance(balance);
-			return amountWithdrawn;
-		}
+	public double withdraw(double amtW) {
+		double withdrawN = getBalance() - amtW;
+		setBalance(withdrawN);
+		return amtW;
 	}
+
 }
+	
+

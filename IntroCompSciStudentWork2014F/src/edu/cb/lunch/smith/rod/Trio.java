@@ -17,9 +17,8 @@ public class Trio extends AbstractTrio implements MenuItem {
 		String sandname = getSandwich().getName();
 		String drinkname = getDrink().getName();
 		String saladname = getSalad().getName();
-		StringBuilder word = new StringBuilder();
-		word.append(sandname + "/").append(drinkname + "/").append(saladname + " Trio");
-		return word.toString();
+		String word = (sandname + "/"+ saladname + "/" + drinkname + " Trio");
+		return word ;
 		
 		
 	}
@@ -30,8 +29,16 @@ public class Trio extends AbstractTrio implements MenuItem {
 		double drinkprice = getDrink().getPrice();
 		double saladprice = getSalad().getPrice();
 		double price = 0;
-		double lowestvalue = 0;
-		return 5.25;
+		if (sandprice >= saladprice && saladprice >= drinkprice) {
+			price = sandprice + saladprice;
+		}
+		if (saladprice >= drinkprice && drinkprice >= sandprice) {
+			price = drinkprice + saladprice;
+		}
+		if (drinkprice >= sandprice && sandprice >= saladprice) {
+			price = drinkprice + sandprice;
+		}
+		return price  ;
 		
 		
 		

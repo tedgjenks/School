@@ -1,40 +1,33 @@
-package edu.cb.lunch.warner.hampton;
+package edu.cb.lunch.kinney.ben;
 
 import edu.jenks.dist.cb.lunch.AbstractTrio;
 import edu.jenks.dist.cb.lunch.Drink;
 import edu.jenks.dist.cb.lunch.Salad;
 import edu.jenks.dist.cb.lunch.Sandwich;
 
-
-
 public class Trio extends AbstractTrio {
-	
-	public static void main(String[] args) {
-		Sandwich sandwich = new Sandwich("Cheeseburger",2.75);
-		Salad salad = new Salad("Spinach Salad",1.25);
-		Drink drink = new Drink("Orange Soda",1.25);
-		Trio trio1 = new Trio(sandwich, salad, drink);
-		System.out.println(trio1.getName());
-		
-	}
 
 	public Trio(Sandwich sandwich, Salad salad, Drink drink) {
 		super(sandwich, salad, drink);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public String getName() {
-		String sandwich = getSandwich().getName();
-		String salad = getSalad().getName();
-		String drink = getDrink().getName();
-		StringBuilder name = new StringBuilder();
-		name.append(sandwich + "/").append(salad+ "/").append(drink + " Trio");
-		return name.toString();
+		String name = "";
+		Sandwich sandwich = getSandwich();
+		String sandwichName = sandwich.getName();
+		Salad salad = getSalad();
+		String saladName = salad.getName();
+		Drink drink = getDrink();
+		String drinkName = drink.getName();
+		name = sandwichName + "/"+saladName+"/"+drinkName+"Trio";
+		return name;
 	}
 
 	@Override
 	public double getPrice() {
-		double price = 0.00d;
+		double price= 0.00d;
 		Sandwich sandwich = getSandwich();
 		double sandwichPrice = sandwich.getPrice();
 		Salad salad = getSalad();
@@ -44,15 +37,16 @@ public class Trio extends AbstractTrio {
 		double price1 = sandwichPrice + saladPrice;
 		double price2 = sandwichPrice + drinkPrice;
 		double price3 = saladPrice + drinkPrice;
-		if (price1 >= price2 && price1 >= price3){
+		if (price1 >= price2 && price1 >= price3  ){
 			price = price1;
 		}
-		if (price2 >= price1 && price2 >= price3){
-			price = price2;
+		if(price2 >= price1 && price2 >= price3){
+			price = price1;
 		}
-		if (price3 >= price2 && price3 >= price1){
+		if(price3 >= price2 && price3 >= price1){
 			price = price3;
 		}
+		
 		return price;
 	}
 

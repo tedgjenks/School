@@ -18,8 +18,19 @@ public class WordScrambler extends java.lang.Object implements Scrambler{
 				sb.append(curChar);
 			}
 		}
+		if (word.length() > sb.length())
+			sb.append(word.charAt(word.length()-1));
 		return sb.toString();
 	}
 	public void scrambleOrRemove(List <String> wordlist){
+		for(int i=0; i<wordlist.size(); i++){
+			if (wordlist.get(i).equals(scrambleWord(wordlist.get(i)))){
+				wordlist.remove(i);
+				i-=1;
+			} else{
+				wordlist.set(i,scrambleWord(wordlist.get(i)));
+			}
+			
+			}
+		}
 	}
-}

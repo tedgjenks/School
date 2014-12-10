@@ -15,12 +15,13 @@ public class CopyFilesFromXML {
 	private static File sourceRoot;
 	private static String turninDirSuffix;
 	private static Document document;
-	
+	private static boolean clearLogs = true;
 
 	public static void main(String[] args) {
 		try {
 			document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
 			Element rootElement = document.getRootElement();
+			clearLogs = Boolean.parseBoolean(rootElement.getAttributeValue("clear-logs"));
 			targetRoot = rootElement.getChildText("eclipse-student-root");
 			//System.out.println(targetRoot);
 			Element googleDriveElement = rootElement.getChild("google-drive");
@@ -47,8 +48,14 @@ public class CopyFilesFromXML {
 					//System.out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetRoot + packageRoot + ", " + turninDirSuffix);
 					String source = studentDirs[index].getPath() + "\\" + fileName;
 					Student student = CopyFileHelper.getStudent(source, turninDirSuffix);
-					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, targetRoot + packageRoot, student))
+					String generalDest = targetRoot + packageRoot;
+					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, generalDest, student)) {
 						studentsToProcess.add(student);
+						if(clearLogs) {
+							File directory = CopyFileHelper.makeDestinationDirectories(generalDest, student);
+							CopyFileHelper.deleteLogs(directory, project.getChildText(TestRunner.PROJECT_NAME_TAG));
+						}
+					}
 				}
 			}
 			for(Student student : studentsToProcess) {
@@ -63,7 +70,7 @@ public class CopyFilesFromXML {
 				studentElement.addContent(firstNameElement);
 				studentsElement.addContent(studentElement);
 			}
-			out.println(studentsToProcess.size() + " students processed for project " + project.getChildText("name"));
+			out.println(studentsToProcess.size() + " students processed for project " + project.getChildText(TestRunner.PROJECT_NAME_TAG));
 		}
 		out.println(projects.size() + " projects processed.");
 	}

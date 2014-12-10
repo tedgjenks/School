@@ -1,7 +1,5 @@
 package edu.cb.lunch.fan.jijie;
 
-
-
 import edu.jenks.dist.cb.lunch.AbstractTrio;
 import edu.jenks.dist.cb.lunch.Drink;
 import edu.jenks.dist.cb.lunch.MenuItem;
@@ -18,26 +16,46 @@ public class Trio extends AbstractTrio implements MenuItem {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		Sandwich sandwich= getSandwich();
-		Salad salad = getSalad();
-		Drink drink = getDrink(); 
-		StringBuilder name = new StringBuilder(); 
-		name.append(sandwich + "/").append(salad + "/").append(drink + "Trio");
+		
+		
+		String sandwich= getSandwich().getName();
+
+		
+		String salad = getSalad().getName();
+		String drink = getDrink().getName();
+		
+		StringBuilder n = new StringBuilder(); 
+		StringBuilder name= n.append(sandwich + "/").append(salad + "/").append(drink + " Trio");
 		
 		return name.toString();
 	}
+		
 
 	@Override
 	public double getPrice() {
 		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	/*
-	
-	public static void main(String [] args){
-		Sandwich sandwich = "PBJ";
+		Double sandwich= getSandwich().getPrice();
+		Double salad = getSalad().getPrice();
+		Double drink = getDrink().getPrice();
 		
-	}
-	*/
+		if(sandwich>=salad && salad>=drink)
+			return sandwich+salad;	
+		
+		if(sandwich>=drink && drink>=salad)
+			return sandwich+drink;
+		
+		if(salad >=sandwich && sandwich >=drink)
+			return salad+sandwich;
+		
+		if(salad>=drink && drink >= sandwich)
+			return salad+drink;
+		
+		if(drink>= sandwich && sandwich >= salad)
+			return drink+sandwich;
+		
+		if(drink >= salad && salad >= sandwich )
+			return drink+salad;
+		
+		return 0;
+		}
 }

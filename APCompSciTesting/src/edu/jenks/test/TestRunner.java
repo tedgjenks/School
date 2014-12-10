@@ -19,7 +19,7 @@ public class TestRunner {
 	
 	public static final String XML_FILE_PATH = "testing/testing-config.xml";
 	private static final String PACKAGE_ROOT_TAG = "package-root";
-	private static final String PROJECT_NAME_TAG = "name";
+	public static final String PROJECT_NAME_TAG = "name";
 	private static final String PROJECT_MAX_RUNTIME_SECS_TAG = "max-runtime-secs";
 	private static final String FORMATTED_DATE;
 	

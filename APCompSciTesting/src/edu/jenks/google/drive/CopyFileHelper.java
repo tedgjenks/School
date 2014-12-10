@@ -5,12 +5,11 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.regex.Pattern;
+
+import edu.jenks.util.FileUtil;
 
 public class CopyFileHelper {
-
-	private static String buildDestPackage(Student student) {
-		return (student.getLastName() + "/" + student.getFirstName() + "/").toLowerCase();
-	}
 	
 	public static File[] getStudentDirectories(File parentFile, final String studentDirSuffix) {
 		FilenameFilter textFilter = new FilenameFilter() {
@@ -23,19 +22,31 @@ public class CopyFileHelper {
 		return parentFile.listFiles(textFilter);
 	}
 	
+	public static File makeDestinationDirectories(String generalDest, Student student) {
+		String dest = generalDest + (student.getLastName() + "/" + student.getFirstName() + "/").toLowerCase();
+		File destFile = new File(dest);
+		if(!destFile.exists())
+			destFile.mkdirs();
+		return destFile;
+	}
+	
+	public static void deleteLogs(File directory, String projectName) {
+		Pattern pattern = Pattern.compile(projectName + "Feedback" + ".*" + "\\.log(\\.lck)?");
+		File[] logFiles = FileUtil.listFiles(directory, pattern);
+		for(File logFile : logFiles)
+			logFile.delete();
+	}
+	
 	public static boolean copyStudentFilesFromTurnIn(String source, final String fileName, String generalDest, Student student) throws IOException {
 		File sourceFile = new File(source);
 		boolean sourceFileExists = sourceFile.exists();
 		if(sourceFileExists) {
-			//System.out.println(source);
-			String dest = generalDest + buildDestPackage(student);
-			//System.out.println(dest);
-			File destFile = new File(dest);
-			if(!destFile.exists())
-				destFile.mkdirs();
+			File destDir = makeDestinationDirectories(generalDest, student);
+			String dest = destDir.getAbsolutePath() + "/";
+			System.out.println("destDir: " + dest);
 			dest += fileName;
-			destFile = new File(dest);
-			//System.out.println(dest);
+			System.out.println("destDir: " + dest);
+			File destFile = new File(dest);
 			if(!destFile.exists())
 				destFile.createNewFile();
 			Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

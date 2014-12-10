@@ -23,17 +23,21 @@ public class LunchTest extends Testable {
 			feedbackLogger.log(Level.INFO, "Name passed: " + solutionTrio1.getName());
 			totalPoints += 1;
 		} else
-			feedbackLogger.log(Level.INFO, "Name failed: " + solutionTrio1.getName());
+			logFailedName(solutionTrio1.getName(), studentTrio1.getName());
 		if(solutionTrio2.getName().equals(studentTrio2.getName())) {
 			feedbackLogger.log(Level.INFO, "Name passed: " + solutionTrio2.getName());
 			totalPoints += 1;
 		} else
-			feedbackLogger.log(Level.INFO, "Name failed: " + solutionTrio2.getName());
+			logFailedName(solutionTrio2.getName(), studentTrio2.getName());
 		if(solutionTrio3.getName().equals(studentTrio3.getName())) {
 			feedbackLogger.log(Level.INFO, "Name passed: " + solutionTrio3.getName());
 			totalPoints += 1;
 		} else
-			feedbackLogger.log(Level.INFO, "Name failed: " + solutionTrio3.getName());
+			logFailedName(solutionTrio3.getName(), studentTrio3.getName());
+	}
+	
+	private void logFailedName(String expected, String actual) {
+		feedbackLogger.log(Level.INFO, "Name failed:\n\texpected: '" + expected + "'\n\tactual: '" + actual +"'");
 	}
 	
 	public void testGetPrice() {
