@@ -22,9 +22,9 @@ public abstract class AbstractMusicDownloads {
 	
 	/** 
 	 * Returns a reference to the <code>DownloadInfo</code> object with the requested title if it exists. <br/>  
-	 * <b>Precondition</b>: <code>title</code> is not null<br/>
+	 * <b>Precondition</b>: <code>title</code> is not <code>null</code><br/>
 	 * <b>Postcondition</b>:   
-	 *   - no changes were made to downloadList.  
+	 *   - no changes were made to <code>downloadList</code>.  
 	 *  @param title the requested title  
 	 *  @return a reference to the <code>DownloadInfo</code> object with the  
 	 *          title that matches the parameter <code>title</code> if it exists in the list; 

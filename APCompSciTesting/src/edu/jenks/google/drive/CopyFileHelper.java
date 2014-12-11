@@ -43,9 +43,9 @@ public class CopyFileHelper {
 		if(sourceFileExists) {
 			File destDir = makeDestinationDirectories(generalDest, student);
 			String dest = destDir.getAbsolutePath() + "/";
-			System.out.println("destDir: " + dest);
+			//System.out.println("destDir: " + dest);
 			dest += fileName;
-			System.out.println("destDir: " + dest);
+			//System.out.println("destDir: " + dest);
 			File destFile = new File(dest);
 			if(!destFile.exists())
 				destFile.createNewFile();
