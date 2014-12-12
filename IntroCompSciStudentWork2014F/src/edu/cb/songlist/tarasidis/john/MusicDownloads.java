@@ -12,10 +12,9 @@ public class MusicDownloads extends AbstractMusicDownloads {
 
 	@Override
 	public DownloadInfo getDownloadInfo(String arg0) {
-		List<DownloadInfo> downloadList = getDownloadList();
-		for (int i = 0; i >= downloadList.size() - 1; i++) {
-			if (arg0 == downloadList.get(i).getTitle()) {
-				return downloadList.get(i);
+		for (DownloadInfo info : getDownloadList()) {
+			if (info.getTitle() == arg0){
+				return info;
 			}
 		}
 		return null;
@@ -23,18 +22,15 @@ public class MusicDownloads extends AbstractMusicDownloads {
 
 	@Override
 	public void updateDownloads(List<String> arg0) {
-		List<DownloadInfo> downloadList = getDownloadList();
-		for (int i = 0; i >= downloadList.size() - 1; i++) {
-			if (arg0.get(i) != downloadList.get(i).getTitle()) {
-				DownloadInfo object = new DownloadInfo(arg0.get(i));
-				object.setTimesDownloaded(1);
-				downloadList.add(object);
+		for (String object : arg0) {
+			DownloadInfo infoinfo = getDownloadInfo(object);
+			if (infoinfo != null) {
+				infoinfo.incrementTimesDownloaded();
 			}
-			if (arg0.get(i) == downloadList.get(i).getTitle()) {
-				downloadList.get(i).incrementTimesDownloaded();
+			else {
+				getDownloadList().add(new DownloadInfo(object));
 			}
 		}
-		setDownloadList(downloadList);
 	}
 
 }

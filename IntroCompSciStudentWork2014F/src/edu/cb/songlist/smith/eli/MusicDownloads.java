@@ -7,7 +7,7 @@ import edu.jenks.dist.cb.songlist.AbstractMusicDownloads;
 import edu.jenks.dist.cb.songlist.DownloadInfo;
 
 public class MusicDownloads extends AbstractMusicDownloads {
-
+	
 	public MusicDownloads() {
 		// TODO Auto-generated constructor stub
 	}
@@ -17,7 +17,8 @@ public class MusicDownloads extends AbstractMusicDownloads {
 		int downloadIndex = 0;
 		List<DownloadInfo> downloadList = getDownloadList();
 		while (downloadIndex < downloadList.size()){
-			if (downloadList.contains(songName) == false){
+			String downloadName = ((DownloadInfo) downloadList.get(downloadIndex)).getTitle();
+			if (downloadName.equals(songName) == false){
 				downloadIndex++;
 			}
 		}
@@ -27,12 +28,12 @@ public class MusicDownloads extends AbstractMusicDownloads {
 		else{
 			return downloadList.get(downloadIndex);
 		}
+
 	}
 
 	@Override
-	public void updateDownloads(List<String> arg0) {
-		// TODO Auto-generated method stub
-
+	public void updateDownloads(List<String> downloadList) {
+		
 	}
 
 }

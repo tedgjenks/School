@@ -14,13 +14,13 @@ public class MusicDownloads extends AbstractMusicDownloads {
 	public DownloadInfo getDownloadInfo(String song) {
 		DownloadInfo songInfo = null;
 		List<DownloadInfo> downloadList = getDownloadList();
-		for(int listIndex = 0; listIndex < downloadList.size(); listIndex++) {
+		boolean found = false;
+		for(int listIndex = 0; listIndex < downloadList.size() && !found; listIndex++) {
 			DownloadInfo temp = downloadList.get(listIndex);
 			String name = temp.getTitle();
 			if(name.equals(song)) {
 				songInfo = temp;
-			} else {
-				songInfo = null;
+				found = true;
 			}
 		}
 		return songInfo;
@@ -30,10 +30,18 @@ public class MusicDownloads extends AbstractMusicDownloads {
 	public void updateDownloads(List<String> titles) {
 		List<DownloadInfo> downloadList = getDownloadList();
 		for(int titlesIndex = 0; titlesIndex < titles.size(); titlesIndex++) {
-			for(int listIndex = 0; listIndex < downloadList.size(); listIndex++) {
+			String titlePlace = titles.get(titlesIndex);
+			if(getDownloadInfo(titlePlace) != null) {
+				getDownloadInfo(titlePlace).incrementTimesDownloaded();
+			} else {
+				DownloadInfo newSong = new DownloadInfo(titlePlace);
+				newSong.setTimesDownloaded(1);
+				downloadList.add(newSong);
+				System.out.println(titlePlace);
+			}
+			/*for(int listIndex = 0; listIndex < downloadList.size(); listIndex++) {
 				DownloadInfo temp = downloadList.get(listIndex);
 				String name = temp.getTitle();
-				String titlePlace = titles.get(titlesIndex);
 				if(name.equals(titlePlace)) {
 					temp.incrementTimesDownloaded();
 				} else {
@@ -41,8 +49,9 @@ public class MusicDownloads extends AbstractMusicDownloads {
 					newSong.setTimesDownloaded(1);
 					downloadList.add(newSong);
 				}
-			}
+			}*/
 		}
+		
 	}
 
 }

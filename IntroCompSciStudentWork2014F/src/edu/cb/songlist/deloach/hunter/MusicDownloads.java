@@ -24,7 +24,15 @@ public class MusicDownloads extends AbstractMusicDownloads {
 	}
 		
 	
-	public void updateDownloads (List<String> arg0) {
-		
+	public void updateDownloads (List<String> titles) {
+		for(String title: titles){
+			DownloadInfo info= getDownloadInfo(title);
+			if(info==null) {
+				getDownloadList().add(new DownloadInfo(title));
+			}else{
+				info.incrementTimesDownloaded();
+			}
+			}
+		}
 	}
-}
+

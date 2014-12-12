@@ -12,19 +12,24 @@ public class MusicDownloads extends AbstractMusicDownloads {
 
 	@Override
 	public DownloadInfo getDownloadInfo(String title) {
-		List<DownloadInfo> downloadList = new ArrayList<DownloadInfo>(getDownloadList());
-		DownloadInfo returnedInfo = null;
-		for(int index = 0; index < downloadList.size(); index++){
-			if(title.equals(downloadList.get(index).getTitle())){
-				returnedInfo = downloadList.get(index);
+		for(int index = 0; index < getDownloadList().size() ; index++){
+			if(title.equals(getDownloadList().get(index).getTitle())){
+				return getDownloadList().get(index);
 			}
 		}
-		return returnedInfo;
+		return null;
 	}
 
 	@Override
 	public void updateDownloads(List<String> titles) {
-		
+		for(int index = 0; index < titles.size(); index++){
+			String currentWord = titles.get(index);
+			if(getDownloadInfo(currentWord) == null){
+				getDownloadList().add(new DownloadInfo(currentWord));
+				getDownloadInfo(currentWord).setTimesDownloaded(0);
+			}
+			getDownloadInfo(currentWord).incrementTimesDownloaded();
+		}
 	}
 
 }

@@ -1,9 +1,8 @@
 package edu.cb.songlist.grenci.david;
 
-import java.util.List;
+import java.util.*;
 
-import edu.jenks.dist.cb.songlist.AbstractMusicDownloads;
-import edu.jenks.dist.cb.songlist.DownloadInfo;
+import edu.jenks.dist.cb.songlist.*;
 
 public class MusicDownloads extends AbstractMusicDownloads {
 
@@ -13,13 +12,28 @@ public class MusicDownloads extends AbstractMusicDownloads {
 
 	@Override
 	public DownloadInfo getDownloadInfo(String title) {
-		// TODO Auto-generated method stub
+		for(int index = 0; index < getDownloadList().size(); index++ ) {
+			if(title.equals(getDownloadList().get(index).getTitle())){
+				return getDownloadList().get(index);
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public void updateDownloads(List<String> titles) {
-		// TODO Auto-generated method stub
+		String title;
+		for(int index = 0; index < getDownloadList().size(); index++) {
+			title = titles.get(index);
+			if(getDownloadInfo(title) != null){
+				getDownloadInfo(title).incrementTimesDownloaded();
+			}
+			else {
+				DownloadInfo notInList = new DownloadInfo(title);
+				getDownloadList().add(notInList);
+				notInList.setTimesDownloaded(1);
+			}
+		}
 
 	}
 

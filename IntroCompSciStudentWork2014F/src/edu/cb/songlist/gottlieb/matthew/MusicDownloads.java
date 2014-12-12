@@ -17,11 +17,16 @@ public class MusicDownloads extends AbstractMusicDownloads {
 		}
 		return null;
 	}
-
+	
 	@Override
-	public void updateDownloads(List<String> arg0) {
-		// TODO Auto-generated method stub
-		
+	public void updateDownloads(List<String> titles) {
+		for(String title : titles){
+			DownloadInfo info = getDownloadInfo(title);
+			if(info != null){
+				info.incrementTimesDownloaded();
+			}else{
+				getDownloadList().add(new DownloadInfo(title));
+			}
+		}
 	}
-
 }

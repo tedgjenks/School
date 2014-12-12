@@ -12,15 +12,32 @@ public class MusicDownloads extends AbstractMusicDownloads {
 	}
 
 	@Override
-	public DownloadInfo getDownloadInfo(String arg0) {
-		// TODO Auto-generated method stub
+	public DownloadInfo getDownloadInfo(String title) {
+		List <DownloadInfo> p = getDownloadList();
+		for(int i = 0; i <p.size(); i ++){
+			String name = p.get(i).getTitle();
+			if(name.equals(title)){
+				return p.get(i);
+			}
+	
+		}
 		return null;
 	}
 
 	@Override
-	public void updateDownloads(List<String> arg0) {
-		// TODO Auto-generated method stub
-
+	public void updateDownloads(List<String> titles) {
+		List <DownloadInfo> di = getDownloadList();
+		for(String title:titles){
+			DownloadInfo info = getDownloadInfo(title);
+			if(info == null){
+				di.add(new DownloadInfo(title));
+				
+			}else{
+				info.incrementTimesDownloaded();
+			}
+			
+		}
+		
 	}
 
 }

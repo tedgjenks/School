@@ -82,12 +82,16 @@ public class MusicDownloadsTest extends Testable {
 		return downloadList;
 	}
 	
+	private void printTitles(List<DownloadInfo> downloadList) {
+		for(DownloadInfo downloadInfo : downloadList)
+			System.out.print(downloadInfo.getTitle() + ", ");
+		System.out.println();
+	}
+	
 	private void testUpdateDownloads(List<DownloadInfo> downloadList, List<String> titles, List<DownloadInfo> expectedList, String logMessage) {
 		studentMusicDownloads.setDownloadList(downloadList);
 		studentMusicDownloads.updateDownloads(titles);
 		List<DownloadInfo> actualList = studentMusicDownloads.getDownloadList();
-		System.out.println(expectedList);
-		System.out.println(actualList);
 		if(expectedList.size() == actualList.size()) {
 			boolean pass = true;
 			for(int index = expectedList.size() - 1; index >= 0 && pass; index--) {
@@ -103,8 +107,11 @@ public class MusicDownloadsTest extends Testable {
 				totalPoints += 10;
 				feedbackLogger.log(Level.INFO, logMessage + " updateDownloads passed");
 			}
-		} else
+		} else {
 			feedbackLogger.log(Level.WARNING, logMessage + " expected download list was not the same size as actual download list");
+			//printTitles(expectedList);
+			//printTitles(actualList);
+		}
 	}
 	
 	public void testUpdateDownloads() {

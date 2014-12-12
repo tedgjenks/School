@@ -37,6 +37,9 @@ public class Trio extends AbstractTrio {
 		if (price3>= price1 && price3>= price2){
 			priceReturn += price3;
 		}
+		if(sandwich > drink && drink == salad){
+			return sandwich + drink;
+		}
 		return priceReturn;
 	}
 }

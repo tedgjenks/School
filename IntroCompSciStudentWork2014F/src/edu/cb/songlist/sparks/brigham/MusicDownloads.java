@@ -20,18 +20,14 @@ public class MusicDownloads extends AbstractMusicDownloads {
 	@Override
 	public void updateDownloads(List<String> titles) {
 		// TODO Auto-generated method stub
-		List<DownloadInfo> fdl = getDownloadList();
-		fdl.clear();
-		List<DownloadInfo> odl = getDownloadList();
-		for (int index = 0; index < odl.size(); index ++){
-			String name = odl.get(index).getTitle();
-			if (titles.contains(name)){
-				odl.get(index).incrementTimesDownloaded();
-				fdl.add(odl.get(index));
+		List<DownloadInfo> dl = getDownloadList();
+		for (String title:titles){
+			DownloadInfo songInfo = getDownloadInfo(title);
+			if(songInfo == null){
+				dl.add(new DownloadInfo(title));
 			}else{
-				fdl.add(odl.get(index));
+				songInfo.incrementTimesDownloaded();
 			}
-		}setDownloadList(fdl);
+		}
 	}
-
 }

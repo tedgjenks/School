@@ -8,19 +8,22 @@ import edu.jenks.dist.cb.songlist.DownloadInfo;
 public class MusicDownloads extends AbstractMusicDownloads {
 
 	public MusicDownloads() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public DownloadInfo getDownloadInfo(String arg0) {
-		// TODO Auto-generated method stub
+	public DownloadInfo getDownloadInfo(String Name) {
+		for(int index = 0; index < (getDownloadList().size()); index++){
+			if(Name.equals(getDownloadList().get(index).getTitle())){
+				return getDownloadList().get(index);
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public void updateDownloads(List<String> arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
-
+	
 }

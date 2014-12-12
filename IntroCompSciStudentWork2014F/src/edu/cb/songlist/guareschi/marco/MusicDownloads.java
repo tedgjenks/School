@@ -15,18 +15,24 @@ public class MusicDownloads extends AbstractMusicDownloads {
 		for(int i = 0; i < downloadList.size(); i++) {
 			String name = downloadList.get (i).getTitle();
 			if (name.equals(title)) {
-				return downloadList.get(i);
-				
+				return downloadList.get(i);	
 			}
 			
 		}
-	
+		
 		return null;
 	}
 
 	
 	@Override
-	public void updateDownloads (List<String> argo0){
-
+	public void updateDownloads (List<String> titles) {
+		for(String title : titles) {
+			DownloadInfo info = getDownloadInfo (title);
+			if (info != null) {
+				info.incrementTimesDownloaded();
+			}else{
+				getDownloadList().add(new DownloadInfo(title));
+			}
+		}
 	}
 }
