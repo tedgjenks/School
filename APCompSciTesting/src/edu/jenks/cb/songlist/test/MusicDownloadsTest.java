@@ -2,12 +2,14 @@ package edu.jenks.cb.songlist.test;
 
 import java.util.*;
 import java.util.logging.Level;
+
 import edu.jenks.dist.cb.songlist.*;
 import edu.jenks.test.Testable;
 import edu.jenks.util.ReflectionUtil;
 
 public class MusicDownloadsTest extends Testable {
 
+	private String studentClassName;
 	private AbstractMusicDownloads studentMusicDownloads;
 
 	public MusicDownloadsTest() {}
@@ -159,35 +161,22 @@ public class MusicDownloadsTest extends Testable {
 	}
 
 	@Override
-	public void setUp() {
-		super.setUp();
-		try {
-			studentMusicDownloads = (AbstractMusicDownloads)ReflectionUtil.newInstance(studentPackage + ".MusicDownloads");
-			feedbackLogger.log(Level.INFO, "MusicDownloads instantiated");
-			totalPoints += 60;
-		} catch(Exception e) {
-			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
-			continueTesting = false;
-		}
-	}
-
-	@Override
-	public void verifySuperClass() {
-		continueTesting = false;
-		if(studentMusicDownloads != null) {
-			// verify that Object is the superclass
-			String superclassName = studentMusicDownloads.getClass().getSuperclass().getName();
-			continueTesting = AbstractMusicDownloads.class.getName().equals(superclassName);
-			if(!continueTesting)
-				feedbackLogger.log(Level.WARNING, "Actual superclass did not match expected superclass");
-			else
-				feedbackLogger.log(Level.FINE, "Superclass validated.");
-		}
+	public void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		studentMusicDownloads = (AbstractMusicDownloads)ReflectionUtil.newInstance(studentClassName);
+		totalPoints += 60;
 	}
 
 	@Override
 	public int getPointsAvailable() {
 		return 100;
+	}
+
+	@Override
+	public Map<String, String> buildStudentClassNameToSuperclassName() {
+		studentClassName = studentPackage + ".MusicDownloads";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(studentClassName, AbstractMusicDownloads.class.getName());
+		return map;
 	}
 
 }

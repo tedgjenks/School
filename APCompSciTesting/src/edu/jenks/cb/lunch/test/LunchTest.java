@@ -1,6 +1,8 @@
 package edu.jenks.cb.lunch.test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import edu.cb.lunch.jenks.ted.Trio;
@@ -11,7 +13,6 @@ import edu.jenks.util.ReflectionUtil;
 
 public class LunchTest extends Testable {
 	
-	private static final String EXPECTED_SUPERCLASS = "edu.jenks.dist.cb.lunch.AbstractTrio";
 	private static final Class<?>[] TRIO_CONSTRUCTOR_PARAM_TYPES = {Sandwich.class, Salad.class, Drink.class};
 	private static final double DELTA = 0.001;
 	
@@ -70,9 +71,7 @@ public class LunchTest extends Testable {
 	 * @see edu.jenks.test.Testable#setUp()
 	 */
 	@Override
-	public void setUp() {
-		super.setUp();
-		studentClassName = studentPackage + ".Trio";
+	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Sandwich sandwich = new Sandwich("Cheeseburger", 2.75);
 		Salad salad = new Salad("Spinach Salad", 1.25);
 		Drink drink = new Drink("Orange Soda", 1.25);
@@ -85,36 +84,10 @@ public class LunchTest extends Testable {
 		salad = new Salad("Random Salad", Math.random() * 10);
 		drink = new Drink("Random Drink", Math.random() * 10);
 		solutionTrio3 = new Trio(sandwich, salad, drink);
-		try {
-			studentTrio1 = instantiateStudentTrio(solutionTrio1);
-			studentTrio2 = instantiateStudentTrio(solutionTrio2);
-			studentTrio3 = instantiateStudentTrio(solutionTrio3);
-			feedbackLogger.log(Level.INFO, "Objects instantiated");
-			totalPoints += 3;
-		} catch(Exception e) {
-			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
-			continueTesting = false;
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see edu.jenks.test.Testable#verifySuperClass()
-	 */
-	@Override
-	public void verifySuperClass() {
-		continueTesting = false;
-		// verify that Object is the superclass
-		String superclassName;
-		try {
-			superclassName = Class.forName(studentClassName).getSuperclass().getName();
-			continueTesting = EXPECTED_SUPERCLASS.equals(superclassName);
-		} catch (ClassNotFoundException e) {
-			logException("Class loader", e);
-		}
-		if(!continueTesting)
-			feedbackLogger.log(Level.WARNING, "Actual superclass did not match expected superclass");
-		else
-			feedbackLogger.log(Level.FINE, "Superclass validated.");
+		studentTrio1 = instantiateStudentTrio(solutionTrio1);
+		studentTrio2 = instantiateStudentTrio(solutionTrio2);
+		studentTrio3 = instantiateStudentTrio(solutionTrio3);
+		totalPoints += 3;
 	}
 
 	/* (non-Javadoc)
@@ -123,6 +96,14 @@ public class LunchTest extends Testable {
 	@Override
 	public int getPointsAvailable() {
 		return 9;
+	}
+
+	@Override
+	public Map<String, String> buildStudentClassNameToSuperclassName() {
+		studentClassName = studentPackage + ".Trio";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(studentClassName, "edu.jenks.dist.cb.lunch.AbstractTrio");
+		return map;
 	}
 
 }

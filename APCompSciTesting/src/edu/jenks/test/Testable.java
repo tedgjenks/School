@@ -1,12 +1,15 @@
 package edu.jenks.test;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,13 +33,32 @@ public abstract class Testable implements Runnable {
 	private ThreadGroup threadGroup;
 	private Student student;
 	
-	public abstract void verifySuperClass();
 	public abstract int getPointsAvailable();
+	public abstract Map<String, String> buildStudentClassNameToSuperclassName();
+	public abstract void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	
+	private void verifySuperClass(Map<String, String> studentClassNameToSuperclassName) throws ClassNotFoundException, IllegalSuperclassException {
+		Iterator<String> keys = studentClassNameToSuperclassName.keySet().iterator();
+		while(keys.hasNext() && continueTesting) {
+			String studentClassName = keys.next();
+			String expectedSuperclassName = studentClassNameToSuperclassName.get(studentClassName);
+			String superclassName = Class.forName(studentClassName).getSuperclass().getName();
+			if(!expectedSuperclassName.equals(superclassName))
+				throw new IllegalSuperclassException("Actual superclass '" + superclassName + "' did not match expected superclass '" + expectedSuperclassName + "'");
+		}
+		feedbackLogger.log(Level.FINE, "Superclass validated.");
+	}
 	
 	public void start() {
 		feedbackLogger.log(Level.INFO, "Begin test of package " + studentPackage + "\r\n" + LoggingUtil.ASTERISKS);
-		setUp();
-		verifySuperClass();
+		try {
+			verifySuperClass(buildStudentClassNameToSuperclassName());
+			setUp();
+			feedbackLogger.log(Level.INFO, "Pass - object creation");
+		} catch(Exception e) {
+			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
+			continueTesting = false;
+		}
 		if(thread == null && continueTesting) {
 			thread = threadGroup == null ? new Thread(this, student.toString()) : new Thread(threadGroup, this, student.toString());
 			thread.start();
@@ -60,10 +82,6 @@ public abstract class Testable implements Runnable {
 			feedbackLogger.log(Level.INFO, "You can earn another " + (getPointsAvailable() - totalPoints) + " points.");
 		String percent = NumberFormat.getPercentInstance().format(totalPoints / (double)getPointsAvailable());
 		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + totalPoints + " -> " + percent);
-	}
-	
-	public void setUp() {
-		continueTesting = true;
 	}
 	
 	public void test() {

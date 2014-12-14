@@ -1,7 +1,9 @@
 package edu.jenks.cb.scrambler.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import edu.cb.scrambler.jenks.ted.WordScrambler;
@@ -11,13 +13,13 @@ import edu.jenks.util.ReflectionUtil;
 
 public class ScramblerTest extends Testable {
 	
-	private static final String EXPECTED_SUPERCLASS = "java.lang.Object";
 	private static final String[] TEST_WORDS = {"TAN", "ABRACADABRA", "WHOA",
 		"AARDVARK", "EGGS", "A", "", "BAKER", "EEL"};
 	private static final String[] TEST_LIST = {"TAN", "ABRACADABRA", "WHOA",
 		"APPLE", "EGGS", "", "DAPPER"};
 		
 	private final List<String> SOLUTION_LIST = new ArrayList<String>();	
+	private String studentClassName;
 	private Scrambler studentScrambler, solutionScrambler = new WordScrambler();
 	
 	public ScramblerTest() {
@@ -52,34 +54,21 @@ public class ScramblerTest extends Testable {
 	}
 	
 	@Override
-	public void setUp() {
-		super.setUp();
-		try {
-			studentScrambler = (Scrambler)ReflectionUtil.newInstance(studentPackage + ".WordScrambler");
-			feedbackLogger.log(Level.INFO, "scrambler instantiated");
-		} catch (Exception e) {
-			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
-			continueTesting = false;
-		}
-	}
-
-	@Override
-	public void verifySuperClass() {
-		continueTesting = false;
-		if(studentScrambler != null) {
-			// verify that Object is the superclass
-			String superclassName = studentScrambler.getClass().getSuperclass().getName();
-			continueTesting = EXPECTED_SUPERCLASS.equals(superclassName);
-			if(!continueTesting)
-				feedbackLogger.log(Level.WARNING, "Actual superclass did not match expected superclass");
-			else
-				feedbackLogger.log(Level.FINE, "Superclass validated.");
-		}
+	public void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		studentScrambler = (Scrambler)ReflectionUtil.newInstance(studentClassName);
 	}
 
 	@Override
 	public int getPointsAvailable() {
 		return TEST_WORDS.length + SOLUTION_LIST.size();
+	}
+
+	@Override
+	public Map<String, String> buildStudentClassNameToSuperclassName() {
+		studentClassName = studentPackage + ".WordScrambler";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(studentClassName, "java.lang.Object");
+		return map;
 	}
 
 }

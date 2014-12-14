@@ -4,6 +4,8 @@
 package edu.jenks.banking.test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import edu.jenks.dist.banking.*;
@@ -17,8 +19,6 @@ import edu.jenks.util.ReflectionUtil;
  */
 public class BankingP1Test extends Testable {
 	
-	private static final String C_ACCOUNT_EXPECTED_SUPERCLASS = "edu.jenks.dist.banking.AccountGen";
-	private static final String CUSTOMER_EXPECTED_SUPERCLASS = "java.lang.Object";
 	private static final double DOLLAR_DELTA = 0.005;
 	private static final Class<?>[] C_ACCOUNT_CONSTRUCTOR_PARAM_TYPES = {double.class};
 	private static double C_ACCOUNT_INIT_BALANCE = 150;
@@ -26,6 +26,8 @@ public class BankingP1Test extends Testable {
 	private static final Class<?>[] CUSTOMER_CONSTRUCTOR_PARAM_TYPES = {String.class};
 	private static final Object[] CUSTOMER_CONSTRUCTOR_ARGS = {"John Doe"}; // initialize customer name
 	
+	private String studentCheckingAccountClassName;
+	private String studentCustomerClassName;
 	private CheckingAccount studentCheckingAccount;
 	private Customer studentCustomer;
 	
@@ -37,35 +39,12 @@ public class BankingP1Test extends Testable {
 	
 	
 	@Override
-	public void setUp() {
-		super.setUp();
-		try {
-			studentCheckingAccount = (CheckingAccount)ReflectionUtil.newInstance(studentPackage + ".CheckingAccountGen", C_ACCOUNT_CONSTRUCTOR_PARAM_TYPES, C_ACCOUNT_CONSTRUCTOR_ARGS);
-			feedbackLogger.log(Level.INFO, "checking account instantiated");
-			totalPoints += 5;
-			studentCustomer = (Customer)ReflectionUtil.newInstance(studentPackage + ".CustomerGen", CUSTOMER_CONSTRUCTOR_PARAM_TYPES, CUSTOMER_CONSTRUCTOR_ARGS);
-			feedbackLogger.log(Level.INFO, "customer instantiated");
-			totalPoints += 5;
-		} catch (Exception e) {
-			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
-			continueTesting = false;
-		}
-		
-	}
-
-	@Override
-	public void verifySuperClass() {
-		continueTesting = false;
-		if(studentCheckingAccount != null && studentCustomer != null) {
-			// verify that Object is the superclass
-			String caSuperclassName = studentCheckingAccount.getClass().getSuperclass().getName();
-			String custSuperclassName = studentCustomer.getClass().getSuperclass().getName();
-			continueTesting = C_ACCOUNT_EXPECTED_SUPERCLASS.equals(caSuperclassName) && CUSTOMER_EXPECTED_SUPERCLASS.equals(custSuperclassName);
-			if(!continueTesting)
-				feedbackLogger.log(Level.WARNING, "Actual superclass did not match expected superclass");
-			else
-				feedbackLogger.log(Level.FINE, "Superclass validated.");
-		}
+	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		studentCheckingAccount = (CheckingAccount)ReflectionUtil.newInstance(studentCheckingAccountClassName, C_ACCOUNT_CONSTRUCTOR_PARAM_TYPES, C_ACCOUNT_CONSTRUCTOR_ARGS);
+		feedbackLogger.log(Level.INFO, "checking account instantiated");
+		totalPoints += 5;
+		studentCustomer = (Customer)ReflectionUtil.newInstance(studentCustomerClassName, CUSTOMER_CONSTRUCTOR_PARAM_TYPES, CUSTOMER_CONSTRUCTOR_ARGS);
+		totalPoints += 5;
 	}
 	
 	public void testCustomer() {
@@ -114,5 +93,17 @@ public class BankingP1Test extends Testable {
 	@Override
 	public int getPointsAvailable() {
 		return 40;
+	}
+
+
+
+	@Override
+	public Map<String, String> buildStudentClassNameToSuperclassName() {
+		studentCustomerClassName = studentPackage + ".CustomerGen";
+		studentCheckingAccountClassName = studentPackage + ".CheckingAccountGen";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(studentCheckingAccountClassName, "java.lang.Object");
+		map.put(studentCheckingAccountClassName, "edu.jenks.dist.banking.AccountGen");
+		return map;
 	}
 }
