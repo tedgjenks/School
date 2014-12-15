@@ -11,6 +11,8 @@ import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
  */
 public class TokenPass extends AbstractTokenPass {
 	
+	private boolean printGame = false;
+	
 	/** 
 	 * Creates the board array to be of size <code>playerCount</code> and fills it with
 	 * random integer values from 1 to 10, inclusive. <br/>
@@ -19,6 +21,7 @@ public class TokenPass extends AbstractTokenPass {
 	 */
 	public TokenPass(int playerCount) {
 		setBoard(createBoard(playerCount));
+		setRound(1);
 	}
 
 	/**
@@ -35,10 +38,11 @@ public class TokenPass extends AbstractTokenPass {
 				index = 0;
 			board[index] = board[index] + 1;
 		}
-		//System.out.println("Tokens distributed");
-		//printBoard();
 	}
 
+	/**
+	 * @see edu.jenks.dist.cb.tokenpass.AbstractTokenPass#createBoard(int)
+	 */
 	@Override
 	public int[] createBoard(int playerCount) {
 		int[] board = new int[playerCount];
@@ -79,18 +83,22 @@ public class TokenPass extends AbstractTokenPass {
 				if(board[index] > 0)
 					board[index] = board[index] - 1;
 			}
-			//System.out.println("Everybody lost a token!");
-			//printBoard();
-		} //else
-			//System.out.println("Remove all skipped - nobody has more than one.");
+			if(printGame) {
+				System.out.println("Everybody lost a token!");
+				printBoard();
+			}
+		} else if(printGame)
+			System.out.println("Remove all skipped - nobody has more than one.");
 	}
 	
 	private void removeTokenFromNextPlayer() {
 		int[] board = getBoard();
 		int index = findNextPlayerWithTokens(getCurrentPlayer());
 		board[index] = board[index] - 1;
-		//System.out.println("Token removed from " + index);
-		//printBoard();
+		if(printGame) {
+			System.out.println("Token removed from " + index);
+			printBoard();
+		}
 	}
 	
 	private int findWinner() {
@@ -107,22 +115,31 @@ public class TokenPass extends AbstractTokenPass {
 		return secondIndexOverZero < 0 ? firstIndexOverZero : -1;
 	}
 
+	/**
+	 * @see edu.jenks.dist.cb.tokenpass.AbstractTokenPass#playGame(int)
+	 */
 	@Override
 	public int playGame(int currentPlayer) {
 		setCurrentPlayer(currentPlayer);
-		//System.out.println("Current player - " + currentPlayer);
-		//printBoard();
+		if(printGame) {
+			System.out.println("Current player - " + currentPlayer);
+			printBoard();
+		}
 		int winner = findWinner();
 		if(winner < 0) {
 			int round = getRound();
-			if(round != 0 && round % 5 == 0)
+			if(round % 5 == 0)
 				removeTokenFromAll();
 			else
 				removeTokenFromNextPlayer();
 			distributeCurrentPlayerTokens();
+			if(printGame) {
+				System.out.println("Tokens distributed");
+				printBoard();
+			}
 			setRound(round + 1);
+			System.out.println();
 			setCurrentPlayer(findNextPlayerWithTokens(currentPlayer));
-			//System.out.println();
 			winner = playGame(getCurrentPlayer());
 		}
 		return winner;
@@ -132,11 +149,13 @@ public class TokenPass extends AbstractTokenPass {
 		TokenPass tp = new TokenPass(5);
 		int[] board1 = {1, 2, 3, 4};
 		tp.setBoard(board1);
+		tp.setRound(1);
 		int winner = tp.playGame(2);
 		System.out.println("Winner is: " + winner + "; round is " + tp.getRound());
 		
 		int[] board2 = {3, 9, 10, 2, 5, 5, 2, 8};
 		tp.setBoard(board2);
+		tp.setRound(1);
 		winner = tp.playGame(5);
 		System.out.println("Winner is: " + winner + "; round is " + tp.getRound());
 	}

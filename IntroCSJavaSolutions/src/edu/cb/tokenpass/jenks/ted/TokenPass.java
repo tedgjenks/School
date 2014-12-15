@@ -11,7 +11,7 @@ import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
  */
 public class TokenPass extends AbstractTokenPass {
 	
-	private boolean printGame = true;
+	private boolean printGame = false;
 	
 	/** 
 	 * Creates the board array to be of size <code>playerCount</code> and fills it with
@@ -21,6 +21,7 @@ public class TokenPass extends AbstractTokenPass {
 	 */
 	public TokenPass(int playerCount) {
 		setBoard(createBoard(playerCount));
+		setRound(1);
 	}
 
 	/**

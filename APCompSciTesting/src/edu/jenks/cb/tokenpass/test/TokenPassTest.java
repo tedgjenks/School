@@ -4,11 +4,10 @@
 package edu.jenks.cb.tokenpass.test;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
+import edu.cb.tokenpass.jenks.ted.TokenPass;
 import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
 import edu.jenks.test.Testable;
 import edu.jenks.util.ReflectionUtil;
@@ -24,6 +23,7 @@ public class TokenPassTest extends Testable {
 	
 	private String studentClassName;
 	private AbstractTokenPass studentTokenPass;
+	private AbstractTokenPass solutionTokenPass;
 
 	/**
 	 * 
@@ -121,7 +121,7 @@ public class TokenPassTest extends Testable {
 		int expWinner = 3;
 		int expRound = 6;
 		if(testPlayGame(board1, currentPlayer, expWinner, expRound, "given"))
-			totalPoints += 3;
+			totalPoints += 1;
 		
 		//test 2
 		int[] board2 = {3, 9, 10, 2, 5, 5, 2, 8};
@@ -130,6 +130,34 @@ public class TokenPassTest extends Testable {
 		expRound = 24;
 		if(testPlayGame(board2, currentPlayer, expWinner, expRound, "custom"))
 			totalPoints += 2;
+		
+		//test 3
+		int playerCount = 5 + (int)(Math.random() * 10);
+		solutionTokenPass = new TokenPass(playerCount);
+		int[] board3 = solutionTokenPass.getBoard().clone();
+		currentPlayer = (int)(Math.random() * playerCount);
+		expWinner = solutionTokenPass.playGame(currentPlayer);
+		expRound = solutionTokenPass.getRound();
+		if(testPlayGame(board3.clone(), currentPlayer, expWinner, expRound, "random"))
+			totalPoints += 2;
+		else {
+			StringBuilder feedbackMessage = new StringBuilder(100);
+			feedbackMessage.append("random test details: starting player - ").append(currentPlayer);
+			feedbackMessage.append("\n\texpected rounds: \t").append(solutionTokenPass.getRound());
+			feedbackMessage.append("\n\tactual rounds: \t\t").append(studentTokenPass.getRound());
+			feedbackMessage.append("\n\tinitial board:\t\t\t");
+			appendBoardElements(board3, feedbackMessage);
+			feedbackMessage.append("\n\texpected board after play:\t");
+			appendBoardElements(solutionTokenPass.getBoard(), feedbackMessage);
+			feedbackMessage.append("\n\tactual board after play:\t");
+			appendBoardElements(studentTokenPass.getBoard(), feedbackMessage);
+			feedbackLogger.log(Level.INFO, feedbackMessage.toString());
+		}
+	}
+	
+	private void appendBoardElements(int[] board, StringBuilder sb) {
+		for(int element : board)
+			sb.append(element).append(",\t");
 	}
 
 	/* (non-Javadoc)
