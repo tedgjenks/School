@@ -3,6 +3,8 @@
  */
 package edu.cb.tokenpass.jenks.ted;
 
+import java.util.Random;
+
 import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
 
 /**
@@ -10,6 +12,8 @@ import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
  *
  */
 public class TokenPass extends AbstractTokenPass {
+	
+	private final Random random = new Random(System.currentTimeMillis());
 	
 	private boolean printGame = false;
 	
@@ -47,7 +51,7 @@ public class TokenPass extends AbstractTokenPass {
 	public int[] createBoard(int playerCount) {
 		int[] board = new int[playerCount];
 		for(int index = board.length - 1; index >= 0; index--)
-			board[index] = (int)(Math.random() * 10) + 1;
+			board[index] = random.nextInt(10) + 1;
 		return board;
 	}
 	

@@ -27,21 +27,19 @@ def format_factors(factors):
         start_index = index
         while(index + 1 < len(factors) and factors[index] == factors[index + 1]):
             factor_count += 1
-            start_index += 1
+            index += 1
             del factors[index - 1]
         if(factor_count > 1):
             exp_factor = str(factor) + "^" + str(factor_count)
-            factors[index] = exp_factor
+            factors[start_index] = exp_factor
             factor_count += 1
         index = start_index + 1
-        if(start_index != index & factor_count > 1):
-            exp_factor = str(factor) + "^" + str(factor_count)
-            factor_count += 1
-        index = start_index + 1        
-        return factors
+    return factors
         
 def display_factors(number,factors):
     if is_prime(number) == True:
         return str(number) + " is a prime number!"
-    if is_prime(number) == False:
-        return factors
+    display = (str(number) + "*")
+    for x in range(len(factors)):
+        display += str(factor[x])
+    return display

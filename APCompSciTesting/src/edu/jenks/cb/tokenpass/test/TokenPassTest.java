@@ -20,6 +20,9 @@ public class TokenPassTest extends Testable {
 	
 	private static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = {int.class};
 	private static final Object[] DEFAULT_CONSTRUCTOR_VALUES = {10};
+	private static final String NEW_LINE = "\n";
+	
+	private final Random random = new Random(System.currentTimeMillis());
 	
 	private String studentClassName;
 	private AbstractTokenPass studentTokenPass;
@@ -56,7 +59,7 @@ public class TokenPassTest extends Testable {
 				double ratio = numberCount.getCount(tokens) / (double)playerCount;
 				if(ratio < .08) {
 					ratiosAcceptable = false;
-					feedbackLogger.log(Level.WARNING, "Fail - randomness is suspicious - not enough " + tokens);
+					feedbackLogger.log(Level.WARNING, "Fail - randomness is suspicious - not enough players with " + tokens + " tokens.");
 				}
 				if(ratio < minRatio)
 					minRatio = ratio;
@@ -132,24 +135,25 @@ public class TokenPassTest extends Testable {
 			totalPoints += 2;
 		
 		//test 3
-		int playerCount = 5 + (int)(Math.random() * 10);
+		int playerCount = 5 + random.nextInt(10);
 		solutionTokenPass = new TokenPass(playerCount);
 		int[] board3 = solutionTokenPass.getBoard().clone();
-		currentPlayer = (int)(Math.random() * playerCount);
+		currentPlayer = (int)(random.nextDouble() * playerCount);
 		expWinner = solutionTokenPass.playGame(currentPlayer);
 		expRound = solutionTokenPass.getRound();
 		if(testPlayGame(board3.clone(), currentPlayer, expWinner, expRound, "random"))
 			totalPoints += 2;
 		else {
-			StringBuilder feedbackMessage = new StringBuilder(100);
+			StringBuilder feedbackMessage = new StringBuilder(200);
 			feedbackMessage.append("random test details: starting player - ").append(currentPlayer);
-			feedbackMessage.append("\n\texpected rounds: \t").append(solutionTokenPass.getRound());
-			feedbackMessage.append("\n\tactual rounds: \t\t").append(studentTokenPass.getRound());
-			feedbackMessage.append("\n\tinitial board:\t\t\t");
+			feedbackMessage.append(" of ").append(playerCount).append(" total players.");
+			feedbackMessage.append(NEW_LINE).append("\texpected rounds: \t").append(solutionTokenPass.getRound());
+			feedbackMessage.append(NEW_LINE).append("\tactual rounds: \t\t").append(studentTokenPass.getRound());
+			feedbackMessage.append(NEW_LINE).append("\tinitial board:\t\t\t\t");
 			appendBoardElements(board3, feedbackMessage);
-			feedbackMessage.append("\n\texpected board after play:\t");
+			feedbackMessage.append(NEW_LINE).append("\texpected board after play:\t");
 			appendBoardElements(solutionTokenPass.getBoard(), feedbackMessage);
-			feedbackMessage.append("\n\tactual board after play:\t");
+			feedbackMessage.append(NEW_LINE).append("\tactual board after play:\t");
 			appendBoardElements(studentTokenPass.getBoard(), feedbackMessage);
 			feedbackLogger.log(Level.INFO, feedbackMessage.toString());
 		}

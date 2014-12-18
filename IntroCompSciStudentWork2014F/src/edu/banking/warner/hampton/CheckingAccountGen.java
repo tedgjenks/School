@@ -19,7 +19,7 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 	public double deposit(double deposit) {
 		double balance = getBalance() + deposit;
 		setBalance(balance);
-		return balance;
+		return deposit;
 	}
 
 	@Override

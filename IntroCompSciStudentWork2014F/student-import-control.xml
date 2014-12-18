@@ -16,4 +16,7 @@
 	<subpackage name="cb.songlist">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="cb.tokenpass">
+		<allow pkg="java.util"/>
+	</subpackage>
 </import-control>

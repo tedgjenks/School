@@ -8,10 +8,19 @@ public class WordScrambler implements Scrambler {
 	private static final char TOKEN = 'A';
 
 	public WordScrambler() {
-	}
+		
+		}	
 
 	@Override
 	public void scrambleOrRemove(List<String> wordList) {
+		for (int index = 0; index < wordList.size(); index++) {
+			if(wordList.get(index).equals(scrambleWord(wordList.get(index)))) {
+				wordList.remove(index);
+				index -= 1;
+			}else{
+				wordList.set(index, scrambleWord(wordList.get(index))); 
+			}
+		}
 	}
 
 	@Override
@@ -27,8 +36,11 @@ public class WordScrambler implements Scrambler {
 				sb.append(curChar);
 			}
 		}
-		if(word.length() > sb.length())
+		
+		if(word.length() > sb.length()) {
 			sb.append(word.charAt(word.length() - 1));
+		}
+		
 		return sb.toString();
 	}
 
@@ -37,5 +49,3 @@ public class WordScrambler implements Scrambler {
 	}
 
 }
-
-

@@ -3,50 +3,94 @@ Created on Oct 27, 2014
 
 @author: HASTNI31
 '''
-number = 300
-exit_cmd = "exiting"
-while number != "exiting" :
-    
-    def is_prime(number):
-        first_prime = 2
-        prime= True
-        divisor = first_prime
-        while prime and divisor < number:
-            if number% divisor ==0:
-                prime = False
-            divisor= divisor+1
-        return prime
-    print(is_prime(number))
-        
+def is_prime(num):
+    if num == 2:
+        return True
+    elif not num & 1:
+        return False
+    end_value = num ** .5
+    if end_value.is_integer():
+        return False
+    end_value = int(end_value + 1)
+    for increment in range(3,end_value,2):
+        if num % increment == 0:
+            return False
+    return True    
 
-    factors = []
-    def factor(number, factors):
-        if is_prime(number) == True: 
-            None
+def helper_function(num,factors,incr):
+    div = None
+    num_limit = num ** .5
+    if is_prime(num):
+        return factors.append(num)
+    elif incr <= num_limit:
+        div = num / incr
+        if div.is_integer():
+            factors.append(incr)
+            num //= incr
+            helper_function(num,factors,2)
+        elif incr == 2:
+            helper_function(num,factors,3)
         else:
-            numtest = number
-            done = False
-            while done == False:
-                first_prime = 2
-                divisor = first_prime
-                primefound = False
-                while divisor < numtest and primefound == False:
-                    if numtest % divisor == 0:
-                        numtest = numtest / divisor
-                        factors.append(divisor)
-                        primefound = True
-                    elif is_prime(numtest) ==  True:
-                        factors.append(int(numtest))
-                        done = True
-                        primefound = True
-                    divisor += 1
-    factor(number, factors)
-    
-    def format_factors(factors):
-        print(factors)
-        
-    format_factors(factors)
-        
-    def display_factors(number, factors):
-        print("The number is ", number, "has", (len(factors)), "factors")
-    display_factors(number, factors)
+            incr += 2
+            while not is_prime(incr):
+                incr += 2
+            helper_function(num, factors, incr)
+
+def factor(num,factors):
+    if is_prime(num):
+        factors.append(num)
+    else:
+        helper_function(num,factors,2)
+
+def format_factors(factors):
+    used_nums = []
+    amount = []
+    for value in factors:
+        if value in used_nums:
+            amount[used_nums.index(value)] += 1
+        else:
+            used_nums.append(value)
+            amount.append(1)
+    count = 0
+    factors.clear()
+    while count < len(used_nums):
+        if amount[count] == 1:
+            factors.append(used_nums[count])
+        else:
+            factors.append(str(used_nums[count]) + "^" + str(amount[count]))
+        count += 1
+
+def display_factors(num,factors):
+    final_return = ''
+    if is_prime(num):
+        final_return = str(num) + ' its prime!'
+    else:
+        final_return += str(num) + ' = '
+        count = 0
+        for value in factors:
+            if count < len(factors) - 1:
+                final_return += str(value) + ' * '
+            else:
+                final_return += str(factors[len(factors) - 1])
+            count += 1
+    return final_return
+
+def factor_loop(num, factors):
+    if is_prime(num):
+        factors.append(1)
+        factors.append(num)
+    else:
+        divisor = None
+        incr = 2
+        num_limit = num ** .5
+        while incr < num_limit:
+            divisor = num / incr
+            if divisor.is_integer():
+                factors.append(incr)
+                num //= incr
+                num_limit = num ** .5
+                increment = 2
+            else:
+                increment += 1
+            if increment == int(num_limit):
+                factors.append(num)

@@ -5,22 +5,25 @@ import java.util.List;
 
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
-
-
 public class WordScrambler implements Scrambler {
-	
+
+	String [] word = {"TAN","HEY"};
+
 	private static final char TOKEN = 'A';
-	
-	public WordScrambler(String word) {
+
+	public WordScrambler() {
 		
-	}
-		 
-    
-	
+	} 
+
 	@Override
-	public void scrambleOrRemove(List<String> Word) {
-		
-		
+	public void scrambleOrRemove(List<String> wordList) {
+		for(int index = 0; index < wordList.size(); index++){
+			if(wordList.get(index).equals(scrambleWord(wordList.get(index))))
+				wordList.remove(index);
+			index = 1;
+			wordList.set(index,scrambleWord(wordList.get(index)));
+		}
+
 
 	}
 	@Override
@@ -38,11 +41,10 @@ public class WordScrambler implements Scrambler {
 		}
 		if(word.length() > sb.length())
 			sb.append(word.charAt(word.length() - 1));
-		
+
 		return sb.toString();
-	}
-	public static void main(String[] args) {
-		
 	}
 
 }
+
+
