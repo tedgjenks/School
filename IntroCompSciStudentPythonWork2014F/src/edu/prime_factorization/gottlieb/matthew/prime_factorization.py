@@ -7,68 +7,91 @@ import math
 def is_prime(number):
     if number == 2:
         return True
-    elif not number:
+    elif not number & 1:
         return False
-    elif not number==1:
+    end_value = number ** .5
+    if end_value.is_integer():
         return False
-    last= math.sqrt(number)
-    if last.is_integer():
-        return False
-    last = int(last)
-    for incr in range(3, last, 2):
-        if number % incr == 0:
+    end_value = int(end_value + 1)
+    for increment in range(3,end_value,2):
+        if number % increment == 0:
             return False
     return True
-def helper_method(number, factors, count):
-    if is_prime(number)==True:
+
+def helper_function(number,factors,incr):
+    div = None
+    number_limit = number ** .5
+    if is_prime(number):
         return factors.append(number)
-    elif count<= math.sqrt(number):
-        if number%count==0:
-            factors.append(count)
-            number=number//count
-            helper_method(number, factors, 2)
-        elif count==2:
-            helper_method(number, factors, 3)
+    elif incr <= number_limit:
+        div = number / incr
+        if div.is_integer():
+            factors.append(incr)
+            number //= incr
+            helper_function(number,factors,2)
+        elif incr == 2:
+            helper_function(number,factors,3)
         else:
-            count+=2
-            while not is_prime==True:
-                count+=2
-            helper_method(number, factors, count)
-def factor(number, factors):
-    if is_prime(number)==True:
-        factors.append(1)
+            incr += 2
+            while not is_prime(incr):
+                incr += 2
+            helper_function(number, factors, incr)
+
+def factor(number,factors):
+    if is_prime(number):
         factors.append(number)
     else:
-        helper_method(number, factors, 2)
+        helper_function(number,factors,2)
+
 def format_factors(factors):
     used_numbers = []
-    frequency = []
+    amount = []
     for value in factors:
         if value in used_numbers:
-            frequency[used_numbers.index(value)] += 1
+            amount[used_numbers.index(value)] += 1
         else:
             used_numbers.append(value)
-            frequency.append(1)
+            amount.append(1)
     count = 0
     factors.clear()
     while count < len(used_numbers):
-        if frequency[count]==1:
+        if amount[count] == 1:
             factors.append(used_numbers[count])
         else:
-            factors.append(str(used_numbers[count]) + "^" + str(frequency[count]))
+            factors.append(str(used_numbers[count]) + "^" + str(amount[count]))
         count += 1
-def display_factors(number, factors):
-    factor(number, factors)
-    format_factors(factors)
+
+def display_factors(number,factors):
     final_return = ''
-    if is_prime(number)==True:
+    if is_prime(number):
         final_return = str(number) + ' is prime!'
     else:
         final_return += str(number) + ' = '
         count = 0
-        while count < len(factors) - 1:
-            final_return += str(factors[count]) + ' * '
-            count+=1
-        final_return += str(factors[len(factors) - 1])
+        for value in factors:
+            if count < len(factors) - 1:
+                final_return += str(value) + ' * '
+            else:
+                final_return += str(factors[len(factors) - 1])
+            count += 1
     return final_return
-print(display_factors(1456,[]))
+
+def factor_loop(number, factors):
+    if is_prime(number):
+        factors.append(1)
+        factors.append(number)
+    else:
+        divisor = None
+        incr = 2
+        number_limit = number ** .5
+        while incr < number_limit:
+            divisor = number / incr
+            if divisor.is_integer():
+                factors.append(incr)
+                number //= incr
+                number_limit = number ** .5
+                increment = 2
+            else:
+                increment += 1
+            if increment == int(number_limit):
+                factors.append(number)

@@ -1,5 +1,6 @@
 def is_prime(number):
     prime = True
+    first_prime = 2
     divisor = first_prime
     while prime and divisor < number:
         if number % divisor == 0:

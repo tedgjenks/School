@@ -39,7 +39,7 @@ def format_factors(factors):
         if spaces == 1:
             factorsl.append(2)
         else:
-            factorsl.append("2^" + str(spaces))
+            factorsl.append('2^' + str(spaces))
         startnewprime = spaces
     while LeNumber > counter:
         if FormatedList[counter] == primecounter:
@@ -53,7 +53,7 @@ def format_factors(factors):
             if numnumber == 1:
                 factorsl.append(primecounter)
             else:
-                factorsl.append(repr(primecounter) + "^" + repr(numnumber))
+                factorsl.append(str(primecounter) + '^' + str(numnumber))
         else:
             primecounter += 2
         startnewprime = spaces
@@ -67,7 +67,7 @@ def format_factors(factors):
         factors.append(newlist.pop())    
 def display_factors(number, factors):
     if is_prime(number):
-        return(number, "is prime!")
+        return(str(number) + ' is prime!')
     else:
         javanot = (str(number) + " = ")
         for x in range(len(factors)):
