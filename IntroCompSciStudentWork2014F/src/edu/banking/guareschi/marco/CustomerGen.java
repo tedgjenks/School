@@ -1,33 +1,35 @@
-package edu.banking.smith.rod;
+package edu.banking.guareschi.marco;
+
 
 import edu.jenks.dist.banking.CheckingAccount;
 import edu.jenks.dist.banking.Customer;
 import edu.jenks.dist.banking.SavingsAccount;
 
 public class CustomerGen implements Customer {
-	private CheckingAccount checkingAccount;
-	private SavingsAccount savingsAccount;
+	private CheckingAccount checkingaccount;
 	private String name;
+	private SavingsAccount savingsaccount;
+	
 
 	public CustomerGen(String name) {
 		this.name = name;
 	}
 
 	@Override
-	public void addCheckingAccount(CheckingAccount checkingAccount) {
-		this.checkingAccount = checkingAccount;
-		
+	public void addCheckingAccount(CheckingAccount checkingaccount) {
+		this.checkingaccount = checkingaccount;
+
 	}
 
 	@Override
-	public void addSavingsAccount(SavingsAccount savingsAccount) {
-		this.savingsAccount = savingsAccount;
+	public void addSavingsAccount(SavingsAccount savingsaccount) {
+		this.savingsaccount = savingsaccount;
 
 	}
 
 	@Override
 	public CheckingAccount getCheckingAccount() {
-		return checkingAccount;
+		return checkingaccount;
 	}
 
 	@Override
@@ -37,15 +39,14 @@ public class CustomerGen implements Customer {
 
 	@Override
 	public SavingsAccount getSavingsAccount() {
-		return savingsAccount;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String arg0) {
+		
 
 	}
 
 }
-
-	

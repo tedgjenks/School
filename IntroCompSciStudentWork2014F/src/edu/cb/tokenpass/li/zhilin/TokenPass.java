@@ -12,7 +12,7 @@ public class TokenPass extends AbstractTokenPass {
 	public int[] createBoard(int playercount) {
 		int[] newBoard = new int [playercount];
 		for (int index = playercount; index < playercount; index++){
-			playercount =  1 + (int)(Math.random() * ( 11 - 1));
+			newBoard[index] =  1 + (int)(Math.random() * ( 11 - 1));
 		}
 		setBoard(newBoard);
 		return newBoard;

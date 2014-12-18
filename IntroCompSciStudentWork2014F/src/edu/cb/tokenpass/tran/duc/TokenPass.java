@@ -29,7 +29,11 @@ public class TokenPass extends AbstractTokenPass {
 	@Override
 	public void distributeCurrentPlayerTokens() {
 		int currentPlayer = getCurrentPlayer();
+		if(getBoard()[currentPlayer]  == 0){
+			return;
+		}
 		int count = getBoard()[currentPlayer];
+		int nextPlayer = currentPlayer;
 		getBoard()[currentPlayer] = 0;
 		currentPlayer = currentPlayer + 1;
 		for(;count > 0; count--){
@@ -42,9 +46,67 @@ public class TokenPass extends AbstractTokenPass {
 	}
 
 	@Override
-	public int playGame(int arg0) {
-		
-		return 0;
+	public int playGame(int currentPlayer) {
+		int winner = 0;
+		int round = 1;
+		setRound(round);
+		setCurrentPlayer(currentPlayer);
+		int count = 0;
+		int removeCount = 0;
+		while(1==1){
+			count = 0;
+			for(int index = 0; index < getBoard().length; index++){
+				if(getBoard()[index] == 0){
+					count++;
+				}
+			}
+			if(count == getBoard().length-1){
+				break;
+			}
+			round++;
+			setRound(round);
+			if(round % 6 == 0){
+				for(int index = 0; index < getBoard().length; index++){
+					if(getBoard()[index] > 0){
+						getBoard()[index]--;
+					}
+				}
+			}else{
+				removeCount = getCurrentPlayer() + 1;
+				for(int index = 0; index < getBoard().length; index++){
+					if(removeCount > getBoard().length - 1){
+						removeCount = 0;
+					}
+					if(getBoard()[removeCount] > 0){
+						getBoard()[removeCount]--;
+						break;
+					}
+				}
+			}
+			if(getBoard()[getCurrentPlayer()] == 0){
+				setCurrentPlayer(getCurrentPlayer() + 1);
+				if(getCurrentPlayer() > getBoard().length - 1){
+					setCurrentPlayer(0);
+				}
+			}else{
+				distributeCurrentPlayerTokens();
+				setCurrentPlayer(getCurrentPlayer() + 1);
+				if(getCurrentPlayer() > getBoard().length - 1){
+					setCurrentPlayer(0);
+				}
+			}
+			count = 0;
+			for(int index = 0; index < getBoard().length; index++){
+				if(getBoard()[index] == 0){
+					count++;
+				}
+			}
+			if(count == getBoard().length-1){
+				break;
+			}
+		}
+		winner = getCurrentPlayer();
+		return winner;
 	}
 
 }

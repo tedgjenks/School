@@ -5,6 +5,19 @@ import java.util.*;
 
 public class TokenPass extends AbstractTokenPass {
 	
+	public static void main(String[] args) {
+		TokenPass tp = new TokenPass(4);
+		int[] initialBoard = {3,2,6,10};
+		int[] expectedBoard = {5, 3, 1, 12};
+		int expCurrentPlayer = 2;
+		tp.setCurrentPlayer(expCurrentPlayer);
+		tp.setBoard(initialBoard);
+		tp.distributeCurrentPlayerTokens();
+		System.out.println("expBoard: " + Arrays.toString(expectedBoard));
+		System.out.println("actBoard: " + Arrays.toString(tp.getBoard()));
+		System.out.println(tp.getCurrentPlayer());
+	}
+	
 	public int random( ){
 		int random = ((int)Math.random() * 10) + 1;
 		return random;
@@ -29,16 +42,17 @@ public class TokenPass extends AbstractTokenPass {
 	public void distributeCurrentPlayerTokens() {
 		int[] board = getBoard();
 		int player = getCurrentPlayer();
-		int currPlayer = player;
-		int index  = 0;
 		int tokensGiving = board[player];
 		board[player] = 0;
-		for(; index < board.length; index++) {
+		player++;
+		for(; tokensGiving > 0; player++,tokensGiving--) {
 			try {
-				board[player]++;
+				board[player] = board[player] + 1;
+
 			}
 			catch (IndexOutOfBoundsException ex) {
-				index = 0;
+				player = 0;
+				board[player] += 1;
 				
 			}
 		}

@@ -21,7 +21,21 @@ public class TokenPass extends AbstractTokenPass {
 
 	@Override
 	public void distributeCurrentPlayerTokens() {
-		
+		int[] board = getBoard();
+		int player = getCurrentPlayer();
+		int distribute = board[player];
+		board[player] = 0;
+		for (;distribute > 0; distribute--){
+			try {
+			player++;
+			board[player] = board[player] + 1;
+			}
+			catch(IndexOutOfBoundsException r) {
+				player = 0;
+				board[player] = board[player] + 1;
+			}
+			
+		}
 		
 	}
 
