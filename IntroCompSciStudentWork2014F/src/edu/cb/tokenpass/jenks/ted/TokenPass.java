@@ -3,6 +3,7 @@
  */
 package edu.cb.tokenpass.jenks.ted;
 
+import java.util.Date;
 import java.util.Random;
 
 import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
@@ -13,7 +14,7 @@ import edu.jenks.dist.cb.tokenpass.AbstractTokenPass;
  */
 public class TokenPass extends AbstractTokenPass {
 	
-	private final Random random = new Random(System.currentTimeMillis());
+	private final Random random = new Random(new Date().getTime());
 	
 	private boolean printGame = false;
 	
