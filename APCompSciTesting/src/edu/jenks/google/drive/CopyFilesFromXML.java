@@ -23,12 +23,12 @@ public class CopyFilesFromXML {
 			Element rootElement = document.getRootElement();
 			clearLogs = Boolean.parseBoolean(rootElement.getAttributeValue("clear-logs"));
 			targetRoot = rootElement.getChildText("eclipse-student-root");
-			//System.out.println(targetRoot);
+			//out.println(targetRoot);
 			Element googleDriveElement = rootElement.getChild("google-drive");
 			sourceRoot = new File(googleDriveElement.getChildText("turnin-root"));
 			turninDirSuffix = googleDriveElement.getChildText("turnin-dir-suffix");
 			File[] studentDirs = CopyFileHelper.getStudentDirectories(sourceRoot, turninDirSuffix);
-			out.println(studentDirs.length + " directories examined.");
+			//out.println(studentDirs.length + " directories examined.");
 			processProjects(rootElement.getChildren("project"), studentDirs);
 			JDOMHelper.updateXml(document, TestRunner.XML_FILE_PATH);
 		} catch (JDOMException | IOException e) {
@@ -39,13 +39,13 @@ public class CopyFilesFromXML {
 	private static void processProjects(List<Element> projects, File[] studentDirs) throws IOException {
 		for(Element project : projects) {
 			String packageRoot = project.getChildText("package-root");
-			//System.out.println(packageRoot);
+			//out.println(packageRoot);
 			List<Element> files = project.getChild("files").getChildren("file");
 			Set<Student> studentsToProcess = new HashSet<Student>();
 			for(Element file : files) {
 				String fileName = file.getText();
 				for(int index = studentDirs.length - 1; index >= 0; index--) {
-					//System.out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetRoot + packageRoot + ", " + turninDirSuffix);
+					//out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetRoot + packageRoot + ", " + turninDirSuffix);
 					String source = studentDirs[index].getPath() + "\\" + fileName;
 					Student student = CopyFileHelper.getStudent(source, turninDirSuffix);
 					String generalDest = targetRoot + packageRoot;
@@ -59,7 +59,7 @@ public class CopyFilesFromXML {
 				}
 			}
 			for(Student student : studentsToProcess) {
-				System.out.println("Add element for " + student);
+				out.println("Add element for " + student);
 				Element studentsElement = project.getChild("students");
 				Element firstNameElement = new Element("first-name");
 				firstNameElement.setText(student.getFirstName());
@@ -71,6 +71,7 @@ public class CopyFilesFromXML {
 				studentsElement.addContent(studentElement);
 			}
 			out.println(studentsToProcess.size() + " students processed for project " + project.getChildText(TestRunner.PROJECT_NAME_TAG));
+			out.println();
 		}
 		out.println(projects.size() + " projects processed.");
 	}
