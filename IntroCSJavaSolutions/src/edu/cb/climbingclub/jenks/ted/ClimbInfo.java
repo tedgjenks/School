@@ -3,6 +3,8 @@
  */
 package edu.cb.climbingclub.jenks.ted;
 
+import edu.jenks.dist.cb.climbingclub.AbstractClimbInfo;
+
 /**
  * @author Ted
  *

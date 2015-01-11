@@ -3,14 +3,13 @@ package edu.cb.lunch.guareschi.alex;
 
 import edu.jenks.dist.cb.lunch.*;
 
-public class Trio extends AbstractTrio {
+public class Trio extends AbstractTrio{
 
-	public Trio(Sandwich sandwich, Salad salad, Drink drink) {
+
+	public Trio(Sandwich sandwich, Salad salad, Drink drink){
 		super(sandwich, salad, drink);
-
-		
 	}
-
+	
 	@Override
 	public String getName() {
 		String trioName = "";
@@ -20,35 +19,32 @@ public class Trio extends AbstractTrio {
 		String saladName = salad.getName();
 		Drink drink = getDrink();
 		String drinkName = drink.getName();
-		trioName= (sandwichName + "/" + saladName + "/" + drinkName + " Trio");
+		trioName += (sandwichName + "/" + saladName + "/" + drinkName + " Trio");
 		return trioName;
+
 	}
 
 	@Override
 	public double getPrice() {
 		double price = 0.00d;
 		Sandwich sandwich = getSandwich();
-		double sandwichPrice= sandwich.getPrice();
+		double sandwichPrice = sandwich.getPrice();
 		Salad salad = getSalad();
-		double saladPrice= salad.getPrice();
+		double saladPrice = salad.getPrice();
 		Drink drink = getDrink();
-		double drinkPrice= drink.getPrice();
-		double price1 = sandwichPrice + saladPrice;
-		double price2 = sandwichPrice + drinkPrice;
-		double price3 = saladPrice+drinkPrice;
-		if (price1 >= price2 && price1>= price3){
+		double drinkPrice = drink.getPrice();
+		double price1= price + sandwichPrice + saladPrice;
+		double price2= price +sandwichPrice + drinkPrice;
+		double price3 = price + saladPrice + drinkPrice;
+		if (price1 >= price2 && price1 >= price3){
 			return price1;
 		}
-		if (price2 >= price1 && price2>=price3){
+		if (price2 >= price1 && price2 >= price3){
 			return price2;
 		}
-		if (price3>=price1 && price3>=price2){
+		if (price3 >= price2 && price3 >= price1){
 			return price3;
-			
 		}
-		
-
-		return price;
+		return 0;
 	}
-
 }

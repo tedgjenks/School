@@ -30,13 +30,17 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 
 	@Override
 	public double withdraw(double withdrawAmount) {
-		if (withdrawAmount > getBalance()){
-			withdrawAmount = 0;
-			return withdrawAmount;
+		double balance = getBalance()- withdrawAmount;
+		setBalance(balance);
+		if(balance>0){
+			return(withdrawAmount);
 		}else{
-			double balance = getBalance()- withdrawAmount;
-			setBalance(balance);
-			return withdrawAmount;
+			setBalance(balance+withdrawAmount);
+			System.out.println("Illegal operation");
+			return(0);
 		}
+		
+		
 	}
+	
 }

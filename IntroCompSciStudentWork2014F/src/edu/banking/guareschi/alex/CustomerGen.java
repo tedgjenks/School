@@ -9,7 +9,7 @@ public class CustomerGen implements Customer {
 	private SavingsAccount savingsAccount;
 	private String name;
 	
-	public CustomerGen() {
+	public CustomerGen(String name) {
 		this.name=name;
 	}
 

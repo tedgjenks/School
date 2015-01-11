@@ -1,36 +1,37 @@
 package edu.cb.scrambler.smith.rod;
 
 import java.util.List;
-import java.util.Scanner;
 
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
 public class WordScrambler implements Scrambler {
+	
+	private static final char TOKEN = 'A';
 
 	public WordScrambler() {
 	}
-
-	public static void scrambleOrRemove(String words2) {
-		Scanner sc = new Scanner (System.in);
-	    String words = sc.nextLine();
-	    System.out.println(words);
-	    WordScrambler w = new WordScrambler();
-		WordScrambler.scrambleOrRemove(words);
+	
+	
+	public void scrambleOrRemove(List<String> wordList) {
 	}
+
 
 	public String scrambleWord(String word) {
-		String[] word1 = word.trim().split(" ");
-		for (int i = 0; i < word1.length; i++) {
-			System.out.println(word1[i]);		
-	    }
-		return word;
-		
-	}
-
-	public void scrambleOrRemove(List<String> arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-}
+		StringBuilder sb = new StringBuilder(word.length());
+		for(int index = 0; index < word.length() - 1; index++) {
+			char curChar = word.charAt(index);
+			char nextChar = word.charAt(index + 1);
+			if(curChar == TOKEN && nextChar != TOKEN) {
+				sb.append(nextChar).append(curChar);
+				index++;
+			} else { 
+				sb.append(curChar);
+			}
+			
+		}
+		if(word.length() > sb.length())
+			sb.append(word.charAt(word.length() - 1));
+		return sb.toString();
+	}	
 	
+}

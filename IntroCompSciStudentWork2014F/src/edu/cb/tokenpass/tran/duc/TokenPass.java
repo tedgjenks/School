@@ -48,8 +48,7 @@ public class TokenPass extends AbstractTokenPass {
 	@Override
 	public int playGame(int currentPlayer) {
 		int winner = 0;
-		int round = 1;
-		setRound(round);
+		setRound(1);
 		setCurrentPlayer(currentPlayer);
 		int count = 0;
 		int removeCount = 0;
@@ -60,12 +59,10 @@ public class TokenPass extends AbstractTokenPass {
 					count++;
 				}
 			}
-			if(count == getBoard().length-1){
+			if(count == getBoard().length - 1){
 				break;
 			}
-			round++;
-			setRound(round);
-			if(round % 6 == 0){
+			if(getRound() % 5 == 0){
 				for(int index = 0; index < getBoard().length; index++){
 					if(getBoard()[index] > 0){
 						getBoard()[index]--;
@@ -95,15 +92,7 @@ public class TokenPass extends AbstractTokenPass {
 					setCurrentPlayer(0);
 				}
 			}
-			count = 0;
-			for(int index = 0; index < getBoard().length; index++){
-				if(getBoard()[index] == 0){
-					count++;
-				}
-			}
-			if(count == getBoard().length-1){
-				break;
-			}
+			setRound(getRound() + 1);
 		}
 		winner = getCurrentPlayer();
 		return winner;

@@ -1,36 +1,40 @@
 package edu.cb.lunch.latham.chase;
 
-import edu.jenks.dist.cb.lunch.MenuItem;
-import edu.jenks.dist.cb.lunch.AbstractTrio;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.List;
 
-public class Trio implements MenuItem {
+import edu.jenks.dist.cb.lunch.*;
 
-	Object [] Sandwhiches = {"Cheesebuger", "Club Sandwhich"};
-	Object [] Salads = {"Spinach Salad", "Cole Slaw"};
-	Object [] Drink = {"Orange Soda", "Cupposhino"};
-	Object [] Trio = {"Cheeseburger", "Spinach Salad", "Orange Soda",};
-	Object [] Trio1 = {"Club Sandwhich", "Cole Slaw", "Cupposhino"};
+public class Trio extends AbstractTrio implements MenuItem {
+
 	
-	public Trio() {
+	public Trio(Sandwich sandwich, Salad salad, Drink drink) {
+		super(sandwich, salad, drink);
 		
 	}
 
 	@Override
 	public String getName() {
-		for (Sandwhiches.equals("Cheesebuger");;)
-			
-		return null;
+		String sandwichName = getSandwich().getName();
+		String saladName = getSalad().getName();
+		String drinkName = getDrink().getName();
+		String orderName =(sandwichName + "/" +saladName + "/" +drinkName + "/" + "Trio");		
+		return orderName;
 	}
 
 	@Override
 	public double getPrice() {
-		
-		return 0;
+		//List<Double> priceList = new ArrayList<Double>();
+		//priceList.add(getSandwich().getPrice());
+		//priceList.add(getSalad().getPrice());
+		//priceList.add(getDrink().getPrice());
+		double sandwichPrice = getSandwich().getPrice();
+		double saladPrice = getSalad().getPrice();
+		double drinkPrice = getDrink().getPrice();
+		double price = sandwichPrice + saladPrice + drinkPrice;
+		return price;
 	}
-
-	public static void main(String[] args) {
-		
-
-	}
+	
 
 }

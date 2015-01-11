@@ -15,9 +15,22 @@ public class WordScrambler implements Scrambler {
 		}
 	}
 
-	@Override
-	public void scrambleOrRemove(List<String> word) {
+	public WordScrambler() {
+		// TODO Auto-generated constructor stub
+	}
 
+	@Override
+	public void scrambleOrRemove(List<String> wordList) {
+		String scrambledWord = null;
+		for(int index = 0; index < wordList.size(); index++){
+			scrambledWord = scrambleWord(wordList.get(index));
+			if (wordList.get(index).equals(scrambledWord)){
+				wordList.remove(wordList.get(index));
+				index--;
+			}else{
+				wordList.set(index, scrambledWord);
+			}
+		}
 	}
 
 	@Override

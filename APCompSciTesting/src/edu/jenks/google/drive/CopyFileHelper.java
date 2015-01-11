@@ -51,6 +51,7 @@ public class CopyFileHelper {
 				destFile.createNewFile();
 			Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			sourceFile.delete();
+			System.out.println("Copied " + fileName + " for " + student);
 		}
 		return sourceFileExists;
 	}

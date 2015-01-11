@@ -39,7 +39,7 @@ def format_factors(factors):
         
 def display_factors(number,factors):
     if is_prime(number) == True:
-        return str(number) + " is a prime number!"
+        return str(number) + " is prime!"
     display = (str(number) + "*")
     for x in range(len(factors)):
         display += str(factor[x])

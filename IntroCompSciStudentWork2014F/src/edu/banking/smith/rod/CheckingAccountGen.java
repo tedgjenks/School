@@ -23,9 +23,9 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 	}
 
 	@Override
-	public double deposit(double depositamount) {
-		setBalance(getBalance() + depositamount);
-		return depositamount;
+	public double deposit(double depositAmount) {
+		setBalance(getBalance() + depositAmount);
+		return depositAmount;
 	}
 
 	@Override
@@ -35,9 +35,11 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 
 	@Override
 	public double withdraw(double withdrawAmount) {
-		if (withdrawAmount >= getBalance())
-				withdrawAmount = 0;
-		setBalance(getBalance() + withdrawAmount);
+		if (withdrawAmount > getBalance()){
+			withdrawAmount = 0;
+		}
+		double balance = getBalance() - withdrawAmount;
+		setBalance(balance);
 		return withdrawAmount;
 	}
 

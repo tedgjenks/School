@@ -9,7 +9,7 @@ public class CustomerGen implements Customer {
 	private SavingsAccount savingsAccount;
 	private String name;
 
-	public CustomerGen() {
+	public CustomerGen(String name) {
 		// TODO Auto-generated constructor stub
 		this.name = name;
 	}

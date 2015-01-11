@@ -26,12 +26,11 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 	public double deposit(double gain) {
 		double newbalance = getBalance() + gain;
 		setBalance(newbalance);
-		return newbalance;
+		return gain;
 	}
 	
 	@Override
 	public double transfer(double arg0, Account arg1) {
-		
 		return 0;
 	}
 	

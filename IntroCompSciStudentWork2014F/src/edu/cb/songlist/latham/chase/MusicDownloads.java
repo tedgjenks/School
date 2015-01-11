@@ -1,38 +1,48 @@
 package edu.cb.songlist.latham.chase;
 
-import edu.jenks.dist.cb.songlist.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import edu.jenks.dist.cb.songlist.AbstractMusicDownloads;
+import edu.jenks.dist.cb.songlist.DownloadInfo;
 
-
-public class MusicDownloads<Aqualung, Lights> {
-Object Lights = "lights";
-Object Aqualung = "aqualung";
-	public MusicDownloads(String title){
-		
+public class MusicDownloads extends AbstractMusicDownloads {	
+	String object1 = (String) ("Sion1");
+	String object2 = (String) ("Sion2");
+	///private DownloadInfo song1;
+	///DownloadInfo  downloadInfo = song1;
+	
+	public MusicDownloads() {
+		getDownloadInfo(object1).getTitle();
 	}
 
-	public Object DownloadInfo(Lights lights,Aqualung aqualung ){
-		
-		
-		
+	@Override
+	public DownloadInfo getDownloadInfo(String title) {
+		List<DownloadInfo> ca = getDownloadList();
+		for(int index = 0; index < ca.size(); index++){
+			String name = ca.get(index).getTitle();
+			if(name.equals(title));
+		}
 		return null;
 	}
+
+	@Override
+	public void updateDownloads(List<String> titles) {
+		List<DownloadInfo> d1 = getDownloadList();
+		for(String title:titles){
+			DownloadInfo songInfo = getDownloadInfo(title);
+			if(songInfo == null){
+				d1.add(new DownloadInfo(title));
+			}else{
+				songInfo.incrementTimesDownloaded();
+			}
+		}
 	
-	public void getTitle(){
-		
+
 	}
-	
-	public void incrementTimesDownloaded(){
+
+	public static void main(String[] args) {
 		
-	}
-	
-	public int getTimesDownloaded(){
-		 getTimesDownloaded();
-		return 0;
-	}
-	
-	public void setTimesDownloaded(int timesDownloaded){
-		
+
 	}
 
 }

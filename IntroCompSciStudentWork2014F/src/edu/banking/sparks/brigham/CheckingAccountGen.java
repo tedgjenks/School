@@ -31,13 +31,14 @@ public class CheckingAccountGen extends AccountGen implements CheckingAccount {
 
 	@Override
 	public double withdraw(double amountWithdrawn) {
-		// TODO Auto-generated method stub
-		if(amountWithdrawn >= getBalance()){
-			return 0;
-		}else{
-			double balance = getBalance() - amountWithdrawn;
-			setBalance(balance);
+		double balance = getBalance()- amountWithdrawn;	// TODO Auto-generated method stub
+		setBalance(balance);
+		if(balance>0){
 			return amountWithdrawn;
+		}else{
+			setBalance(balance+amountWithdrawn);
+			System.out.println("invalid operation");
+			return 0;
 		}
 	}
 }
