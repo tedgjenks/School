@@ -1,5 +1,13 @@
 package edu.cb.climbingclub.guareschi.marco;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import edu.jenks.dist.cb.climbingclub.AbstractClimbInfo;
 import edu.jenks.dist.cb.climbingclub.AbstractClimbingClub;
+
 public class ClimbingClubAlphabetical extends AbstractClimbingClub {
 
 	public ClimbingClubAlphabetical() {
@@ -8,14 +16,23 @@ public class ClimbingClubAlphabetical extends AbstractClimbingClub {
 
 	@Override
 	public void addClimb(String arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i < this.climbList.size(); i++) {
+			 if (arg0.compareTo(this.climbList.get(i).getPeakName()) <= 0) {
+			 this.climbList.add(i, new ClimbInfo(arg0, arg1));
+			    return;
+			 }
+		}
+		this.climbList.add(new ClimbInfo(arg0, arg1)); 
 	}
 
 	@Override
 	public int distinctPeakNames() {
-		// TODO Auto-generated method stub
-		return 0;
+		List<String> tempClimbList1 = new ArrayList<String>();
+		for (AbstractClimbInfo name : this.climbList) {
+			tempClimbList1.add(name.getPeakName());
+		}
+		Set<String> tempClimbList2 = new HashSet<String>(tempClimbList1);
+    		 return tempClimbList2.size();
 	}
 
 }

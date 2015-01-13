@@ -1,16 +1,22 @@
 package edu.cb.climbingclub.detreville.will;
 
-import edu.jenks.dist.cb.climbingclub.AbstractClimbInfo;
+import edu.jenks.dist.cb.climbingclub.AbstractClimbingClub;
 
-public class ClimbingClubChronological extends AbstractClimbInfo {
+public class ClimbingClubChronological extends AbstractClimbingClub {
 
-	public ClimbingClubChronological(String peakName, int climbTime) {
-		super(peakName, climbTime);
+	public ClimbingClubChronological() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public int compareTo(AbstractClimbInfo o) {
+	public void addClimb(String peakName, int clubTime) {
+		this.climbList.add(new ClimbInfo(peakName, clubTime));
+		
+
+	}
+
+	@Override
+	public int distinctPeakNames() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

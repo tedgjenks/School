@@ -1,8 +1,8 @@
-package edu.cb.climbingclub.guareschi.marco;
+package edu.cb.climbingclub.smithdeal.thomas;
 
 import edu.jenks.dist.cb.climbingclub.AbstractClimbInfo;
 
-public class ClimbInfo extends AbstractClimbInfo{
+public class ClimbInfo extends AbstractClimbInfo {
 
 	public ClimbInfo(String peakName, int climbTime) {
 		super(peakName, climbTime);
@@ -10,8 +10,10 @@ public class ClimbInfo extends AbstractClimbInfo{
 	}
 
 	@Override
-	public int compareTo(AbstractClimbInfo peakName) {
+	public int compareTo(AbstractClimbInfo o) {
 		// TODO Auto-generated method stub
-		return 0;
+		String mountain= o.getPeakName();
+		return this.getPeakName().compareTo(mountain);
 	}
+
 }

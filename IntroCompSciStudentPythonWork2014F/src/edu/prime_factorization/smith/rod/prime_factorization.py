@@ -1,3 +1,8 @@
+'''
+Created on Oct 13, 2014
+
+@author: SMITRO47
+'''
 import math
 
 def is_prime(number):
@@ -59,3 +64,8 @@ def display_factors(number, factors):
             else:
                 display = display + str(factors[x]) + ' x '
         return display
+
+        
+    
+    
+    

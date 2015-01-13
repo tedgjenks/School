@@ -2,40 +2,45 @@ package edu.cb.tokenpass.smithdeal.thomas;
 
 import edu.jenks.dist.cb.tokenpass.*;
 
-public class TokenPass extends AbstractTokenPass{
-
+public class TokenPass extends AbstractTokenPass {
 	public TokenPass(int playerCount) {
-        int[]createBoard = new int[playerCount];
-
+		int board [] = createBoard(playerCount);
+		setBoard(board);
 	}
-		
-        
-
-		
-		
-		
-	
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
-	public int[] createBoard(int arg0) {
+	public int[] createBoard(int playerCount) {
 		// TODO Auto-generated method stub
-		return null;
+		int boardCreated []= new int[playerCount];
+		for(int i=0; i< playerCount; i++){
+			int number= (int)(Math.random()*10);
+			number +=1;
+			boardCreated[i]= number;
+		}
+		return boardCreated;
 	}
 
 	@Override
 	public void distributeCurrentPlayerTokens() {
 		// TODO Auto-generated method stub
-		
+		int [] currentBoard = getBoard();
+		int currentPlayer = getCurrentPlayer();
+		int currentTotal = currentBoard[currentPlayer];
+		int indexPlayer = currentPlayer +1;
+		currentBoard[currentPlayer] = 0;
+		while(currentTotal >0 ){
+			if(indexPlayer == currentBoard.length){
+				indexPlayer = 0;
+			}
+			currentBoard[indexPlayer]++;
+			currentTotal-=1;
+			indexPlayer +=1;
+		}
 	}
 
 	@Override
-	public int playGame(int arg0) {
+	public int playGame(int currentPlayer) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 }

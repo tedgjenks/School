@@ -1,4 +1,4 @@
-package edu.cb.climbingclub.detreville.will;
+package edu.cb.climbingclub.rhodes.carter;
 
 import edu.jenks.dist.cb.climbingclub.AbstractClimbInfo;
 
@@ -10,9 +10,9 @@ public class ClimbInfo extends AbstractClimbInfo {
 	}
 
 	@Override
-	public int compareTo(AbstractClimbInfo peakName) {
-		// TODO Auto-generated method stub
-		return this.getPeakName().compareTo(peakName.getPeakName());
+	public int compareTo(AbstractClimbInfo o) {
+		String mountain = o.getPeakName();
+		return this.getPeakName().compareTo(mountain);
 	}
 
 }
