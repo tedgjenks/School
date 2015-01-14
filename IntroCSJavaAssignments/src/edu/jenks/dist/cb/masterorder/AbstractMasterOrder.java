@@ -27,6 +27,7 @@ public abstract class AbstractMasterOrder {
 	public abstract int getTotalBoxes();
 	
 	/**
+	 * Removed all orders of variety <code>cookieVar</code>.<br /> 
 	 * Removes all cookie orders from the master order that have the same variety
 	 * of cookie as <code>cookieVar</code> and returns the total number of boxes
 	 * that were removed. 
@@ -35,10 +36,16 @@ public abstract class AbstractMasterOrder {
 	 */
 	public abstract int removeVariety(String cookieVar);
 
+	/**
+	 * @return
+	 */
 	public List<CookieOrder> getOrders() {
 		return orders;
 	}
 
+	/**
+	 * @param orders
+	 */
 	public void setOrders(List<CookieOrder> orders) {
 		this.orders = orders;
 	}

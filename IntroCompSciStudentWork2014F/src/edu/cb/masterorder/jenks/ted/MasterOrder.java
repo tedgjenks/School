@@ -40,7 +40,7 @@ public class MasterOrder extends AbstractMasterOrder {
 			CookieOrder cookieOrder = orders.get(index);
 			if(cookieVar.equals(cookieOrder.getVariety())) {
 				orders.remove(index);
-				numberRemoved++;
+				numberRemoved += cookieOrder.getNumBoxes();
 			}
 		}
 		return numberRemoved;

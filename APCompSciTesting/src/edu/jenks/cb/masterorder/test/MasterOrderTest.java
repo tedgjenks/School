@@ -4,15 +4,10 @@
 package edu.jenks.cb.masterorder.test;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 
-import edu.jenks.dist.cb.masterorder.AbstractMasterOrder;
-import edu.jenks.dist.cb.masterorder.CookieOrder;
+import edu.jenks.dist.cb.masterorder.*;
 import edu.jenks.test.Testable;
 import edu.jenks.util.ReflectionUtil;
 
@@ -22,6 +17,13 @@ import edu.jenks.util.ReflectionUtil;
  */
 public class MasterOrderTest extends Testable {
 	
+	private static List<CookieOrder> expOrdersStandard = new ArrayList<CookieOrder>();
+	
+	static {
+		expOrdersStandard.add(new CookieOrder("Shortbread", 5));
+		expOrdersStandard.add(new CookieOrder("Macaroon", 2));
+	}
+	
 	private AbstractMasterOrder studentMasterOrder;
 	private Random random = new Random(System.currentTimeMillis());
 
@@ -29,6 +31,109 @@ public class MasterOrderTest extends Testable {
 	 * 
 	 */
 	public MasterOrderTest() {}
+	
+	public void testRemoveVariety() {
+		initData1();
+		
+		//standard - remove Chocolate Chip
+		String variety = "Chocolate Chip";
+		int expRemoved = 4;
+		int actRemoved = studentMasterOrder.removeVariety(variety);
+		if(expRemoved != actRemoved) {
+			logExpectedActual(Level.WARNING, "Failed - removeVariety return value; " + variety + " removed", expRemoved, actRemoved);
+		} else {
+			totalPoints += 2;
+			feedbackLogger.log(Level.INFO, "Passed - removeVariety return value; " + variety + " removed");
+			if(ordersEqual(expOrdersStandard, studentMasterOrder.getOrders())) {
+				totalPoints +=2;
+				feedbackLogger.log(Level.INFO, "Passed - removeVariety orders; " + variety + " removed");
+			} else
+				feedbackLogger.log(Level.INFO, "Failed - removeVariety orders; " + variety + " removed");
+		}
+		
+		//standard - remove Brownie
+		variety = "Brownie";
+		expRemoved = 0;
+		actRemoved = studentMasterOrder.removeVariety(variety);
+		if(expRemoved != actRemoved) {
+			logExpectedActual(Level.WARNING, "Failed - removeVariety return value; " + variety + " removed", expRemoved, actRemoved);
+		} else {
+			totalPoints += 2;
+			feedbackLogger.log(Level.INFO, "Passed - removeVariety return value; " + variety + " removed");
+			if(ordersEqual(expOrdersStandard, studentMasterOrder.getOrders())) {
+				totalPoints +=2;
+				feedbackLogger.log(Level.INFO, "Passed - removeVariety orders; " + variety + " removed");
+			} else
+				feedbackLogger.log(Level.INFO, "Failed - removeVariety orders; " + variety + " removed");
+		}
+		
+		List<CookieOrder> orders = studentMasterOrder.getOrders(), expOrders = new ArrayList<CookieOrder>();
+		orders.clear();
+		
+		int number = getRandomNumberBoxes();
+		expRemoved = number;
+		orders.add(new CookieOrder("A", number));
+		
+		number = getRandomNumberBoxes();
+		CookieOrder cookieOrder = new CookieOrder("B", number);
+		orders.add(cookieOrder);
+		expOrders.add(cookieOrder);
+		
+		number = getRandomNumberBoxes();
+		expRemoved += number;
+		orders.add(new CookieOrder("A", number));
+		
+		number = getRandomNumberBoxes();
+		cookieOrder = new CookieOrder("C", number);
+		orders.add(cookieOrder);
+		expOrders.add(cookieOrder);
+		
+		number = getRandomNumberBoxes();
+		expRemoved += number;
+		orders.add(new CookieOrder("A", number));
+		
+		//random - remove A
+		variety = "A";
+		actRemoved = studentMasterOrder.removeVariety(variety);
+		if(expRemoved != actRemoved) {
+			logExpectedActual(Level.WARNING, "Failed - removeVariety return value; " + variety + " removed", expRemoved, actRemoved);
+		} else {
+			totalPoints += 3;
+			feedbackLogger.log(Level.INFO, "Passed - removeVariety return value; " + variety + " removed");
+			if(ordersEqual(expOrders, studentMasterOrder.getOrders())) {
+				totalPoints +=3;
+				feedbackLogger.log(Level.INFO, "Passed - removeVariety orders; " + variety + " removed");
+			} else
+				feedbackLogger.log(Level.INFO, "Failed - removeVariety orders; " + variety + " removed");
+		}
+		
+		//standard - remove A (should not be any remaining)
+		expRemoved = 0;
+		actRemoved = studentMasterOrder.removeVariety(variety);
+		if(expRemoved != actRemoved) {
+			logExpectedActual(Level.WARNING, "Failed - removeVariety return value; " + variety + " removed", expRemoved, actRemoved);
+		} else {
+			totalPoints += 3;
+			feedbackLogger.log(Level.INFO, "Passed - removeVariety return value; " + variety + " removed");
+			if(ordersEqual(expOrders, studentMasterOrder.getOrders())) {
+				totalPoints +=3;
+				feedbackLogger.log(Level.INFO, "Passed - removeVariety orders; " + variety + " removed");
+			} else
+				feedbackLogger.log(Level.INFO, "Failed - removeVariety orders; " + variety + " removed");
+		}
+	}
+	
+	private boolean ordersEqual(List<CookieOrder> orders1, List<CookieOrder> orders2) {
+		boolean equal = orders1.size() == orders2.size();
+		if(equal) {
+			for(int index = orders1.size() - 1; index >= 0 && equal; index--) {
+				CookieOrder cookieOrder1 = orders1.get(index), cookieOrder2 = orders2.get(index);
+				if(!cookieOrder1.getVariety().equals(cookieOrder2.getVariety()) || cookieOrder1.getNumBoxes() != cookieOrder2.getNumBoxes())
+					equal = false;
+			}
+		}
+		return equal;
+	}
 	
 	public void testGetTotalBoxes() {
 		initData1();
@@ -38,7 +143,7 @@ public class MasterOrderTest extends Testable {
 			totalPoints += 5;
 			feedbackLogger.log(Level.INFO, "Passed - getTotalBoxes standard.");
 		} else
-			feedbackLogger.log(Level.WARNING, "Failed - getTotalBoxes standard.");
+			logExpectedActual(Level.WARNING, "Failed - getTotalBoxes standard.", expV, actV);
 		
 		List<CookieOrder> orders = studentMasterOrder.getOrders();
 		orders.clear();
@@ -56,7 +161,7 @@ public class MasterOrderTest extends Testable {
 			totalPoints += 5;
 			feedbackLogger.log(Level.INFO, "Passed - getTotalBoxes random.");
 		} else
-			feedbackLogger.log(Level.WARNING, "Failed - getTotalBoxes random.");
+			logExpectedActual(Level.WARNING, "Failed - getTotalBoxes random.", String.valueOf(expV), String.valueOf(actV));
 	}
 	
 	private int getRandomNumberBoxes() {
@@ -77,7 +182,7 @@ public class MasterOrderTest extends Testable {
 	 */
 	@Override
 	public int getPointsAvailable() {
-		return 80;
+		return 100;
 	}
 
 	/* (non-Javadoc)

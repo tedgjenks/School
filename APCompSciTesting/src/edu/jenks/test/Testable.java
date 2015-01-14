@@ -131,6 +131,18 @@ public abstract class Testable implements Runnable {
 		feedbackLogger.log(Level.WARNING, sb.toString());
 	}
 	
+	public void logExpectedActual(Level level, String message, long expected, long actual) {
+		logExpectedActual(level, message, String.valueOf(expected), String.valueOf(actual));
+	}
+	
+	public void logExpectedActual(Level level, String message, String expected, String actual) {
+		StringBuilder sb = new StringBuilder(100);
+		sb.append(message).append("\n ");
+		sb.append("Expected: ").append(expected).append("\n ");
+		sb.append("Actual: " ).append(actual).append("\n ");
+		feedbackLogger.log(level, sb.toString());
+	}
+	
 	public void setLogFilePathFeedback(String path, Student student) throws IOException {
 		feedbackLogger = Logger.getLogger(student + " Feedback: " + getClass().getName());
 		LoggingUtil.initLocalFileLogger(feedbackLogger, path);
