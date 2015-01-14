@@ -22,4 +22,7 @@
 	<subpackage name="cb.climbingclub">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="cb.masterorder">
+		<allow pkg="java.util"/>
+	</subpackage>
 </import-control>
