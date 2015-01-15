@@ -32,6 +32,41 @@ public class MasterOrderTest extends Testable {
 	 */
 	public MasterOrderTest() {}
 	
+	public void testGetTotalBoxesByVariety() {
+		List<CookieOrder> orders = studentMasterOrder.getOrders();
+		orders.clear();
+		int numberA = 0, numberB = 0;
+		int number = getRandomNumberBoxes();
+		orders.add(new CookieOrder("A", number));
+		numberA += number;
+		number = getRandomNumberBoxes();
+		orders.add(new CookieOrder("B", number));
+		numberB += number;
+		number = getRandomNumberBoxes();
+		orders.add(new CookieOrder("A", number));
+		numberA += number;
+		Map<String, Integer> exp = new HashMap<String, Integer>();
+		exp.put("A", numberA);
+		exp.put("B", numberB);
+		Map<String, Integer> act = studentMasterOrder.getTotalBoxesByVariety();
+		if(act != null && exp.size() == act.size()) {
+			Iterator keys = exp.keySet().iterator();
+			boolean pass = true;
+			while(pass && keys.hasNext()) {
+				Object key = keys.next();
+				if(!exp.get(key).equals(act.get(key))) {
+					pass = false;
+				}
+			}
+			if(pass) {
+				totalPoints += 2;
+				feedbackLogger.log(Level.INFO, "Passed - getTotalBoxesByVariety");
+			} else
+				feedbackLogger.log(Level.WARNING, "Failed - getTotalBoxesByVariety");
+		} else
+			feedbackLogger.log(Level.WARNING, "Failed - getTotalBoxesByVariety");
+	}
+	
 	public void testRemoveVariety() {
 		initData1();
 		
@@ -98,10 +133,10 @@ public class MasterOrderTest extends Testable {
 		if(expRemoved != actRemoved) {
 			logExpectedActual(Level.WARNING, "Failed - removeVariety return value; " + variety + " removed", expRemoved, actRemoved);
 		} else {
-			totalPoints += 3;
+			totalPoints += 2;
 			feedbackLogger.log(Level.INFO, "Passed - removeVariety return value; " + variety + " removed");
 			if(ordersEqual(expOrders, studentMasterOrder.getOrders())) {
-				totalPoints +=3;
+				totalPoints += 2;
 				feedbackLogger.log(Level.INFO, "Passed - removeVariety orders; " + variety + " removed");
 			} else
 				feedbackLogger.log(Level.INFO, "Failed - removeVariety orders; " + variety + " removed");

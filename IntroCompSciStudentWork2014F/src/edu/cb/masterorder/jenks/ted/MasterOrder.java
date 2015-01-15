@@ -3,6 +3,9 @@
  */
 package edu.cb.masterorder.jenks.ted;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.jenks.dist.cb.masterorder.AbstractMasterOrder;
 import edu.jenks.dist.cb.masterorder.CookieOrder;
 
@@ -44,6 +47,22 @@ public class MasterOrder extends AbstractMasterOrder {
 			}
 		}
 		return numberRemoved;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.jenks.dist.cb.masterorder.AbstractMasterOrder#getTotalBoxesByVariety()
+	 */
+	@Override
+	public Map<String, Integer> getTotalBoxesByVariety() {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		for(CookieOrder cookieOrder : orders) {
+			String variety = cookieOrder.getVariety();
+			int count = cookieOrder.getNumBoxes();
+			if(map.containsKey(variety))
+				count += map.get(variety);
+			map.put(variety, count);
+		}
+		return map;
 	}
 
 }
