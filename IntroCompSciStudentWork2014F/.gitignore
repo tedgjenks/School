@@ -1,7 +1,6 @@
 /bin
 /.settings
 .classpath
-.project
 /.checkstyle
 *.log.lck
 *.log

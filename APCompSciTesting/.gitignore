@@ -1,7 +1,6 @@
 /bin
 /.settings
 .classpath
-.project
 *.log
 /testing/googleDrive.properties
 /testing/*.xml
