@@ -12,7 +12,7 @@ public class TestableMonitor implements Runnable {
 		THREAD_GROUP = threadGroup;
 		THREAD_NAME = threadName;
 		MAX_RUNNING_TIME_MILLIS = maxRunningTimeMillis;
-		SLEEP_MILLIS = MAX_RUNNING_TIME_MILLIS / 10;
+		SLEEP_MILLIS = 2;
 	}
 	
 	public void start() {

@@ -131,6 +131,26 @@ public abstract class Testable implements Runnable {
 		feedbackLogger.log(Level.WARNING, sb.toString());
 	}
 	
+	public void logPass(String message, String expected, String actual) {
+		Level level = Level.INFO;
+		message = "Pass: " + message;
+		logExpectedActual(level, message, expected, actual);
+	}
+	
+	public void logPass(String message, double expected, double actual) {
+		logPass(message, String.valueOf(expected), String.valueOf(actual));
+	}
+	
+	public void logFail(String message, double expected, double actual, int points) {
+		logFail(message, String.valueOf(expected), String.valueOf(actual), points);
+	}
+	
+	public void logFail(String message, String expected, String actual, int points) {
+		Level level = Level.WARNING;
+		message = "Fail (-" + points + "): " + message;
+		logExpectedActual(level, message, expected, actual);
+	}
+	
 	public void logExpectedActual(Level level, String message, long expected, long actual) {
 		logExpectedActual(level, message, String.valueOf(expected), String.valueOf(actual));
 	}
@@ -138,8 +158,8 @@ public abstract class Testable implements Runnable {
 	public void logExpectedActual(Level level, String message, String expected, String actual) {
 		StringBuilder sb = new StringBuilder(100);
 		sb.append(message).append("\n ");
-		sb.append("Expected: ").append(expected).append("\n ");
-		sb.append("Actual: " ).append(actual).append("\n ");
+		sb.append("\tExpected: ").append(expected).append("\n ");
+		sb.append("\tActual: " ).append(actual).append("\n ");
 		feedbackLogger.log(level, sb.toString());
 	}
 	

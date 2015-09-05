@@ -25,4 +25,10 @@
 	<subpackage name="cb.masterorder">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="unitconversion">
+		<allow pkg="java.util"/>
+	</subpackage>
+	<subpackage name="phone">
+		<allow pkg="java.util"/>
+	</subpackage>
 </import-control>
