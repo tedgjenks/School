@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE projects SYSTEM "testing-config.dtd">
+<projects feedback-enabled="true" clear-logs="true">
+  <eclipse-student-root>C:/Users/Ted/git/School14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
+  <google-drive>
+    <turnin-root>C:/Users/Ted/Google Drive/Courses/IntroCS/TurnIn/F2015_ICS/</turnin-root>
+    <turnin-dir-suffix>_ICS_TurnIn</turnin-dir-suffix>
+  </google-drive>
+  <project>
+    <name>UnitConversion</name>
+    <package-root>edu/unitconversion/</package-root>
+    <test-class>edu.jenks.unitconversion.test.ConvertibleTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>MetricLengthConverter.java</file>
+    </files>
+    <students />
+  </project>
+  <project>
+    <name>RandomPhoneNumber</name>
+    <package-root>edu/phone/</package-root>
+    <test-class>edu.jenks.phone.test.RandomPhoneNumberTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>RandomPhoneNumber.java</file>
+    </files>
+    <students />
+  </project>
+</projects>
