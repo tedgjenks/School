@@ -131,6 +131,18 @@ public abstract class Testable implements Runnable {
 		feedbackLogger.log(Level.WARNING, sb.toString());
 	}
 	
+	public void logPass(String message) {
+		feedbackLogger.log(Level.INFO, "Pass: " + message);
+	}
+	
+	public void logFailPrereq() {
+		logFail("testing skipped due to previous failures.");
+	}
+	
+	public void logFail(String message) {
+		feedbackLogger.log(Level.WARNING, "Fail: " + message);
+	}
+	
 	public void logPass(String message, String expected, String actual) {
 		Level level = Level.INFO;
 		message = "Pass: " + message;

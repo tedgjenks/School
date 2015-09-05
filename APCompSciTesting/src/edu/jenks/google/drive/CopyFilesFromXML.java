@@ -28,9 +28,11 @@ public class CopyFilesFromXML {
 			sourceRoot = new File(googleDriveElement.getChildText("turnin-root"));
 			turninDirSuffix = googleDriveElement.getChildText("turnin-dir-suffix");
 			File[] studentDirs = CopyFileHelper.getStudentDirectories(sourceRoot, turninDirSuffix);
-			//out.println(studentDirs.length + " directories examined.");
-			processProjects(rootElement.getChildren("project"), studentDirs);
-			JDOMHelper.updateXml(document, TestRunner.XML_FILE_PATH);
+			if(studentDirs != null) {
+				processProjects(rootElement.getChildren("project"), studentDirs);
+				JDOMHelper.updateXml(document, TestRunner.XML_FILE_PATH);
+			} else
+				out.println("No student directories for " + sourceRoot + " and " + turninDirSuffix);
 		} catch (JDOMException | IOException e) {
 			e.printStackTrace();
 		}
