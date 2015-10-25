@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE projects SYSTEM "testing-config.dtd">
-<projects feedback-enabled="true" clear-logs="true">
-  <eclipse-student-root>D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
+<projects feedback-enabled="false" clear-logs="true">
+  <eclipse-student-root>C:/Users/Ted/git/School14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
   <google-drive>
     <turnin-root>C:/Users/Ted/Google Drive/Courses/IntroCS/TurnIn/F2015_ICS/</turnin-root>
     <turnin-dir-suffix>_ICS_TurnIn</turnin-dir-suffix>
@@ -27,13 +27,35 @@
     <students />
   </project>
   <project>
-    <name>GregorianCalendar</name>
-    <package-root>edu/gcal/</package-root>
-    <test-class>edu.jenks.gcal.test.GregorianCalendarTest</test-class>
+    <name>Rational</name>
+    <package-root>edu/math/</package-root>
+    <test-class>edu.jenks.math.test.RationalTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <files>
-      <file>GregorianCalendar.java</file>
+      <file>Rational.java</file>
     </files>
     <students />
+  </project>
+  <project>
+    <name>Banking</name>
+    <package-root>edu/banking/</package-root>
+    <test-class>edu.jenks.banking.test.BankingTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>11/16/2015</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>Banking.java</file>
+      <file>Customer.java</file>
+      <file>CheckingAccount.java</file>
+      <file>SavingsAccount.java</file>
+    </files>
+    <students>
+      <student>
+        <last-name>Jenks</last-name>
+        <first-name>Ted</first-name>
+      </student>
+    </students>
   </project>
 </projects>

@@ -149,12 +149,10 @@ public class TestRunner {
 					calendar.setTime(new Date());
 					boolean applyPenalty = false;
 					int calYear = calendar.get(Calendar.YEAR);
-					System.out.println("Calendar year: " + calYear);
 					if(calYear > year)
 						applyPenalty = true;
 					else if(calYear == year) {
 						int calMonth = calendar.get(Calendar.MONTH) + 1; // cal month starts at 0
-						System.out.println("Calendar month: " + calMonth);
 						if(calMonth > month)
 							applyPenalty = true;
 						else if(calMonth == month) {
