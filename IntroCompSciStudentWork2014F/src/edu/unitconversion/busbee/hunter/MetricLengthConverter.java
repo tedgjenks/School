@@ -9,26 +9,104 @@ public class MetricLengthConverter implements Convertible {
 	public double convert(double numberStartingUnits, String startingUnit, String desiredUnits) {
 		// TODO Auto-generated method stub
 		double convertedUnit = convertToMeters(numberStartingUnits, startingUnit);
-		double unitWanted = convertFromMeters(convertedUnit, desiredUnits);
-		return unitWanted;
+		return convertFromMeters(convertedUnit, desiredUnits);
+	
 		
 	}
 
-	@Override
 	public String convertForDisplay(double numberStartingUnits, String startingUnit , String desiredUnits) {
 		// TODO Auto-generated method stub
-		
-			return null;
-	}
+		// Test desiredUnit also. Return the right thing.
+		boolean validUnit = false;
+		switch(startingUnit){
+		case "nm":
+			validUnit = true;
+			break;
+		case "um":
+			validUnit = true;
+			break;
+		case "mm":
+			validUnit = true;
+			break;			
+		case "cm":
+			validUnit = true;
+			break;
+		case "dm":
+			validUnit = true;
+			break;
+		case "m":
+			validUnit = true;
+			break;
+		case "dam":
+			validUnit = true;
+			break;
+		case "hm":
+			validUnit = true;
+			break;
+		case "km":
+			validUnit = true;
+			break;
+		case "Mm":
+			validUnit = true;
+			break;
+		case "Gm":
+			validUnit = true;
+			break;
+		default:
+			return ("Unit is not supported.") ;
+			}
+		switch(desiredUnits){
+		case "nm":
+			validUnit = true;
+			break;
+		case "um":
+			validUnit = true;
+			break;
+		case "mm":
+			validUnit = true;
+			break;			
+		case "cm":
+			validUnit = true;
+			break;
+		case "dm":
+			validUnit = true;
+			break;
+		case "m":
+			validUnit = true;
+			break;
+		case "dam":
+			validUnit = true;
+			break;
+		case "hm":
+			validUnit = true;
+			break;
+		case "km":
+			validUnit = true;
+			break;
+		case "Mm":
+			validUnit = true;
+			break;
+		case "Gm":
+			validUnit = true;
+			break;
+		default:
+			return "Unit is not supported." ;
+			}
+		if(validUnit)
+			return "" + numberStartingUnits + " " + startingUnit + " = " + convert(numberStartingUnits, startingUnit, desiredUnits) + " " + desiredUnits + ".";
+		else
+			return "Unit is not supported";
+		}
+	
 
 	@Override
 	public double convertFromMeters(double numberMeters, String unit) {
 		// TODO Auto-generated method stub
 		switch(unit){
 		case "nm":
-			return numberMeters * 100000000;
+			return numberMeters * 1000000000;
 		case "um":
-			return numberMeters * 100000;
+			return numberMeters * 1000000;
 		case "mm":
 			return numberMeters * 1000;
 		case "cm":
@@ -38,18 +116,18 @@ public class MetricLengthConverter implements Convertible {
 		case "m":
 			return numberMeters;
 		case "dam":
-			return numberMeters * .1;
+			return numberMeters / 10;
 		case "hm":
-			return numberMeters * .01;
+			return numberMeters / 100;
 		case "km":
-			return numberMeters * .001;
+			return numberMeters / 1000;
 		case "Mm":
-			return numberMeters * .000001;
+			return numberMeters / 1000000;
 		case "Gm":
-			return numberMeters * .000000001;
+			return numberMeters / 1000000000;
 		default:
 			System.out.println("Not a valid unit input.");
-			return -50;
+			return -1;
 		}
 		
 	}
@@ -59,15 +137,15 @@ public class MetricLengthConverter implements Convertible {
 		// TODO Auto-generated method stub
 		switch(unit){
 		case "nm":
-			return numberUnits * .000000001;
+			return numberUnits / 1000000000;
 		case "um":
-			return numberUnits * .000001;
+			return numberUnits / 1000000;
 		case "mm":
-			return numberUnits * .001;
+			return numberUnits / 1000;
 		case "cm":
-			return numberUnits * .01;
+			return numberUnits / 100;
 		case "dm":
-			return numberUnits * .1;
+			return numberUnits / 10;
 		case "m":
 			return numberUnits;
 		case "dam":
@@ -81,9 +159,8 @@ public class MetricLengthConverter implements Convertible {
 		case "Gm":
 			return numberUnits * 100000000;
 		default:
-			
 			System.out.println("Not a valid unit input.");
-			return -50;
+			return -1;
 		}
 		
 	}

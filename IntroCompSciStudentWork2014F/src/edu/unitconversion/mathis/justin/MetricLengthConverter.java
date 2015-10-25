@@ -49,37 +49,38 @@ public class MetricLengthConverter implements Convertible {
 		else {
 			return "Unit not supported.";
 		}
+		boolean validUnit2 = false;
 		if (desired.equals("Gm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("Mm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("km")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("hm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("dam")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("dm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("cm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("mm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("um")){
-			validUnit = true;
+			validUnit2 = true;
 		}
 		else if (desired.equals("nm")){
-			validUnit = true;
+			validUnit2 = true;
 		}
-		if (validUnit) {
+		if (validUnit2) {
 			
 		}
 		else {

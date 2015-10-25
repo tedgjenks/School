@@ -16,8 +16,10 @@ public class MetricLengthConverter implements Convertible {
 	public String convertForDisplay(double amount, String stUnit, String desUnit) {
 		// TODO Auto-generated method stub
 		boolean validUnit = false;
+		
 		if (stUnit.equals ("Gm")) {	
 			validUnit=true;
+		
 		}
 		else if (stUnit.equals("Mm")) {
 			validUnit=true;
@@ -50,12 +52,53 @@ public class MetricLengthConverter implements Convertible {
 			
 		}
 		else{
+		
 			return "Unit not supported";
+			
 		}
 		
+		boolean svalidUnit=false;
+		if (desUnit.equals ("Gm")) {	
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("Mm")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("km")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("hm")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("dam")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("dm")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("cm")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("mm")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("um")) {
+			svalidUnit=true;
+		}
+		else if (desUnit.equals("nm")) {
+			svalidUnit=true;
+		}
+		if (svalidUnit){
+			
+		}
+		else{
+			return "Unit not supported";
+		}
 			double amtdesired= convert(amount, stUnit, desUnit); 
-			return (amount) + (stUnit) + ("=") + (amtdesired) + (desUnit);
-	
+			String result = (amount) + (stUnit) + ("=") + (amtdesired) + (desUnit);
+			return result;
+			
+		
 			
 		
 	}
@@ -89,10 +132,10 @@ public class MetricLengthConverter implements Convertible {
 			amount =(amount*1000);}
 		
 		else if (desUnit.equals("um")){
-			amount =(amount*100000);}
+			amount =(amount*1000000);}
 		
 		else if (desUnit.equals("nm")){
-			amount =(amount*10000000);}
+			amount =(amount*1000000000);}
 		return amount;
 	}
 
@@ -133,9 +176,6 @@ public class MetricLengthConverter implements Convertible {
 		return amount;
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 }

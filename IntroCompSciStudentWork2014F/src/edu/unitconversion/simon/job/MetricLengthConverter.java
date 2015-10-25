@@ -10,89 +10,150 @@ implements Convertible {
 	}
 
 	@Override
-	public double convert(double arg0, String arg1, String arg2) {
+	public double convert(double amount, String met, String desireunit) {
 		// TODO Auto-generated method stub
-	
-		return 0;
+		
+		double meters = convertToMeters(amount, met);
+		return convertFromMeters(meters, desireunit);
+		
 	}
 
 	@Override
-	public String convertForDisplay(double arg0, String arg1, String arg2) {
+	public String convertForDisplay(double numberStartingUnits, String stunit, String desireunit) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
+		double numberDesireunits = convert( numberStartingUnits, stunit, desireunit);
+		
+		boolean vaildunit= false;
+			
+			if (stunit.equals("Gm")) {
+				vaildunit = true;
+			}
+			else if (stunit.equals("Mm")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("km")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("hm")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("dam")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("cm")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("mm")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("um")){
+				vaildunit = true;
+			}
+			else if (stunit.equals("nm")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("nm")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("um")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("mm")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("cm")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("dam")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("hm")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("km")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("Mm")){
+				vaildunit = true;
+			}
+			else if (desireunit.equals("Gm")){
+				vaildunit = true;
+			}
+ 
+				return ("unit not supporterd");
+	}	
 	@Override
-	public double convertFromMeters(double nunmeters, String desireunit) {
+	public double convertFromMeters(double amount, String desireunit) {
 		// TODO Auto-generated method stub
-		double newunit=0;
+		double newunit= amount;
 		if ("Gm" .equals(desireunit)){
-			newunit=nunmeters/1000000000;
+			newunit=amount/1000000000;
 		}
 		if ("Mm" .equals(desireunit)){
-			newunit=nunmeters/1000000;
+			newunit=amount/1000000;
 		}
 		if ("km" .equals(desireunit)){
-			newunit=nunmeters/1000;
+			newunit=amount/1000;
 		}
 		if ("hm" .equals(desireunit)){
-			newunit=nunmeters/100;
+			newunit=amount/100;
 		}
 		if ("dam" .equals(desireunit)){
-			newunit=nunmeters/10;
+			newunit=amount/10;
 		}
 		if ("cm".equals(desireunit)){
-			newunit=nunmeters*100;}
+			newunit=amount*100;}
 		
 		if("mm".equals(desireunit)){
-			newunit=nunmeters*1000;}
+			newunit=amount*1000;}
 		
 		if("um".equals(desireunit)){
-			newunit=nunmeters*1000000;}
+			newunit=amount*1000000;}
 		
 		if("nm" .equals(desireunit)){
-			newunit=nunmeters*1000000000;}
+			newunit=amount*1000000000;}
 		
 		if("dm" .equals(desireunit)){
-			newunit=nunmeters*10;
+			newunit=amount*10;
+
 		}
 	return newunit;
 }
 	@Override
-	public double convertToMeters(double arg0, String arg1) {
+	public double convertToMeters(double amount, String strUnit) {
 		// TODO Auto-generated method stub
-		double meters=0;
-		if ("cm".equals(arg1)){
-			meters=arg0/100;}
+		double meters=amount;
+		if ("cm".equals(strUnit)){
+			meters=amount/100;}
 		
-		if("mm".equals(arg1)){
-			meters=arg0/1000;}
+		if("mm".equals(strUnit)){
+			meters=amount/1000;}
 		
-		if("um".equals(arg1)){
-			meters=arg0/1000000;}
+		if("um".equals(strUnit)){
+			meters=amount/1000000;}
 		
-		if("nm" .equals(arg1)){
-			meters=arg0/1000000000;}
+		if("nm" .equals(strUnit)){
+			meters=amount/1000000000;}
 		
-		if("dm" .equals(arg1)){
-			meters=arg0/10;	
+		if("dm" .equals(strUnit)){
+			meters=amount/10;	
 		}
-		if ("Gm" .equals(arg1)){
-			meters=arg0*1000000000;
+		if ("Gm" .equals(strUnit)){
+			meters=amount*1000000000;
 		}
-		if ("Mm" .equals(arg1)){
-			meters=arg0*1000000;
+		if ("Mm" .equals(strUnit)){
+			meters=amount*1000000;
 		}
-		if ("km" .equals(arg1)){
-			meters=arg0*1000;
+		if ("km" .equals(strUnit)){
+			meters=amount*1000;
 		}
-		if ("hm" .equals(arg1)){
-			meters=arg0*100;
+		if ("hm" .equals(strUnit)){
+			meters=amount*100;
 		}
-		if ("dam" .equals(arg1)){
-			meters=arg0*10;
+		if ("dam" .equals(strUnit)){
+			meters=amount*10;
 		}
-
+		
 		return meters;
 	}
 

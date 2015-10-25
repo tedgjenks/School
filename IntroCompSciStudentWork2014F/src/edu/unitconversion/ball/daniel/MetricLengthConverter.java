@@ -21,113 +21,126 @@ public class MetricLengthConverter implements Convertible
 	@Override
 	public String convertForDisplay(double numberStartingUnits, String startingUnit, String desiredUnit) 
 	{
-		return null;
+		String returnString = new String("");
+		double runConvert = convert(numberStartingUnits, startingUnit, desiredUnit);
+		
+		if (runConvert > 0)
+		{
+			returnString = (numberStartingUnits + " " + startingUnit + " = " + runConvert + " " + desiredUnit + ".");
+			return returnString;
+		}
+		else
+		{
+			returnString = ("Unit not supported.");
+			return returnString;
+		}
 	}
 
 	@Override
 	public double convertFromMeters(double numberMeters, String unit)
-	{
-		double finalFromMeters = 0.0;
-			
+	{	
 			if (unit.equals("Gm")) //If converting to Gigameters, take number of meters and divide by 1000000000
 				{
-					finalFromMeters = (numberMeters/1000000000);
+					return (numberMeters/1000000000);
 				}
 		else if (unit.equals("Mm"))
 				{
-					finalFromMeters = (numberMeters/1000000);
+					return (numberMeters/1000000);
 				}
 		else if (unit.equals("km"))
 				{
-					finalFromMeters = (numberMeters/1000);
+					return (numberMeters/1000);
 				}
 		else if (unit.equals("hm"))
 				{
-					finalFromMeters = (numberMeters/100);
+					return (numberMeters/100);
 				}	
 		else if (unit.equals("dam"))
 				{
-					finalFromMeters = (numberMeters/10);
+					return (numberMeters/10);
 				}
 		else if (unit.equals("m"))
 				{
-					finalFromMeters = (numberMeters);
+					return (numberMeters);
 				}
 		else if (unit.equals("dm"))
 				{
-					finalFromMeters = (numberMeters*10);
+					return (numberMeters*10);
 				}
 		else if (unit.equals("cm"))
 				{
-					finalFromMeters = (numberMeters*100);
+					return (numberMeters*100);
 				}
 		else if (unit.equals("mm"))
 				{
-					finalFromMeters = (numberMeters*1000);
+					return (numberMeters*1000);
 				}
 		else if (unit.equals("um"))
 				{
-					finalFromMeters = (numberMeters*1000000);
+					return (numberMeters*1000000);
 				}
 		else if (unit.equals("nm"))
 				{
-					finalFromMeters = (numberMeters*1000000000);
+					return (numberMeters*1000000000);
 				}
-			
-		return finalFromMeters;
+		else
+				{
+					return -1;
+				}
 	}
 
 	@Override
 	public double convertToMeters(double numberUnits, String unit) 
 	{
-		double finalToMeters = 0.0;
-		
 			if (unit.equals("Gm")) //1 Gigameter = 1000000000 meters
 				{
-					finalToMeters = (numberUnits*1000000000);
+					return (numberUnits*1000000000);
 				}
 		else if (unit.equals("Mm")) //1 Megameter = 1000000 meters
 				{
-					finalToMeters = (numberUnits*1000000);
+					return (numberUnits*1000000);
 				}
 		else if (unit.equals("km")) //1 kilometer = 1000 meters
 				{
-					finalToMeters = (numberUnits*1000);
+					return (numberUnits*1000);
 				}
 		else if (unit.equals("hm")) //1 hectometer = 100 meters
 				{
-					finalToMeters = (numberUnits*100);
+					return (numberUnits*100);
 				}
 		else if (unit.equals("dam")) //1 decameter = 10 meters
 				{
-					finalToMeters = (numberUnits*10);
+					return (numberUnits*10);
 				}
 		else if (unit.equals("m"))
 				{
-					finalToMeters = (numberUnits);
+					return (numberUnits);
 				}
 		else if (unit.equals("dm")) //1 meter = 10 decimeters
 				{
-					finalToMeters = (numberUnits/10);
+					return (numberUnits/10);
 				}
 		else if (unit.equals("cm")) //1 meter = 100 centimeters
 				{
-					finalToMeters = (numberUnits/100);
+					return (numberUnits/100);
 				}
 		else if (unit.equals("mm")) //1 meter = 1000 millimeters
 				{
-					finalToMeters = (numberUnits/1000);
+					return (numberUnits/1000);
 				}
 		else if (unit.equals("um")) //1 meter = 1000000 micrometers
 				{
-					finalToMeters = (numberUnits/1000000);
+					return (numberUnits/1000000);
 				}
 		else if (unit.equals("nm")) //1 meter = 1000000000 nanometers
 				{
-					finalToMeters = (numberUnits/1000000000);
+					return (numberUnits/1000000000);
+				}
+		else
+				{
+					return -1;
 				}
 
-		return finalToMeters;
 	}
 
 	public static void main(String[] args) 

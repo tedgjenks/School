@@ -7,16 +7,23 @@ public class MetricLengthConverter implements Convertible {
 	@Override
 	public double convert(double sNumUnit, String sUnit, String eUnit) {
 		double numMeters = convertToMeters(sNumUnit, sUnit);
-		
-		eUnit = "cm"; 
-		double numEUnit = convertFromMeters(numMeters, eUnit) ;		
+		double numEUnit = convertFromMeters(numMeters, eUnit);		
 		return numEUnit;
 	}
 
 	@Override
 	public String convertForDisplay(double numSUnit, String sUnit, String eUnit) {
-		// TODO Auto-generated method stub
-		return null;
+		double numMeters = 0;
+		double numEUnit = 0;
+		if(sUnit.equals("m")||sUnit.equals("nm")||sUnit.equals("um")||sUnit.equals("mm")||sUnit.equals("cm")||sUnit.equals("dm")||sUnit.equals("dam")||sUnit.equals("hm")||sUnit.equals("km")||sUnit.equals("Mm")||sUnit.equals("Gm"))
+			numMeters = convertToMeters(numSUnit, sUnit);
+		else 
+			return "Unit not supported.";
+		if(eUnit.equals("m")||eUnit.equals("nm")||eUnit.equals("um")||eUnit.equals("mm")||eUnit.equals("cm")||eUnit.equals("dm")||eUnit.equals("dam")||eUnit.equals("hm")||eUnit.equals("km")||eUnit.equals("Mm")||eUnit.equals("Gm"))
+			numEUnit = convertFromMeters(numMeters, eUnit);
+		else 
+			return "Unit not supported.";	
+		return numSUnit + " " + sUnit + " = " + numEUnit + " " + eUnit + ".";
 	}
 
 	@Override
@@ -71,7 +78,7 @@ public class MetricLengthConverter implements Convertible {
 			meters = sNumUnit / 1000000;
 		else if("nm".equals(sUnit))
 			meters = sNumUnit / 1000000000;
-		else if("m".equals(sUnit));
+		else if("m".equals(sUnit))
 			meters = sNumUnit / 1;
 		return meters;
 	}

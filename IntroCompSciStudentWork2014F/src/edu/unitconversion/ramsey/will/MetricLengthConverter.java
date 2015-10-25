@@ -22,7 +22,7 @@ public class MetricLengthConverter implements Convertible {
 		if (validInput == false)
 			return "Unit not supported.";
 		double endingValue = convert(amountUnits, startingUnit, desiredUnit);
-		String returnString = + amountUnits + " " + startingUnit + " = " + endingValue + " " + desiredUnit;
+		String returnString = + amountUnits + " " + startingUnit + " = " + endingValue + " " + desiredUnit + ".";
 		
 		return returnString;
 	}

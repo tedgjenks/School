@@ -19,7 +19,7 @@ public class MetricLengthConverter implements Convertible {
 		
 		double output = convert( numberUnits, startingUnit, endUnit);
 		if(output < 0)
-			System.out.println("Unit not supported.");
+			return ("Unit not supported.");
 		
 		else
 			System.out.println(startingUnit + " " + numberUnits + " = " + output + " " + endUnit + ".");
@@ -40,51 +40,51 @@ public class MetricLengthConverter implements Convertible {
 		double mm = m*1000;
 		double um = m*1000000;
 		double nm = m*1000000000;
-		double meters = 0;
 		if (unit.equals("m")){
-			meters =  m;
+			return m;
 		}
 		
 		else if (unit.equals("dam")){
-			meters = dam;
+			return dam;
 		}
 		
 		else if (unit.equals("hm")){
-			meters = hm;
+			return hm;
 		}
 		
 		else if (unit.equals("km")){
-			meters = km;
+			return km;
 		}
 		
 		else if (unit.equals("Mm")){
-			meters = Mm;
+			return Mm;
 		}
 		
 		else if (unit.equals("dm")){
-			meters = dm;
+			return dm;
 		}
 		
 		else if (unit.equals("cm")){
-			meters = cm;
+			return cm;
 		}
 		
 		else if (unit.equals("mm")){
-			meters = mm;
+			return mm;
 		}
 		
 		else if (unit.equals("Gm")){
-			meters = Gm;
+			return Gm;
 		}
 		
 		else if (unit.equals("um")){
-			meters = um;
+			return um;
 		}
 		
 		else if (unit.equals("nm")){
-			meters = nm;
+			return nm;
 		}
-		return meters;
+		else return -1;
+		
 	}
 
 	@Override
@@ -101,52 +101,51 @@ public class MetricLengthConverter implements Convertible {
 		double mm = m/1000;
 		double um = m/1000000;
 		double nm = m/1000000000;
-		double meters = 0; 
 		if (unit.equals("m")){
-			meters = m;
+			return m;
 		}
 		
 		else if (unit.equals("dam")){
-			meters = dam;
+			return dam;
 		}
 		
 		else if (unit.equals("hm")){
-			meters = hm;
+			return hm;
 		}
 		
 		else if (unit.equals("km")){
-			meters = km;
+			return km;
 		}
 		
 		else if (unit.equals("Mm")){
-			meters = Mm;
+			return Mm;
 		}
 		
 		else if (unit.equals("dm")){
-			meters = dm;
+			return dm;
 		}
 		
 		else if (unit.equals("cm")){
-			meters = cm;
+			return cm;
 		}
 		
 		else if (unit.equals("mm")){
-			meters = mm;
+			return mm;
 		}
 		
 		else if (unit.equals("Gm")){
-			meters = Gm;
+			return Gm;
 		}
 		
 		else if (unit.equals("um")){
-			meters = um;
+			return um;
 		}
 		
 		else if (unit.equals("nm")){
-			meters = nm;
+			return nm;
 		}
+		else return -1;
 		
-		return meters;
 	}
 
 }
