@@ -5,7 +5,7 @@ public class TestableMonitor implements Runnable {
 	private final ThreadGroup THREAD_GROUP;
 	private final String THREAD_NAME;
 	private Thread thread;
-		private final long MAX_RUNNING_TIME_MILLIS;
+	private final long MAX_RUNNING_TIME_MILLIS;
 	private final long SLEEP_MILLIS;
 
 	public TestableMonitor(ThreadGroup threadGroup, String threadName, long maxRunningTimeMillis) {

@@ -7,11 +7,14 @@
 <!ELEMENT turnin-root (#PCDATA)>
 <!ELEMENT turnin-dir-suffix (#PCDATA)>
 
-<!ELEMENT project (name, package-root, test-class, max-runtime-secs, files, students)>
+<!ELEMENT project (name, package-root, test-class, max-runtime-secs, deadline?, files, students)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT package-root (#PCDATA)>
 <!ELEMENT test-class (#PCDATA)>
 <!ELEMENT max-runtime-secs (#PCDATA)>
+<!ELEMENT deadline (due-date?, penalty?)>
+<!ELEMENT due-date (#PCDATA)>
+<!ELEMENT penalty (#PCDATA)>
 <!ELEMENT files (file+)>
 <!ELEMENT students (student*)>
 <!ELEMENT file (#PCDATA)>

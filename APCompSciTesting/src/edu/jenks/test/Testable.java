@@ -24,7 +24,7 @@ public abstract class Testable implements Runnable {
 	
 	protected String studentPackage;
 	protected Logger feedbackLogger;
-	protected int totalPoints;
+	protected int totalPoints, latePenalty = 0;
 	protected boolean continueTesting = true;
 	
 	private Logger gradesLogger;
@@ -74,10 +74,18 @@ public abstract class Testable implements Runnable {
 		logEnd();
 	}
 	
+	private void assessLatePenalty() {
+		if(latePenalty > 0) {
+			totalPoints = (int)((100 - latePenalty) / 100.0 * totalPoints);
+			feedbackLogger.log(Level.WARNING, "Late penalty applied: " + latePenalty);
+		}
+	}
+	
 	private void logEnd() {
+		assessLatePenalty();
 		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":\n" + totalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
 		if(getPointsAvailable() == totalPoints)
-			feedbackLogger.log(Level.INFO, "Congratulation!  You earned all available points!");
+			feedbackLogger.log(Level.INFO, "Congratulations!  You earned all available points!");
 		else
 			feedbackLogger.log(Level.INFO, "You can earn another " + (getPointsAvailable() - totalPoints) + " points.");
 		String percent = NumberFormat.getPercentInstance().format(totalPoints / (double)getPointsAvailable());

@@ -19,6 +19,9 @@ public class TestRunner {
 	
 	public static final String XML_FILE_PATH = "testing/testing-config.xml";
 	private static final String PACKAGE_ROOT_TAG = "package-root";
+	private static final String DEADLINE_TAG = "deadline";
+	private static final String DUE_DATE_TAG = "due-date";
+	private static final String PENALTY_TAG = "penalty";
 	public static final String PROJECT_NAME_TAG = "name";
 	private static final String PROJECT_MAX_RUNTIME_SECS_TAG = "max-runtime-secs";
 	private static final String FORMATTED_DATE;
@@ -72,6 +75,7 @@ public class TestRunner {
 		for(Element studentElement : students) {
 			Testable tester = (Testable)ReflectionUtil.newInstance(testClass);
 			initGradesLogger(tester, project);
+			processLatePenalty(tester, project);
 			Student student = new Student(studentElement.getChildText("first-name"), studentElement.getChildText("last-name"));
 			student.setStudentElement(studentElement);
 			initStudentPackage(tester, project, student);
@@ -129,6 +133,42 @@ public class TestRunner {
 		String path = sb.toString();
 		tester.setLogFilePathFeedback(path, student);
 		return path;
+	}
+	
+	private static void processLatePenalty(Testable tester, Element project) throws IOException {
+		Element deadlineElement = project.getChild(DEADLINE_TAG);
+		if(deadlineElement != null) {
+			String dueDateText = deadlineElement.getChildText(DUE_DATE_TAG);
+			String penaltyText = deadlineElement.getChildText(PENALTY_TAG);
+			if(dueDateText != null && !dueDateText.isEmpty() && penaltyText != null && !penaltyText.isEmpty()) {
+				int penalty = Integer.parseInt(penaltyText);
+				if(penalty > 0) {
+					String[] dateTokens = dueDateText.split("/");
+					int month = Integer.parseInt(dateTokens[0]), day = Integer.parseInt(dateTokens[1]), year = Integer.parseInt(dateTokens[2]);
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(new Date());
+					boolean applyPenalty = false;
+					int calYear = calendar.get(Calendar.YEAR);
+					System.out.println("Calendar year: " + calYear);
+					if(calYear > year)
+						applyPenalty = true;
+					else if(calYear == year) {
+						int calMonth = calendar.get(Calendar.MONTH) + 1; // cal month starts at 0
+						System.out.println("Calendar month: " + calMonth);
+						if(calMonth > month)
+							applyPenalty = true;
+						else if(calMonth == month) {
+							int calDay = calendar.get(Calendar.DAY_OF_MONTH); // cal day starts at 1
+							System.out.println("Calendar day: " + calDay);
+							if(calDay > day)
+								applyPenalty = true;
+						}
+					}
+					if(applyPenalty)
+						tester.latePenalty = penalty;
+				}
+			}
+		}
 	}
 	
 	private static void initGradesLogger(Testable tester, Element project) throws IOException {
