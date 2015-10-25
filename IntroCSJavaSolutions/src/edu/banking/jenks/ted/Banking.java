@@ -6,6 +6,8 @@ package edu.banking.jenks.ted;
 
 import edu.jenks.dist.banking.AbstractBanking;
 import edu.jenks.dist.banking.AbstractCheckingAccount;
+import edu.jenks.dist.banking.AbstractCustomer;
+import edu.jenks.dist.banking.AbstractSavingsAccount;
 import edu.jenks.dist.banking.Account;
 
 /**
@@ -19,12 +21,14 @@ public class Banking extends AbstractBanking {
 	 */
 	@Override
 	public void performMaintenance(int days) {
-		if(days < 0)
-			days = 0;
-		AbstractCheckingAccount checkingAccount = getCheckingAccount();
-		Account savingsAccount = getSavingsAccount();
-		applyFees(checkingAccount, savingsAccount);
-		payInterest(days, checkingAccount, savingsAccount);
+		if(days > 0) {
+			for(AbstractCustomer customer : getCustomers()) {
+				AbstractCheckingAccount checkingAccount = customer.getCheckingAccount();
+				Account savingsAccount = customer.getSavingsAccount();
+				applyFees(checkingAccount, savingsAccount);
+				payInterest(days, checkingAccount, savingsAccount);
+			}
+		}
 	}
 	
 	private void applyFees(AbstractCheckingAccount checkingAccount, Account savingsAccount) {
@@ -70,6 +74,16 @@ public class Banking extends AbstractBanking {
 			checkingAccount.payInterest(days);
 		if(savingsAccount != null)
 			savingsAccount.payInterest(days);
+	}
+
+	@Override
+	public void addCustomer(String name, AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
+		getCustomers().add(new Customer(name, checkingAccount, savingsAccount));
+	}
+
+	@Override
+	public boolean removeCustomer(String name) {
+		return getCustomers().remove(name);
 	}
 
 }

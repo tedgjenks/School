@@ -15,21 +15,22 @@ public class AccountHelper {
 	
 	public static double standardWithdraw(Account account, double requestedWithdrawal) {
 		double withdrawal = 0;
-		if(requestedWithdrawal > 0) {
-			double balance = account.getBalance();
-			if(requestedWithdrawal <= balance)
-				withdrawal = requestedWithdrawal;
-			balance -= withdrawal;
+		double balance = account.getBalance();
+		if(requestedWithdrawal > 0 && requestedWithdrawal <= balance) {
+			balance -= requestedWithdrawal;
 			account.setBalance(balance);
+			withdrawal = requestedWithdrawal;
 		}
 		return withdrawal;
 	}
 	
 	public static double transfer(Account src, Account dest, double amt) {
 		double transferAmt = 0;
-		double srcBalance = src.getBalance();
-		if(srcBalance >= amt)
-			dest.deposit(src.withdraw(amt));
+		if(src.canTransact() && dest.canTransact()) {
+			double withdrawn = src.withdraw(amt);
+			if(withdrawn > 0)
+				transferAmt = dest.deposit(withdrawn);
+		}
 		return transferAmt;
 	}
 }

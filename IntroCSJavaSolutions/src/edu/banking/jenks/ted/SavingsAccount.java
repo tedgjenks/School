@@ -47,13 +47,27 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	@Override
 	public double transfer(Account destination, double amount) {
 		double transferAmt = 0;
-		int numTransactions = getNumTransactions();
-		if(amount <= getBalance() && numTransactions < getMaxMonthlyTransactions()) {
+		if(amount <= getBalance() && canTransact()) {
 			transferAmt = AccountHelper.transfer(this, destination, amount);
 			if(transferAmt > 0)
-				setNumTransactions(numTransactions + 1);
+				setNumTransactions(getNumTransactions() + 1);
 		}
 		return transferAmt;
 	}
 
+	@Override
+	public double deposit(double depositAmount) {
+		double depositAmt = 0;
+		if(canTransact()) {
+			super.deposit(depositAmount);
+			setNumTransactions(getNumTransactions() + 1);
+			depositAmt = depositAmount;
+		}
+		return depositAmt;
+	}
+
+	@Override
+	public boolean canTransact() {
+		return getNumTransactions() < getMaxMonthlyTransactions();
+	}
 }
