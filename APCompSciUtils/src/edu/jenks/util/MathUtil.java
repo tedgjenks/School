@@ -1,5 +1,7 @@
 package edu.jenks.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class MathUtil {
@@ -25,5 +27,33 @@ public class MathUtil {
 	
 	public static boolean isRealNumber(String s) {
 		return REAL_NUMBER_PATTERN.matcher(s).matches();
+	}
+	
+	public static int findGreatestCommonFactor(int num1, int num2) throws IllegalArgumentException {
+		if(num1 <= 0 || num2 <= 0)
+			throw new IllegalArgumentException("Parameters must be greater than zero.");
+		while (num1 != num2) {
+			if (num1 > num2)
+				num1 = num1 - num2;
+			else
+				num2 = num2 - num1;
+		}
+		return num1;
+	}
+	
+	public static List<Integer> factorAsPrimes(int number) {
+		if(number < 0)
+			number *= -1;
+		List<Integer> factors = new ArrayList<Integer>();
+		int quotient = number;
+		for(int i = 2; i <= quotient / i; i++) {
+			while(quotient % i == 0) {
+				factors.add(i);
+				quotient /= i;
+			}
+		}
+		if(quotient > 1)
+			factors.add(quotient);
+		return factors;
 	}
 }
