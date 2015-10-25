@@ -4,7 +4,7 @@
 package edu.jenks.dist.banking;
 
 /**
- * @author Ted
+ * @author Ted Jenks
  *
  */
 public abstract class AbstractSavingsAccount extends Account {
@@ -54,5 +54,4 @@ public abstract class AbstractSavingsAccount extends Account {
 	public void setMaxMonthlyTransactions(int maxMonthlyTransactions) {
 		this.maxMonthlyTransactions = maxMonthlyTransactions;
 	}
-
 }

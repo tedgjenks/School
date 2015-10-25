@@ -1,4 +1,8 @@
 package edu.jenks.dist.banking;
+/**
+ * @author Ted Jenks
+ *
+ */
 public abstract class AbstractCheckingAccount extends Account {
 
 	private int overdraftFee;
@@ -6,8 +10,6 @@ public abstract class AbstractCheckingAccount extends Account {
 	private int overdraftMax;
 	private boolean overdraftProtected;
 	private Account linkedSavingsAccount;
-	
-	
 	
 	public AbstractCheckingAccount() {
 		this(0, 0);
@@ -85,5 +87,10 @@ public abstract class AbstractCheckingAccount extends Account {
 	 */
 	public int getNumberOverdrafts() {
 		return numberOverdrafts;
+	}
+
+	@Override
+	public boolean canTransact() {
+		return true;
 	}
 }

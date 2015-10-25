@@ -59,9 +59,11 @@ public abstract class Account {
 	
 	/**
 	 * @param depositAmount this is added to the balance.
+	 * @return
 	 */
-	public void deposit(double depositAmount) {
+	public double deposit(double depositAmount) {
 		balance += depositAmount;
+		return depositAmount;
 	}
 
 	/**
@@ -88,4 +90,6 @@ public abstract class Account {
 	 * @return the amount transfered
 	 */
 	public abstract double transfer(Account destination, double amount);
+	
+	public abstract boolean canTransact();
 }
