@@ -2,6 +2,7 @@ package edu.banking.jenks.ted;
 
 
 import edu.jenks.dist.banking.AbstractCheckingAccount;
+import edu.jenks.dist.banking.AbstractSavingsAccount;
 import edu.jenks.dist.banking.Account;
 
 public class CheckingAccount extends AbstractCheckingAccount {
@@ -47,7 +48,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 		double balance = getBalance();
 		if(requestedWithdrawal <= balance)
 			withdrawal = AccountHelper.standardWithdraw(this, requestedWithdrawal);
-		else { // handle overdraft
+		else if(requestedWithdrawal <= balance + additionalFunds()) { // handle overdraft
 			double withdrawalOverage = requestedWithdrawal - balance;
 			Account linkedSavingsAccount = getLinkedSavingsAccount();
 			if(linkedSavingsAccount != null) {
@@ -70,6 +71,16 @@ public class CheckingAccount extends AbstractCheckingAccount {
 			setBalance(balance);
 		}
 		return withdrawal;
+	}
+	
+	private double additionalFunds() {
+		double addFunds = 0;
+		AbstractSavingsAccount linkedSavingsAccount = getLinkedSavingsAccount();
+		if(linkedSavingsAccount != null && canTransact())
+			addFunds += linkedSavingsAccount.getBalance();
+		if(isOverdraftProtected())
+			addFunds += getOverdraftMax();
+		return addFunds;
 	}
 
 	@Override

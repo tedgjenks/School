@@ -7,9 +7,9 @@ public abstract class AbstractCheckingAccount extends Account {
 
 	private int overdraftFee;
 	private int numberOverdrafts; // reset to zero after fee calculation
-	private int overdraftMax;
+	private double overdraftMax;
 	private boolean overdraftProtected;
-	private Account linkedSavingsAccount;
+	private AbstractSavingsAccount linkedSavingsAccount;
 	
 	public AbstractCheckingAccount() {
 		this(0, 0);
@@ -22,14 +22,14 @@ public abstract class AbstractCheckingAccount extends Account {
 	/**
 	 * @return the savings account linked to this checking account
 	 */
-	public Account getLinkedSavingsAccount() {
+	public AbstractSavingsAccount getLinkedSavingsAccount() {
 		return linkedSavingsAccount;
 	}
 
 	/**
 	 * @param linkedSavingsAccount
 	 */
-	public void setLinkedSavingsAccount(Account linkedSavingsAccount) {
+	public void setLinkedSavingsAccount(AbstractSavingsAccount linkedSavingsAccount) {
 		this.linkedSavingsAccount = linkedSavingsAccount;
 	}
 	
@@ -50,14 +50,14 @@ public abstract class AbstractCheckingAccount extends Account {
 	/**
 	 * @return the maximum amount of money that can be overdrawn from the account.
 	 */
-	public int getOverdraftMax() {
+	public double getOverdraftMax() {
 		return overdraftMax;
 	}
 
 	/**
 	 * @param overdraftMax
 	 */
-	public void setOverdraftMax(int overdraftMax) {
+	public void setOverdraftMax(double overdraftMax) {
 		this.overdraftMax = overdraftMax;
 	}
 

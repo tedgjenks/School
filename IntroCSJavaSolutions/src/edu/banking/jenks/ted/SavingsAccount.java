@@ -35,11 +35,10 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	@Override
 	public double withdraw(double requestedWithdrawal) {
 		double withdrawAmt = 0;
-		int transactions = getNumTransactions();
-		if(transactions < getMaxMonthlyTransactions()) {
+		if(canTransact()) {
 			withdrawAmt = AccountHelper.standardWithdraw(this, requestedWithdrawal);
 			if(withdrawAmt > 0)
-				setNumTransactions(transactions + 1);
+				setNumTransactions(getNumTransactions() + 1);
 		}
 		return withdrawAmt;
 	}

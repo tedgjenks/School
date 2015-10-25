@@ -71,6 +71,7 @@ public abstract class AbstractBanking {
 	 * The overdraft fee is applied for every overdraft.<br>
 	 * If the combined balances are less than the minimum to avoid fees, banking fees are deducted from the checking account.<br>
 	 * Continuously compounding interest is applied to each account based on the APR and days. Interest is calculated after fees are assessed.<br>
+	 * Maintenance transactions do not count toward transaction limits.<br>
 	 * PRECONDITION: days is greater than zero.<br>
 	 * POSTCONDITION: number of overdrafts for the checking account is set to zero.<br>
 	 * 
