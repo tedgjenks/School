@@ -29,8 +29,8 @@ public class Customer extends AbstractCustomer {
 		super(name, checkingAccount, savingsAccount);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * Compare by name.
 	 */
 	@Override
 	public int compareTo(AbstractCustomer arg0) {

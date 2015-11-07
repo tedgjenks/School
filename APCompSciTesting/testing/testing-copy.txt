@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE projects SYSTEM "testing-config.dtd">
-<projects feedback-enabled="false" clear-logs="true">
+<projects test-mode="false">
   <eclipse-student-root>C:/Users/Ted/git/School14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
   <google-drive>
     <turnin-root>C:/Users/Ted/Google Drive/Courses/IntroCS/TurnIn/F2015_ICS/</turnin-root>
@@ -51,11 +51,20 @@
       <file>CheckingAccount.java</file>
       <file>SavingsAccount.java</file>
     </files>
-    <students>
-      <student>
-        <last-name>Jenks</last-name>
-        <first-name>Ted</first-name>
-      </student>
-    </students>
+    <students />
+  </project>
+  <project>
+    <name>MutableArray</name>
+    <package-root>edu/array/</package-root>
+    <test-class>edu.jenks.array.test.MutableArrayTest</test-class>
+    <max-runtime-secs>100000</max-runtime-secs>
+    <deadline>
+      <due-date>12/1/2015</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>MutableArray.java</file>
+    </files>
+    <students />
   </project>
 </projects>

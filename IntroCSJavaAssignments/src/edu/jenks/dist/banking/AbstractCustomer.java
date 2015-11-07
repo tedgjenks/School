@@ -30,7 +30,7 @@ public abstract class AbstractCustomer implements Comparable<AbstractCustomer> {
 	public AbstractCustomer(String name, AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
 		this.name = name;
 		this.checkingAccount = checkingAccount;
-		this.savingsAccount = savingsAccount;
+		setSavingsAccount(savingsAccount);
 	}
 
 
@@ -63,7 +63,7 @@ public abstract class AbstractCustomer implements Comparable<AbstractCustomer> {
 	/**
 	 * @return
 	 */
-	public Account getSavingsAccount() {
+	public AbstractSavingsAccount getSavingsAccount() {
 		return savingsAccount;
 	}
 

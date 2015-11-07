@@ -73,7 +73,9 @@ public abstract class AbstractBanking {
 	 * Continuously compounding interest is applied to each account based on the APR and days. Interest is calculated after fees are assessed.<br>
 	 * Maintenance transactions do not count toward transaction limits.<br>
 	 * PRECONDITION: days is greater than zero.<br>
-	 * POSTCONDITION: number of overdrafts for the checking account is set to zero.<br>
+	 * POSTCONDITION:<br>
+	 *  - number of overdrafts for the checking account is set to zero.<br>
+	 *  - number of transactions for the savings account is set to zero.<br>
 	 * 
 	 * @param days
 	 */

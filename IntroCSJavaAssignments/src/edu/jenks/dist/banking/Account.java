@@ -10,6 +10,11 @@ package edu.jenks.dist.banking;
  */
 public abstract class Account {
 	
+	/**
+	 * The approximate number of days in a year.
+	 */
+	public static final double DAYS_IN_A_YEAR = 365.2422;
+	
 	private double accountInterestAPR;
 	private double balance;
 	

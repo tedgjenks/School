@@ -24,35 +24,55 @@ public class Banking extends AbstractBanking {
 		if(days > 0) {
 			for(AbstractCustomer customer : getCustomers()) {
 				AbstractCheckingAccount checkingAccount = customer.getCheckingAccount();
-				Account savingsAccount = customer.getSavingsAccount();
+				payCheckingDeficit(checkingAccount);
+				AbstractSavingsAccount savingsAccount = customer.getSavingsAccount();
 				applyFees(checkingAccount, savingsAccount);
 				payInterest(days, checkingAccount, savingsAccount);
+				resetAccounts(checkingAccount, savingsAccount);
 			}
 		}
 	}
 	
-	private void applyFees(AbstractCheckingAccount checkingAccount, Account savingsAccount) {
-		applyOverdraftFees(checkingAccount);
+	private void payCheckingDeficit(AbstractCheckingAccount checkingAccount) {
+		if(checkingAccount != null) {
+			double cBal = checkingAccount.getBalance();
+			AbstractSavingsAccount savingsAccount = checkingAccount.getLinkedSavingsAccount();
+			if(cBal < 0 && savingsAccount != null) {
+				double sBal = savingsAccount.getBalance();
+				double sWithdraw;
+				if(sBal >= Math.abs(cBal))
+					sWithdraw = Math.abs(cBal);
+				else
+					sWithdraw = sBal;
+				savingsAccount.setBalance(sBal - sWithdraw);
+				checkingAccount.deposit(sWithdraw);
+			}
+		}
+	}
+	
+	private void resetAccounts(AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
+		if(checkingAccount != null)
+			checkingAccount.setNumberOverdrafts(0);
+		if(savingsAccount != null)
+			savingsAccount.setNumTransactions(0);
+	}
+	
+	private void applyFees(AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
+		applyOverdraftFees(checkingAccount, savingsAccount);
 		applyBankingFee(checkingAccount, savingsAccount);
 	}
 	
-	private void applyOverdraftFees(AbstractCheckingAccount checkingAccount) {
+	private void applyOverdraftFees(AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
 		if(checkingAccount != null) {
 			int numberOverdrafts = checkingAccount.getNumberOverdrafts();
 			if(numberOverdrafts > 0) {
 				int totalOverdraftFee = checkingAccount.getOverdraftFee() * numberOverdrafts;
-				double withdrawal = checkingAccount.withdraw(totalOverdraftFee);
-				double difference = totalOverdraftFee - withdrawal;
-				if(difference > 0) {
-					double balance = checkingAccount.getBalance() - difference;
-					checkingAccount.setBalance(balance);
-				}
+				applyFee(totalOverdraftFee, checkingAccount, savingsAccount);
 			}
-			checkingAccount.setNumberOverdrafts(0);
 		}
 	}
 	
-	private void applyBankingFee(AbstractCheckingAccount checkingAccount, Account savingsAccount) {
+	private void applyBankingFee(AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
 		double combinedBalance = 0;
 		if(checkingAccount != null)
 			combinedBalance += checkingAccount.getBalance();
@@ -60,12 +80,29 @@ public class Banking extends AbstractBanking {
 			combinedBalance += savingsAccount.getBalance();
 		if(combinedBalance < getMinNoFeeCombinedBalance()) {
 			int bankingFee = getBankingFee();
-			double withdrawal = checkingAccount.withdraw(bankingFee);
-			double difference = bankingFee - withdrawal;
-			if(difference > 0) {
-				double balance = checkingAccount.getBalance() - difference;
-				checkingAccount.setBalance(balance);
-			}
+			applyFee(bankingFee, checkingAccount, savingsAccount);
+		}
+	}
+	
+	private void applyFee(final double fee, AbstractCheckingAccount checkingAccount, Account savingsAccount) {
+		if(checkingAccount == null) {
+			double balance = savingsAccount.getBalance() - fee;
+			savingsAccount.setBalance(balance);
+		} else if(savingsAccount == null || fee <= checkingAccount.getBalance()) {
+			double balance = checkingAccount.getBalance() - fee;
+			checkingAccount.setBalance(balance);
+		} else { // checking and savings not null and checking balance not enough
+			double checkBal = checkingAccount.getBalance();
+			double savBal = savingsAccount.getBalance();
+			double checkShortage = fee - checkBal;
+			double savWith;
+			if(checkShortage < savBal)
+				savWith = checkShortage;
+			else
+				savWith = savBal;
+			savingsAccount.setBalance(savBal - savWith);
+			checkingAccount.deposit(savWith);
+			checkingAccount.setBalance(checkingAccount.getBalance() - fee);
 		}
 	}
 	

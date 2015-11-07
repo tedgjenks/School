@@ -2,6 +2,7 @@ package edu.banking.jenks.ted;
 
 
 import edu.jenks.dist.banking.AbstractCheckingAccount;
+import edu.jenks.dist.banking.AbstractSavingsAccount;
 import edu.jenks.dist.banking.Account;
 
 public class CheckingAccount extends AbstractCheckingAccount {
@@ -36,7 +37,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	 * If the withdrawal is greater than the balance, attempt to withdraw the difference from a linked savings account.<br>
 	 * If the withdrawal is greater than the combined balance, attempt to cover the request with an overdraft.
 	 * If the request cannot be satisfied, no transactions should take place.
-	 * @param the requested withdrawal amount
+	 * @param requestedWithdrawal the requested withdrawal amount
 	 */
 	@Override
 	public double withdraw(double requestedWithdrawal) {
@@ -47,7 +48,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 		double balance = getBalance();
 		if(requestedWithdrawal <= balance)
 			withdrawal = AccountHelper.standardWithdraw(this, requestedWithdrawal);
-		else { // handle overdraft
+		else if(requestedWithdrawal <= balance + additionalFunds()) { // handle overdraft
 			double withdrawalOverage = requestedWithdrawal - balance;
 			Account linkedSavingsAccount = getLinkedSavingsAccount();
 			if(linkedSavingsAccount != null) {
@@ -70,6 +71,16 @@ public class CheckingAccount extends AbstractCheckingAccount {
 			setBalance(balance);
 		}
 		return withdrawal;
+	}
+	
+	private double additionalFunds() {
+		double addFunds = 0;
+		AbstractSavingsAccount linkedSavingsAccount = getLinkedSavingsAccount();
+		if(linkedSavingsAccount != null && canTransact())
+			addFunds += linkedSavingsAccount.getBalance();
+		if(isOverdraftProtected())
+			addFunds += getOverdraftMax();
+		return addFunds;
 	}
 
 	@Override

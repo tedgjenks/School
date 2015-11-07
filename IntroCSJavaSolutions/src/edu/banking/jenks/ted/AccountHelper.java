@@ -7,7 +7,7 @@ public class AccountHelper {
 	public static void payInterest(Account account, int days) {
 		double balance = account.getBalance();
 		if(balance > 0) {
-			double timeInYears = days/365.0;
+			double timeInYears = days/Account.DAYS_IN_A_YEAR;
 			balance *= Math.pow(Math.E, account.getAccountInterestAPR() / 100 * timeInYears);
 			account.setBalance(balance);
 		}

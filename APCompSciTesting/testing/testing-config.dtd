@@ -1,6 +1,5 @@
 <!ELEMENT projects (eclipse-student-root, google-drive, project+)>
-<!ATTLIST projects feedback-enabled (true|false) "true">
-<!ATTLIST projects clear-logs (true|false) "true">
+<!ATTLIST projects test-mode (true|false) "false">
 <!ELEMENT eclipse-student-root (#PCDATA)>
 
 <!ELEMENT google-drive (turnin-root, turnin-dir-suffix)>

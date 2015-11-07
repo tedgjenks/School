@@ -5,43 +5,46 @@ import edu.jenks.dist.unitconversion.Convertible;
 public class MetricLengthConverter implements Convertible {
 
 	@Override
-	public double convert(double numMeters, String arg1, String desiredUnit) {
-		double meters=convertToMeters(numMeters, desiredUnit);
-		
-		return convertFromMeters(meters, desiredUnit);
+	public double convert(double numUnit, String unit, String desiredUnit) {
+		double meters=convertToMeters(numUnit, desiredUnit);
+		double numDesiredUnits=convertFromMeters(meters, desiredUnit);
+		return numDesiredUnits;
 	}
+	
 
+	
 	@Override
-	public String convertForDisplay(double newUnit, String startingUnit, String desiredUnit) {
+	public String convertForDisplay(double newUnit, String unit, String desiredUnit) {
+		
 		boolean validUnit=false;
-		if (startingUnit.equals("dm")){
+		if (unit.equals("dm")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("nm")){
+		else if (unit.equals("nm")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("um")){
+		else if (unit.equals("um")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("cm")){
+		else if (unit.equals("cm")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("mm")){
+		else if (unit.equals("mm")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("km")){
+		else if (unit.equals("km")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("dam")){
+		else if (unit.equals("dam")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("Mm")){
+		else if (unit.equals("Mm")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("Gm")){
+		else if (unit.equals("Gm")){
 			validUnit=true;
 		}
-		else if (startingUnit.equals("hm")){
+		else if (unit.equals("hm")){
 			validUnit=true;
 		}
 		if (desiredUnit.equals("dm")){
@@ -74,77 +77,88 @@ public class MetricLengthConverter implements Convertible {
 		else if (desiredUnit.equals("hm")){
 			validUnit=true;
 		}
-		return "unit not supported";
+		if (validUnit==true){
+		 double numberDesiredUnits = convert(newUnit, unit, desiredUnit);
+		 String result=(newUnit + " " + unit + " = " + numberDesiredUnits + " " + desiredUnit);
+		 return result;
+		}
+		else return "unit not supported";
 	}
 
 	@Override
-	public double convertFromMeters(double numMeters, String desiredUnit) {
-		double newUnit=numMeters;
+	public double convertFromMeters(double meters, String desiredUnit) {
+		double numDesiredUnit = 0;
 		if ("dm".equals(desiredUnit)){
-			newUnit=numMeters*10;
+			numDesiredUnit=meters*10;
 		}
 		else if ("nm".equals(desiredUnit)){
-			newUnit=numMeters*1000000000;
+			numDesiredUnit=meters*1000000000;
 		}
 		else if ("um".equals(desiredUnit)){
-			newUnit=numMeters*1000000;
+			numDesiredUnit=meters*1000000;
 		}
 		else if ("mm".equals(desiredUnit)){
-			newUnit=numMeters*1000;
+			numDesiredUnit=meters*1000;
 		}
 		else if ("cm".equals(desiredUnit)){
-			newUnit=numMeters*100;
+			numDesiredUnit=meters*100;
 		}
 		else if ("km".equals(desiredUnit)){
-			newUnit=numMeters/1000;
+			numDesiredUnit=meters/1000;
 		}
 		else if ("dam".equals(desiredUnit)){
-			newUnit=numMeters/10;
+			numDesiredUnit=meters/10;
 		}
 		else if ("Mm".equals(desiredUnit)){
-			newUnit=numMeters/1000000;
+			numDesiredUnit=meters/1000000;
 		}
 		else if ("Gm".equals(desiredUnit)){
-			newUnit=numMeters/1000000000;
+			numDesiredUnit=meters/1000000000;
 		}
 		else if ("hm".equals(desiredUnit)){
-			newUnit=numMeters/100;
+			numDesiredUnit=meters/100;
 		}
-		return newUnit;
+		else if ("m".equals(desiredUnit)){
+			numDesiredUnit=meters;
+		}
+		return numDesiredUnit;
 	}
 
 	@Override
-	public double convertToMeters(double arg0, String arg1) {
-		double meters=0;
-		if ("dm".equals(arg1)){
-			meters=arg0/10;
+	public double convertToMeters(double numUnits, String unit) {
+		double meters = 0;
+		if ("dm".equals(unit)){
+			meters=numUnits/10;
 		}
-		else if ("nm".equals(arg1)){
-			meters=arg0/1000000000;
+		else if ("nm".equals(unit)){
+			meters=numUnits/1000000000;
 		}
-		else if ("um".equals(arg1)){
-			meters=arg0/1000000;
+		else if ("um".equals(unit)){
+			meters=numUnits/1000000;
 		}
-		else if ("mm".equals(arg1)){
-			meters=arg0/1000;
+		else if ("mm".equals(unit)){
+			meters=numUnits/1000;
 		}
-		else if ("cm".equals(arg1)){
-			meters=arg0/100;
+		else if ("cm".equals(unit)){
+			meters=numUnits/100;
 		}
-		else if ("km".equals(arg1)){
-			meters=arg0*1000;
+		else if ("km".equals(unit)){
+			meters=numUnits*1000;
 		}
-		else if ("dam".equals(arg1)){
-			meters=arg0*10;
+		else if ("dam".equals(unit)){
+			meters=numUnits*10;
 		}
-		else if ("Mm".equals(arg1)){
-			meters=arg0*1000000;
+		else if ("Mm".equals(unit)){
+			meters=numUnits*1000000;
 		}
-		else if ("Gm".equals(arg1)){
-			meters=arg0*1000000000;
+		else if ("Gm".equals(unit)){
+			meters=numUnits*1000000000;
 		}
-		else if ("hm".equals(arg1)){
-			meters=arg0*100;
+		else if ("hm".equals(unit)){
+			meters=numUnits*100;
+		}
+		else if ("m".equals(unit)){
+			meters=numUnits;
 		}
 		return meters;
 	}

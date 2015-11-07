@@ -27,7 +27,7 @@ public class TestRunner {
 	private static final String FORMATTED_DATE;
 	
 	private static Document document;
-	private static boolean feedbackEnabled;
+	private static boolean testMode;
 	private static String eclipseStudentRoot;
 	private static String googleDriveTurninRoot;
 	private static String turninDirSuffix;
@@ -85,14 +85,14 @@ public class TestRunner {
 			tester.setStudent(student);
 			tester.start();
 		}
-		TestableMonitor monitor = new TestableMonitor(threadGroup, project.getChildText(PROJECT_NAME_TAG), calcMaxRuntimeMillis(project));
+		TestableMonitor monitor = new TestableMonitor(threadGroup, project.getChildText(PROJECT_NAME_TAG), calcMaxRuntimeMillis(project), testMode);
 		monitor.start();
 		try {
 			monitor.getThread().join();
 		} catch (InterruptedException e) {
 			e.printStackTrace(System.err);
 		}
-		if(feedbackEnabled) {
+		if(!testMode) {
 			out.println("Sending feedback " + StringUtil.buildString('*', 50));
 			try {
 				for(Student student : studentFeedbackLogPath.keySet()) {
@@ -189,7 +189,7 @@ public class TestRunner {
 	private static void initXml() throws JDOMException, IOException {
 		document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
 		Element rootElement = document.getRootElement();
-		feedbackEnabled = Boolean.valueOf(rootElement.getAttributeValue("feedback-enabled"));
+		testMode = Boolean.valueOf(rootElement.getAttributeValue("test-mode"));
 		eclipseStudentRoot = rootElement.getChildText("eclipse-student-root");
 		Element googleDriveElement = rootElement.getChild("google-drive");
 		googleDriveTurninRoot = googleDriveElement.getChildText("turnin-root");

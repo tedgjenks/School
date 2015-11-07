@@ -18,7 +18,6 @@ public  class Rational extends AbstractRational {
 		
 	}
 
-
 	@Override
 	public AbstractRational add(AbstractRational rn2) {
 		int numer=getNumerator();
@@ -34,15 +33,15 @@ public  class Rational extends AbstractRational {
 
 	@Override
 	public AbstractRational divide(AbstractRational rn2) {
-		int quotientDenom=(getNumerator()) * (rn2.getDenominator());
-		int quotient=(getDenominator()*rn2.getNumerator());
-		Rational end= new Rational(quotient, quotientDenom);
+		int quotient=((getDenominator()/getNumerator()) * (rn2.getNumerator() / rn2.getDenominator()));
+		int quotientDenom=getNumerator();
+		Rational end= new Rational(quotientDenom, quotient);
 		return end;
 	}
 
 	@Override
 	public boolean equals(AbstractRational rn2) {
-		if((getNumerator()/getDenominator())==(rn2.getNumerator()/rn2.getDenominator())){
+		if((getNumerator()/getDenominator())==rn2.getNumerator()/rn2.getDenominator()){
 			return true;
 		}
 		else{
@@ -92,11 +91,9 @@ public  class Rational extends AbstractRational {
 	}
 	@Override
 	public boolean decimalTerminates() {
-		int decimal=(getNumerator()/getDenominator());
-		if (decimal==(getNumerator()/getDenominator())){
-			return false;
-		}
-		else return true;
+		if((getDenominator()%5==0)||(getDenominator()%2==0))
+			return true;
+		else return false;
 	}
 	public String toString(){
 		if (getNumerator()==0){

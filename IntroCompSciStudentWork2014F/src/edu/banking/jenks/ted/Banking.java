@@ -60,11 +60,24 @@ public class Banking extends AbstractBanking {
 			combinedBalance += savingsAccount.getBalance();
 		if(combinedBalance < getMinNoFeeCombinedBalance()) {
 			int bankingFee = getBankingFee();
-			double withdrawal = checkingAccount.withdraw(bankingFee);
-			double difference = bankingFee - withdrawal;
-			if(difference > 0) {
-				double balance = checkingAccount.getBalance() - difference;
+			if(checkingAccount == null) {
+				double balance = savingsAccount.getBalance() - bankingFee;
+				savingsAccount.setBalance(balance);
+			} else if(savingsAccount == null || bankingFee <= checkingAccount.getBalance()) {
+				double balance = checkingAccount.getBalance() - bankingFee;
 				checkingAccount.setBalance(balance);
+			} else { // checking and savings not null and checking balance not enough
+				double checkBal = checkingAccount.getBalance();
+				double savBal = savingsAccount.getBalance();
+				double checkShortage = checkBal - bankingFee;
+				double savWith;
+				if(checkShortage < savBal)
+					savWith = checkShortage;
+				else
+					savWith = savBal;
+				savingsAccount.setBalance(savBal - savWith);
+				checkBal = checkingAccount.deposit(savWith);
+				checkingAccount.setBalance(checkBal - bankingFee);
 			}
 		}
 	}

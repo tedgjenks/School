@@ -37,7 +37,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	 * If the withdrawal is greater than the balance, attempt to withdraw the difference from a linked savings account.<br>
 	 * If the withdrawal is greater than the combined balance, attempt to cover the request with an overdraft.
 	 * If the request cannot be satisfied, no transactions should take place.
-	 * @param the requested withdrawal amount
+	 * @param requestedWithdrawal the requested withdrawal amount
 	 */
 	@Override
 	public double withdraw(double requestedWithdrawal) {
