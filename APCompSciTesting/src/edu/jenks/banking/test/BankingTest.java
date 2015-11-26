@@ -52,13 +52,27 @@ public class BankingTest extends Testable {
 		checking2.setOverdraftMax(100);
 		AbstractSavingsAccount savings2 = cust2.getSavingsAccount(); // 400, 7%
 		savings2.setMaxMonthlyTransactions(4);
+		//checking at 60 on first linked savings
 		for(int withdrawals = 15; withdrawals > 0; withdrawals--)
 			checking2.withdraw(70);
 		
+		// expect savings 180
 		banking.performMaintenance(30);
-		testCustBalance(message + " checking only", cust0, -195, 0);
-		testCustBalance(message + " savings only", cust1, 0, 150.7411);
-		testCustBalance(message + " checking and savings", cust2, 0, 30.173);
+		if(!(verifyCustomerReset(cust0) && verifyCustomerReset(cust1) && verifyCustomerReset(cust2)))
+			logFail(message + " - overdrafts and transactions should be reset after maintenance.");
+		else {
+			testCustBalance(message + " checking only", cust0, -195, 0);
+			testCustBalance(message + " savings only", cust1, 0, 150.7411);
+			testCustBalance(message + " checking and savings", cust2, 0, 30.173);
+		}
+	}
+	
+	private boolean verifyCustomerReset(AbstractCustomer customer) {
+		AbstractCheckingAccount checking = customer.getCheckingAccount();
+		AbstractSavingsAccount savings = customer.getSavingsAccount();
+		boolean checkingReset = checking != null ? checking.getNumberOverdrafts() == 0 : true;
+		boolean savingsReset = savings != null ? savings.getNumTransactions() == 0 : true;
+		return checkingReset && savingsReset;
 	}
 	
 	public void test12PerformMaintenanceOverdraftFees() {
@@ -123,7 +137,8 @@ public class BankingTest extends Testable {
 		Double actCheckBal = checking != null ? checking.getBalance() : null;
 		Double actSavBal = savings != null ? savings.getBalance() : null;
 		if((checking != null && !MathUtil.equals(expCheckBal, actCheckBal, DELTA)) || (savings != null && !MathUtil.equals(expSavBal, actSavBal, DELTA))) {
-			logFail(message, "check: " + expCheckBal + ", sav: " + expSavBal, "check: " + actCheckBal + ", sav: " + actSavBal, points);
+			logBalFail(message + " checking", expCheckBal, actCheckBal, points);
+			logBalFail(message + " savings", expSavBal, actSavBal, points);
 			continueTesting = false;
 		} else {
 			totalPoints += 1;
@@ -183,13 +198,13 @@ public class BankingTest extends Testable {
 	}
 	
 	public void test07PayInterest() {
-		testPayInterest(checkingInstance(100, 5));
-		testPayInterest(savingsInstance(100, 5));
+		testPayInterest("checking", checkingInstance(100, 5));
+		testPayInterest("savings", savingsInstance(100, 5));
 	}
 	
-	private boolean testPayInterest(Account account) {
+	private boolean testPayInterest(String accountType, Account account) {
 		int points = 2;
-		String message = "Pay interest";
+		String message = "Pay interest " + accountType;
 		boolean pass = false;
 		double expBal = 100.4115;
 		account.payInterest(30);
@@ -231,7 +246,7 @@ public class BankingTest extends Testable {
 	private boolean testTransfer(Account from, Account to, double reqAmt, double expAmt) {
 		boolean pass = false;
 		int points = 2;
-		String message = "Transfer";
+		String message = "Transfer from " + from.getClass().toString() + " to " + to.getClass().toString();
 		double expFromBal = from.getBalance() - expAmt;
 		double expToBal = to.getBalance() + expAmt;
 		double actAmt = from.transfer(to, reqAmt);
@@ -251,21 +266,49 @@ public class BankingTest extends Testable {
 	}
 	
 	public void test05SavingsTransactions() {
+		boolean pass = true;
 		int points = 1;
 		String message = "Savings transactions";
+		AbstractCheckingAccount checking = checkingInstance(100, 0);
 		AbstractSavingsAccount savings = savingsInstance(200, 0);
+		checking.setLinkedSavingsAccount(savings);
 		savings.setMaxMonthlyTransactions(3);
-		savings.withdraw(100);
+		savings.transfer(checking, 100);
 		savings.deposit(100);
 		savings.withdraw(100);
 		double expAmt = 0, expBal = 100;
 		double actAmt = savings.deposit(50);
 		double actBal = savings.getBalance();
 		if(MathUtil.equals(expAmt, actAmt, DELTA) && MathUtil.equals(expBal, actBal, DELTA)) {
-			totalPoints += points;
 			logPass(message);
-		} else
-			logFail(message, "Amt: " + expAmt + ", Bal: " + expBal, "Amt: " + actAmt + ", Bal: " + actBal, points);
+		} else {
+			pass = false;
+			logBalFail(message, expAmt, expBal, actAmt, actBal, points);
+		}
+		
+		message += " with checking overdraft";
+		expAmt = 0;
+		double expBalC = 100, expBalS = 200;
+		checking = checkingInstance(expBalC, 0);
+		checking.setOverdraftProtected(true);
+		checking.setOverdraftMax(100);
+		savings = savingsInstance(expBalS, 0);
+		checking.setLinkedSavingsAccount(savings);
+		savings.setMaxMonthlyTransactions(0);
+		actAmt = checking.withdraw(250);
+		double actBalC = checking.getBalance();
+		double actBalS = savings.getBalance();
+		if(MathUtil.equals(expAmt, actAmt, DELTA)
+				&& MathUtil.equals(expBalC, actBalC, DELTA)
+				&& MathUtil.equals(expBalS, actBalS, DELTA)) {
+			logPass(message);
+		} else {
+			pass = false;
+			logBalFail(message + " (checking)", expAmt, expBalC, actAmt, actBalC, points);
+			logBalFail(message + " (savings)", expBalS, actBalS, points);
+		}
+		if(pass)
+			totalPoints += points;
 	}
 	
 	public void test04LinkedOverdraftWithdraw() {
@@ -294,9 +337,9 @@ public class BankingTest extends Testable {
 			totalPoints += points;
 			logPass(message);
 		} else {
-			logFail(message, "Over - " + expOver + ", CBal - " + expBalC + ", SBal - " + expBalS,
-					"Over - " + actOver + ", CBal - " + actBalC + ", SBal - " + actBalS,
-					points);
+			logFail(message, "Over - " + expOver, "Over - " + actOver, points);
+			logBalFail(message + " checking", expBalC, actBalC, points);
+			logBalFail(message + " savings", expBalS, actBalS, points);
 		}
 	}
 	
@@ -317,9 +360,8 @@ public class BankingTest extends Testable {
 			totalPoints += points;
 			logPass(message);
 		} else {
-			logFail(message, "Amt - " + expAmt + ", CBal - " + expBalC + ", SBal - " + expBalS,
-					"Amt - " + actAmt + ", CBal - " + actBalC + ", SBal - " + actBalS,
-					points);
+			logBalFail(message + " checking", expAmt, expBalC, actAmt, actBalC, points);
+			logBalFail(message + " savings", expBalS, actBalS, points);
 			return;
 		}
 		
@@ -333,9 +375,8 @@ public class BankingTest extends Testable {
 			totalPoints += points;
 			logPass(message);
 		} else {
-			logFail(message, "Amt - " + expAmt + ", CBal - " + expBalC + ", SBal - " + expBalS,
-					"Amt - " + actAmt + ", CBal - " + actBalC + ", SBal - " + actBalS,
-					points);
+			logBalFail(message + " checking", expAmt, expBalC, actAmt, actBalC, points);
+			logBalFail(message + " savings", expBalS, actBalS, points);
 		}
 	}
 	
@@ -350,13 +391,15 @@ public class BankingTest extends Testable {
 		double expBal = -430;
 		double actAmt = checking.withdraw(expAmt);
 		double actBal = checking.getBalance();
+		int expOverdrafts = 1, actOverdrafts = checking.getNumberOverdrafts();
 		if(MathUtil.equals(actAmt, expAmt, DELTA) &&
 				MathUtil.equals(actBal, expBal, DELTA) &&
-				checking.getNumberOverdrafts() == 1) {
+				actOverdrafts == expOverdrafts) {
 			totalPoints += points;
 			logPass(message);
 		} else {
-			logFail(message, expAmt + " -> " + expBal, actAmt + " -> " + actBal, points);
+			logFail(message + " (number overdrafts)", expOverdrafts, actOverdrafts, points);
+			logBalFail(message, expAmt, expBal, actAmt, actBal, points);
 			return;
 		}
 		
@@ -368,33 +411,42 @@ public class BankingTest extends Testable {
 			totalPoints += points;
 			logPass(message);
 		} else {
-			logFail(message, expAmt + " -> " + expBal, actAmt + " -> " + actBal, points);
+			logBalFail(message, expAmt, expBal, actAmt, actBal, points);
 		}
 	}
 	
+	private void logBalFail(String message, double expBal, double actBal, int points) {
+		logFail(message, "Exp balance: " + expBal, "Act balance: " + actBal, points);
+	}
+	
+	private void logBalFail(String message, double expAmt, double expBal, double actAmt, double actBal, int points) {
+		logFail(message, "Exp withdraw: " + expAmt + ", exp balance: " + expBal,
+				"Act withdraw: " + actAmt + ", act balance: " + actBal, points);
+	}
+	
 	public void test01BasicWithdrawChecking() {
-		testBasicWithdraw(checkingInstance(100, 5));
+		testBasicWithdraw(checkingInstance(100, 5), "checking");
 	}
 	
 	public void test02BasicWithdrawSavings() {
 		AbstractSavingsAccount savings = savingsInstance(100, 5);
 		savings.setMaxMonthlyTransactions(100);
-		testBasicWithdraw(savings);
+		testBasicWithdraw(savings, "savings");
 	}
 	
-	private void testBasicWithdraw(Account account) {
+	private void testBasicWithdraw(Account account, String accountType) {
 		int points = 2;
 		// legal withdraw
 		double expAmt = 30, expBal = 70;
 		double actAmt = account.withdraw(expAmt);
 		double actBal = account.getBalance();
-		String message = "account standard withdraw";
+		String message = accountType + " standard withdraw";
 		if(MathUtil.equals(actAmt, expAmt, DELTA) && MathUtil.equals(actBal, expBal, DELTA)) {
 			totalPoints += points;
 			logPass(message);
 		} else {
 			continueTesting = false;
-			logFail(message + " - testing aborted", expAmt + " -> " + expBal, actAmt + " -> " + actBal, points);
+			logFail(message + " - testing aborted", expAmt + " withdrawn -> " + expBal + " balance", actAmt + " withdrawn -> " + actBal + " balance", points);
 			return;
 		}
 		

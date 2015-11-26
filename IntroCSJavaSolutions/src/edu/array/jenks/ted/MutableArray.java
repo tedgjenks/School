@@ -114,4 +114,9 @@ public class MutableArray implements List {
 		return new IndexOutOfBoundsException(sb.toString());
 	}
 
+	@Override
+	public Object[] getBackingArray() {
+		return backingArray;
+	}
+
 }

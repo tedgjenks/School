@@ -33,10 +33,8 @@ public  class Rational extends AbstractRational {
 
 	@Override
 	public AbstractRational divide(AbstractRational rn2) {
-		int quotient=((getDenominator()/getNumerator()) * (rn2.getNumerator() / rn2.getDenominator()));
-		int quotientDenom=getNumerator();
-		Rational end= new Rational(quotientDenom, quotient);
-		return end;
+		AbstractRational reciprocal=rn2.reciprocal();
+		return multiply(reciprocal);
 	}
 
 	@Override
@@ -107,5 +105,5 @@ public  class Rational extends AbstractRational {
 		}
 		
 	}
-	
+
 }

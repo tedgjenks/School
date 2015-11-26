@@ -11,36 +11,61 @@ public class SavingsAccount extends AbstractSavingsAccount {
 
 	public SavingsAccount(double balance, double accountInterestAPR) {
 		super(balance, accountInterestAPR);
-		setBalance(balance);
-		setAccountInterestAPR(accountInterestAPR);
+		
 	}
 
 	@Override
 	public boolean canTransact() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean answer = false;
+		if(getNumTransactions() < getMaxMonthlyTransactions()){
+			answer = true;
+		}
+		return answer;
 	}
 
 	@Override
-	public void payInterest(int arg0) {
-		// TODO Auto-generated method stub
+	public void payInterest(int days) {
+		double e = Math.E;
+		double aPR = getAccountInterestAPR();
+		double accountBalance = getBalance()* Math.pow(e, (aPR * (days / DAYS_IN_A_YEAR)));
+		setBalance(accountBalance);
 
 	}
 
 	@Override
-	public double transfer(Account arg0, double arg1) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double transfer(Account destination, double amount) {
+		double balance = getBalance();
+		if(canTransact() && balance >= amount){
+			this.withdraw(amount);
+			setBalance(balance - amount);
+			destination.deposit(amount);
+		}
+		else {
+			amount = 0;
+		}
+		return amount;
 	}
 
 	@Override
 	public double withdraw(double requestedWithdrawl) {
-		if(requestedWithdrawl > getBalance()){
-			requestedWithdrawl = 0;
+		double balance = getBalance();
+		if(requestedWithdrawl <= balance){
+			if(getNumTransactions() < getMaxMonthlyTransactions()){
+				setBalance(balance - requestedWithdrawl);
+			}
+			else{
+				setBalance(balance);
+				requestedWithdrawl = 0;
+			}
 		}
-		setBalance(getBalance() - requestedWithdrawl);
+		else {
+			requestedWithdrawl = 0;
+			setBalance(balance);
+		}
+
 		return requestedWithdrawl;
-	
 	}
+
+
 
 }

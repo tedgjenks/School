@@ -11,7 +11,7 @@ package edu.jenks.dist.banking;
 public abstract class Account {
 	
 	/**
-	 * The approximate number of days in a year.
+	 * The approximate number of days in a year (365.2422).
 	 */
 	public static final double DAYS_IN_A_YEAR = 365.2422;
 	
@@ -72,7 +72,8 @@ public abstract class Account {
 	}
 
 	/**
-	 * Continuously compounding interest is applied to this account.
+	 * <p>Continuously compounding interest is applied to this account.</p>
+	 * [initial balance]*e^([yearly rate] * [time in years])<br>
 	 * 
 	 * @param days
 	 */

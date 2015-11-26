@@ -42,29 +42,22 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	@Override
 	public double withdraw(double requestedWithdrawal) {
 		double withdrawal = 0;
-		if(requestedWithdrawal <= 0) // no action if requestedWithdrawal is not positive
-			return withdrawal;
-		
-		double balance = getBalance();
-		if(requestedWithdrawal <= balance)
-			withdrawal = AccountHelper.standardWithdraw(this, requestedWithdrawal);
-		else if(requestedWithdrawal <= balance + additionalFunds()) { // handle overdraft
-			double withdrawalOverage = requestedWithdrawal - balance;
-			Account linkedSavingsAccount = getLinkedSavingsAccount();
-			if(linkedSavingsAccount != null) {
-				double savingsBalance = linkedSavingsAccount.getBalance();
-				double savingsWithdrawal = withdrawalOverage <= savingsBalance ? withdrawalOverage : savingsBalance;
-				deposit(linkedSavingsAccount.withdraw(savingsWithdrawal));
-				balance = getBalance();
-			}
-			if(requestedWithdrawal <= balance)
-				withdrawal = requestedWithdrawal;
-			else if(isOverdraftProtected()) {
-				double availableBalance = balance + getOverdraftMax();
-				if(requestedWithdrawal <= availableBalance) {
-					int numberOverdrafts = getNumberOverdrafts() + 1;
-					setNumberOverdrafts(numberOverdrafts);
-					withdrawal = requestedWithdrawal;
+		// no action if requestedWithdrawal is not positive or it is more than the total available funds
+		if(requestedWithdrawal > 0 && requestedWithdrawal <= totalFunds()) {
+			withdrawal = requestedWithdrawal;
+			double balance = getBalance();
+			if(requestedWithdrawal > balance) {
+				double withdrawalOverage = requestedWithdrawal - balance;
+				AbstractSavingsAccount linkedSavingsAccount = getLinkedSavingsAccount();
+				if(linkedSavingsAccount != null) {
+					double savingsBalance = linkedSavingsAccount.getBalance();
+					double savingsWithdrawal = withdrawalOverage <= savingsBalance ? withdrawalOverage : savingsBalance;
+					deposit(linkedSavingsAccount.withdraw(savingsWithdrawal));
+					balance = getBalance();
+				}
+				if(requestedWithdrawal > balance) {
+					assert isOverdraftProtected() && requestedWithdrawal - balance <= getOverdraftMax() : "Overdraft not sufficient!";
+					setNumberOverdrafts(getNumberOverdrafts() + 1);
 				}
 			}
 			balance -= withdrawal;
@@ -73,14 +66,14 @@ public class CheckingAccount extends AbstractCheckingAccount {
 		return withdrawal;
 	}
 	
-	private double additionalFunds() {
-		double addFunds = 0;
+	private double totalFunds() {
+		double funds = getBalance();
 		AbstractSavingsAccount linkedSavingsAccount = getLinkedSavingsAccount();
-		if(linkedSavingsAccount != null && canTransact())
-			addFunds += linkedSavingsAccount.getBalance();
+		if(linkedSavingsAccount != null && linkedSavingsAccount.canTransact())
+			funds += linkedSavingsAccount.getBalance();
 		if(isOverdraftProtected())
-			addFunds += getOverdraftMax();
-		return addFunds;
+			funds += getOverdraftMax();
+		return funds;
 	}
 
 	@Override

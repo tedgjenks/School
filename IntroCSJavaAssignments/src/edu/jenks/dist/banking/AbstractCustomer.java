@@ -57,7 +57,8 @@ public abstract class AbstractCustomer implements Comparable<AbstractCustomer> {
 	 */
 	public void setCheckingAccount(AbstractCheckingAccount checkingAccount) {
 		this.checkingAccount = checkingAccount;
-		checkingAccount.setLinkedSavingsAccount(savingsAccount);
+		if(checkingAccount != null)
+			checkingAccount.setLinkedSavingsAccount(savingsAccount);
 	}
 
 	/**

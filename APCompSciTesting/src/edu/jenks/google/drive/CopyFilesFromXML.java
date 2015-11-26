@@ -15,13 +15,13 @@ public class CopyFilesFromXML {
 	private static File sourceRoot;
 	private static String turninDirSuffix;
 	private static Document document;
-	private static boolean clearLogs = true;
+	private static boolean testMode = false;
 
 	public static void main(String[] args) {
 		try {
 			document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
 			Element rootElement = document.getRootElement();
-			clearLogs = Boolean.parseBoolean(rootElement.getAttributeValue("clear-logs"));
+			testMode = Boolean.parseBoolean(rootElement.getAttributeValue("test-mode"));
 			targetRoot = rootElement.getChildText("eclipse-student-root");
 			//out.println(targetRoot);
 			Element googleDriveElement = rootElement.getChild("google-drive");
@@ -53,7 +53,7 @@ public class CopyFilesFromXML {
 					String generalDest = targetRoot + packageRoot;
 					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, generalDest, student)) {
 						studentsToProcess.add(student);
-						if(clearLogs) {
+						if(!testMode) {
 							File directory = CopyFileHelper.makeDestinationDirectories(generalDest, student);
 							CopyFileHelper.deleteLogs(directory, project.getChildText(TestRunner.PROJECT_NAME_TAG));
 						}

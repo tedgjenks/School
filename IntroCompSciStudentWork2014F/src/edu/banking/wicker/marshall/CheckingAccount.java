@@ -26,44 +26,56 @@ public class CheckingAccount extends AbstractCheckingAccount{
 			return doSimpleWithdraw(requestedWithdrawal);
 		}
 		else{
-			if (this.hasLinkedSavings()){
+			if (this.hasLinkedSavings() && this.getLinkedSavingsAccount().getBalance() + getBalance() >= requestedWithdrawal){
 				return withdrawFromSavings(requestedWithdrawal);
 			}
 			else {
-				if (this.isOverdraftProtected()){
-					return doOverdraftWithdraw(requestedWithdrawal);
-				}
-				else {
-					this.setBalance(this.getBalance() - requestedWithdrawal);
-					incrementOverdrafts();
-					return requestedWithdrawal;
-				}
+				if (this.hasLinkedSavings())
+					return handleOverdraft(requestedWithdrawal, this.getLinkedSavingsAccount());
+				else
+					return handleOverdraft(requestedWithdrawal);
 			}
 		}
 	}
 	
-	private void incrementOverdrafts(){
-		this.setNumberOverdrafts(getNumberOverdrafts() + 1);
-	}
-
-	private double doOverdraftWithdraw(double requestedWithdrawal) {
-		double amountShort = requestedWithdrawal - this.getBalance();
-
-		if (amountShort <= this.getOverdraftMax()){
-			this.setNumberOverdrafts(this.getNumberOverdrafts() + 1);
-			return doSimpleWithdraw(requestedWithdrawal);
+	private double handleOverdraft(double requestedWithdrawal, AbstractSavingsAccount linkedSavingsAccount) {
+		if (requestedWithdrawal - getBalance() - linkedSavingsAccount.getBalance() <= getOverdraftMax()){
+			if (linkedSavingsAccount.canTransact()){
+				incrementOverdrafts();
+				requestedWithdrawal -= linkedSavingsAccount.getBalance();
+				linkedSavingsAccount.setBalance(0);
+				this.setBalance(getBalance() - requestedWithdrawal);
+				return requestedWithdrawal;
+			}
+			else{
+				return handleOverdraft(requestedWithdrawal);
+			}
 		}
 		else {
 			return 0.0;
 		}
 	}
 
+	private double handleOverdraft(double requestedWithdrawal) {
+		if (requestedWithdrawal - getBalance() <= getOverdraftMax()){
+			incrementOverdrafts();
+			this.setBalance(getBalance() - requestedWithdrawal);
+			return requestedWithdrawal;
+		}
+		else {
+			return 0.0;
+		}
+	}
+
+	private void incrementOverdrafts(){
+		this.setNumberOverdrafts(getNumberOverdrafts() + 1);
+	}
+
 	private double withdrawFromSavings(double requestedWithdrawal) {
 		Account LSA = getLinkedSavingsAccount();
 		double amountShort = requestedWithdrawal - this.getBalance();
-		if (LSA.getBalance() >= amountShort){
+		if (LSA.withdraw(amountShort) != 0){
 			this.setBalance(0);
-			LSA.withdraw(amountShort);
 			return requestedWithdrawal;
 		}
 		else{
@@ -76,7 +88,7 @@ public class CheckingAccount extends AbstractCheckingAccount{
 	}
 
 	private double doSimpleWithdraw(double requestedWithdrawal) {
-		this.setBalance(this.getBalance()-requestedWithdrawal);
+		this.setBalance(this.getBalance() - requestedWithdrawal);
 		return requestedWithdrawal;
 	}
 

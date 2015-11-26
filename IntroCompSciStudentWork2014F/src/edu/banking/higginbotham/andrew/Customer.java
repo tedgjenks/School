@@ -17,9 +17,20 @@ public class Customer extends AbstractCustomer {
 	}
 
 	@Override
-	public int compareTo(AbstractCustomer arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(AbstractCustomer customer) {
+		String name = this.getName();
+		String custName = customer.getName();
+		return name.compareTo(custName);
 	}
 
+	@Override
+	public boolean equals(Object customer){
+		return this.getName().equals(((Customer)customer).getName());
+
+	}
+
+	@Override
+	public String toString(){
+		return this.getName();
+	}
 }

@@ -4,15 +4,11 @@ import edu.jenks.dist.banking.*;
 
 public class SavingsAccount extends AbstractSavingsAccount{
 	public SavingsAccount (){
-		super();
-		setBalance(0);
-		setAccountInterestAPR(0);
+		super(0, 0);
 	}
 	
 	public SavingsAccount (double balance, double interestRate){
-		super();
-		setBalance(balance);
-		setAccountInterestAPR(interestRate);
+		super(balance, interestRate);
 	}
 
 	public void payInterest(int days) {
@@ -29,6 +25,20 @@ public class SavingsAccount extends AbstractSavingsAccount{
 		}
 		else{
 			return 0.0;
+		}
+	}
+	
+	
+
+	@Override
+	public double deposit(double depositAmount) {
+		if (canTransact()){
+			incrementTransactions();
+			super.deposit(depositAmount);
+			return depositAmount;
+		}
+		else {
+			return 0;
 		}
 	}
 

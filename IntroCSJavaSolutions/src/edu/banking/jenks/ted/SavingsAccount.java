@@ -29,8 +29,9 @@ public class SavingsAccount extends AbstractSavingsAccount {
 		AccountHelper.payInterest(this, days);
 	}
 
-	/* (non-Javadoc)
-	 * @see jenks.unit4.Account#withdraw(double)
+	/**
+	 * <p>Attempt to withdraw if the number of transactions is less than the maximum allowed transactions.</p>
+	 * POSTCONDITION: if an amount is withdrawn, <code>numTransactions</code> is incremented.<br>
 	 */
 	@Override
 	public double withdraw(double requestedWithdrawal) {
@@ -55,9 +56,8 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	public double deposit(double depositAmount) {
 		double depositAmt = 0;
 		if(canTransact()) {
-			super.deposit(depositAmount);
+			depositAmt = super.deposit(depositAmount);
 			setNumTransactions(getNumTransactions() + 1);
-			depositAmt = depositAmount;
 		}
 		return depositAmt;
 	}

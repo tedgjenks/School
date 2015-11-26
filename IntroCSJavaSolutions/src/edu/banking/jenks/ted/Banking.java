@@ -101,7 +101,7 @@ public class Banking extends AbstractBanking {
 			else
 				savWith = savBal;
 			savingsAccount.setBalance(savBal - savWith);
-			checkingAccount.deposit(savWith);
+			checkingAccount.setBalance(checkBal + savWith);
 			checkingAccount.setBalance(checkingAccount.getBalance() - fee);
 		}
 	}
