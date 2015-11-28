@@ -42,8 +42,8 @@
     <test-class>edu.jenks.banking.test.BankingTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>11/16/2015</due-date>
-      <penalty>10</penalty>
+      <due-date>12/11/2015</due-date>
+      <penalty>5</penalty>
     </deadline>
     <files>
       <file>Banking.java</file>
@@ -57,10 +57,10 @@
     <name>MutableArray</name>
     <package-root>edu/array/</package-root>
     <test-class>edu.jenks.array.test.MutableArrayTest</test-class>
-    <max-runtime-secs>100000</max-runtime-secs>
+    <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>12/1/2015</due-date>
-      <penalty>10</penalty>
+      <due-date>1/6/2016</due-date>
+      <penalty>5</penalty>
     </deadline>
     <files>
       <file>MutableArray.java</file>
