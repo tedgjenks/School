@@ -157,7 +157,7 @@ public class TestRunner {
 							applyPenalty = true;
 						else if(calMonth == month) {
 							int calDay = calendar.get(Calendar.DAY_OF_MONTH); // cal day starts at 1
-							System.out.println("Calendar day: " + calDay);
+							//System.out.println("Calendar day: " + calDay);
 							if(calDay > day)
 								applyPenalty = true;
 						}

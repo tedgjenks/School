@@ -134,8 +134,8 @@ public class BankingTest extends Testable {
 		int points = 1;
 		AbstractCheckingAccount checking = customer.getCheckingAccount();
 		AbstractSavingsAccount savings = customer.getSavingsAccount();
-		Double actCheckBal = checking != null ? checking.getBalance() : null;
-		Double actSavBal = savings != null ? savings.getBalance() : null;
+		Double actCheckBal = checking != null ? checking.getBalance() : 0;
+		Double actSavBal = savings != null ? savings.getBalance() : 0;
 		if((checking != null && !MathUtil.equals(expCheckBal, actCheckBal, DELTA)) || (savings != null && !MathUtil.equals(expSavBal, actSavBal, DELTA))) {
 			logBalFail(message + " checking", expCheckBal, actCheckBal, points);
 			logBalFail(message + " savings", expSavBal, actSavBal, points);

@@ -42,8 +42,8 @@
     <test-class>edu.jenks.banking.test.BankingTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>12/11/2015</due-date>
-      <penalty>5</penalty>
+      <due-date>1/4/2016</due-date>
+      <penalty>10</penalty>
     </deadline>
     <files>
       <file>Banking.java</file>
@@ -59,11 +59,69 @@
     <test-class>edu.jenks.array.test.MutableArrayTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>1/6/2016</due-date>
-      <penalty>5</penalty>
+      <due-date>1/8/2016</due-date>
+      <penalty>10</penalty>
     </deadline>
     <files>
       <file>MutableArray.java</file>
+    </files>
+    <students />
+  </project>
+  <project>
+    <name>ClimbingClub</name>
+    <package-root>edu/cb/climbingclub/</package-root>
+    <test-class>edu.jenks.cb.climbingclub.test.ClimbingClubTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/9/2015</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>ClimbInfo.java</file>
+      <file>ClimbingClubAlphabetical.java</file>
+      <file>ClimbingClubChronological.java</file>
+    </files>
+    <students />
+  </project>
+  <project>
+    <name>Lunch</name>
+    <package-root>edu/cb/lunch/</package-root>
+    <test-class>edu.jenks.cb.lunch.test.LunchTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/11/2015</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>Trio.java</file>
+    </files>
+    <students />
+  </project>
+  <project>
+    <name>Scrambler</name>
+    <package-root>edu/cb/scrambler/</package-root>
+    <test-class>edu.jenks.cb.scrambler.test.ScramblerTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/15/2015</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>WordScrambler.java</file>
+    </files>
+    <students />
+  </project>
+  <project>
+    <name>MusicDownloads</name>
+    <package-root>edu/cb/songlist/</package-root>
+    <test-class>edu.jenks.cb.songlist.test.MusicDownloadsTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/17/2015</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>MusicDownloads.java</file>
     </files>
     <students />
   </project>

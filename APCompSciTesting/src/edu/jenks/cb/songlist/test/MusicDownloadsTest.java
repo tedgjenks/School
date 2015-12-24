@@ -1,8 +1,6 @@
 package edu.jenks.cb.songlist.test;
 
 import java.util.*;
-import java.util.logging.Level;
-
 import edu.jenks.dist.cb.songlist.*;
 import edu.jenks.test.Testable;
 import edu.jenks.util.ReflectionUtil;
@@ -102,15 +100,15 @@ public class MusicDownloadsTest extends Testable {
 				if(!expected.getTitle().equals(actual.getTitle()) ||
 						expected.getTimesDownloaded() != actual.getTimesDownloaded()) {
 					pass = false;
-					feedbackLogger.log(Level.WARNING, logMessage + " download info did not match after updateDownloads");
+					logFail(logMessage + " download info did not match after updateDownloads");
 				}
 			}
 			if(pass) {
 				totalPoints += 10;
-				feedbackLogger.log(Level.INFO, logMessage + " updateDownloads passed");
+				logPass(logMessage);
 			}
 		} else {
-			feedbackLogger.log(Level.WARNING, logMessage + " expected download list was not the same size as actual download list");
+			logFail(logMessage + " expected download list was not the same size as actual download list");
 			//printTitles(expectedList);
 			//printTitles(actualList);
 		}
@@ -134,30 +132,30 @@ public class MusicDownloadsTest extends Testable {
 		studentMusicDownloads.setDownloadList(downloadList);
 		if(downloadList.get(2) == studentMusicDownloads.getDownloadInfo("Aqualung")) {
 			totalPoints += 5;
-			feedbackLogger.log(Level.INFO, "passed getDownloadInfo for existing object " + logMessage);
+			logPass("existing object " + logMessage);
 		} else
-			feedbackLogger.log(Level.WARNING, "failed getDownloadInfo for existing object " + logMessage);
+			logFail("existing object " + logMessage);
 		
 		if(studentMusicDownloads.getDownloadInfo("Happy Birthday") == null) {
 			totalPoints += 5;
-			feedbackLogger.log(Level.INFO, "passed getDownloadInfo for missing object " +  logMessage);
+			logPass("missing object " +  logMessage);
 		} else
-			feedbackLogger.log(Level.WARNING, "failed getDownloadInfo for missing object " + logMessage);
+			logFail("missing object " + logMessage);
 		
 		logMessage = "(custom)";
 		downloadList = createCustomDownloadList();
 		studentMusicDownloads.setDownloadList(downloadList);
 		if(downloadList.get(2) == studentMusicDownloads.getDownloadInfo("Boogey Man")) {
 			totalPoints += 5;
-			feedbackLogger.log(Level.INFO, "passed getDownloadInfo for existing object " + logMessage);
+			logPass("existing object " + logMessage);
 		} else
-			feedbackLogger.log(Level.WARNING, "failed getDownloadInfo for existing object " + logMessage);
+			logFail("existing object " + logMessage);
 		
 		if(studentMusicDownloads.getDownloadInfo("Happy Birthday") == null) {
 			totalPoints += 5;
-			feedbackLogger.log(Level.INFO, "passed getDownloadInfo for missing object " + logMessage);
+			logPass("missing object " +  logMessage);
 		} else
-			feedbackLogger.log(Level.WARNING, "failed getDownloadInfo for missing object " + logMessage);
+			logFail("missing object " + logMessage);
 	}
 
 	@Override

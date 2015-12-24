@@ -74,22 +74,30 @@ public abstract class Testable implements Runnable {
 		logEnd();
 	}
 	
-	private void assessLatePenalty() {
-		if(latePenalty > 0) {
-			totalPoints = (int)((100 - latePenalty) / 100.0 * totalPoints);
-			feedbackLogger.log(Level.WARNING, "Late penalty applied: " + latePenalty);
-		}
+	private double getLatePenalty() {
+		double penaltyPoints = 0;
+		if(latePenalty > 0)
+			penaltyPoints = latePenalty / 100.0 * totalPoints;
+		return penaltyPoints;
 	}
 	
 	private void logEnd() {
-		assessLatePenalty();
-		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":\n" + totalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
-		if(getPointsAvailable() == totalPoints)
+		double finalPoints = totalPoints;
+		double penaltyPoints = getLatePenalty();
+		if(penaltyPoints > 0) {
+			feedbackLogger.log(Level.WARNING, "Late penalty applied - " + penaltyPoints);
+			finalPoints -= penaltyPoints;
+		}
+		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":\n" + finalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
+		if(getPointsAvailable() == finalPoints)
 			feedbackLogger.log(Level.INFO, "Congratulations!  You earned all available points!");
-		else
-			feedbackLogger.log(Level.INFO, "You can earn another " + (getPointsAvailable() - totalPoints) + " points.");
-		String percent = NumberFormat.getPercentInstance().format(totalPoints / (double)getPointsAvailable());
-		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + totalPoints + " -> " + percent);
+		else {
+			double pointsAvailable = getPointsAvailable() - penaltyPoints - finalPoints;
+			if(pointsAvailable > 0)
+				feedbackLogger.log(Level.INFO, "You can earn another " + pointsAvailable + " points.");
+		}
+		String percent = NumberFormat.getPercentInstance().format(finalPoints / getPointsAvailable());
+		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + finalPoints + " -> " + percent);
 	}
 	
 	public void test() {

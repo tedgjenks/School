@@ -13,7 +13,7 @@
 <!ELEMENT max-runtime-secs (#PCDATA)>
 <!ELEMENT deadline (due-date?, penalty?)>
 <!ELEMENT due-date (#PCDATA)>
-<!ELEMENT penalty (#PCDATA)>
+<!ELEMENT penalty (#PCDATA)> <!-- one-time percentage -->
 <!ELEMENT files (file+)>
 <!ELEMENT students (student*)>
 <!ELEMENT file (#PCDATA)>
