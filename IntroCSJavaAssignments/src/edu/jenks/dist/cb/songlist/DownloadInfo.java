@@ -19,8 +19,16 @@ public class DownloadInfo {
 	 *  @param title the unique title of the downloaded song 
 	 */ 
 	public DownloadInfo(String title) {
+		this(title, 1);
+	}
+	
+	/**
+	 * @param title
+	 * @param timesDownloaded
+	 */
+	public DownloadInfo(String title, int timesDownloaded) {
 		this.title = title;
-		timesDownloaded = 1;
+		this.timesDownloaded = timesDownloaded;
 	}
 
 	/**
