@@ -1,7 +1,9 @@
-package edu.cb.scrambler.jenks.ted;
+package edu.cb.scrambler.jenks.ted.test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.cb.scrambler.jenks.ted.WordScrambler;
 
 import static java.lang.System.out;
 

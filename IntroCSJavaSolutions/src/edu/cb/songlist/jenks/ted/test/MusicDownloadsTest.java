@@ -1,4 +1,4 @@
-package edu.cb.songlist.jenks.ted;
+package edu.cb.songlist.jenks.ted.test;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.cb.songlist.jenks.ted.MusicDownloads;
 import edu.jenks.dist.cb.songlist.DownloadInfo;
 
 public class MusicDownloadsTest {

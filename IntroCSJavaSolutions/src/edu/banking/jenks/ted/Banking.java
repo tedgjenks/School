@@ -91,7 +91,8 @@ public class Banking extends AbstractBanking {
 		} else if(savingsAccount == null || fee <= checkingAccount.getBalance()) {
 			double balance = checkingAccount.getBalance() - fee;
 			checkingAccount.setBalance(balance);
-		} else { // checking and savings not null and checking balance not enough
+		} else {
+			assert checkingAccount != null && savingsAccount != null && fee > checkingAccount.getBalance();
 			double checkBal = checkingAccount.getBalance();
 			double savBal = savingsAccount.getBalance();
 			double checkShortage = fee - checkBal;

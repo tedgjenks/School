@@ -9,6 +9,10 @@ import edu.jenks.dist.cb.climbingclub.AbstractClimbInfo;
  * @author Ted
  *
  */
+/**
+ * @author Ted
+ *
+ */
 public class ClimbInfo extends AbstractClimbInfo {
 
 	/**
@@ -19,8 +23,9 @@ public class ClimbInfo extends AbstractClimbInfo {
 		super(peakName, climbTime);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	
+	/**
+	 * Compares peak names alphabetically.
 	 */
 	@Override
 	public int compareTo(AbstractClimbInfo o) {

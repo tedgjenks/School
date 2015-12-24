@@ -1,4 +1,4 @@
-package edu.cb.seatingchart.jenks.ted;
+package edu.cb.seatingchart.jenks.ted.test;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.cb.seatingchart.jenks.ted.SeatingChart;
 import edu.jenks.dist.cb.seatingchart.Student;
 
 public class SeatingChartTest {

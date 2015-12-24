@@ -1,9 +1,10 @@
-package edu.cb.lunch.jenks.ted;
+package edu.cb.lunch.jenkst.ted.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import edu.cb.lunch.jenks.ted.Trio;
 import edu.jenks.dist.cb.lunch.*;
 
 public class TrioTest {

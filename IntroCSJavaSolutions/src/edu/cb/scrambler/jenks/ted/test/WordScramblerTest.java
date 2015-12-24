@@ -1,4 +1,4 @@
-package edu.cb.scrambler.jenks.ted;
+package edu.cb.scrambler.jenks.ted.test;
 
 import static org.junit.Assert.*;
 
@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import edu.cb.scrambler.jenks.ted.WordScrambler;
 
 public class WordScramblerTest {
 	
