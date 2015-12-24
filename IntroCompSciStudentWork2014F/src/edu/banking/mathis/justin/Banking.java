@@ -10,14 +10,17 @@ public class Banking extends AbstractBanking {
 	public void performMaintenance(int days) {
 		for (int i = 1; i <= getCustomers().size(); i++){
 			Customer custo = (Customer)getCustomers().get(i-1);
-			
-			AbstractCheckingAccount ca = (CheckingAccount)custo.getCheckingAccount();
-			AbstractSavingsAccount sa = (SavingsAccount)custo.getSavingsAccount();
-			double overfee = (ca.getOverdraftFee()*ca.getNumberOverdrafts());
+
+			AbstractCheckingAccount ca = custo.getCheckingAccount();
+			AbstractSavingsAccount sa = custo.getSavingsAccount();
+
 
 			if (ca != null && sa != null){
+				double overfee = (ca.getOverdraftFee()*ca.getNumberOverdrafts());
 				double cabal = ca.getBalance();
 				double sabal = sa.getBalance();
+				ca.setNumberOverdrafts(0);
+				sa.setNumTransactions(0);
 				if (cabal >= overfee){
 					ca.setBalance(cabal-overfee);
 				}
@@ -30,9 +33,29 @@ public class Banking extends AbstractBanking {
 					ca.setBalance(cabal-deduction);
 					sa.setBalance(0);
 				}
+				if (ca.getBalance()+sa.getBalance() <= getMinNoFeeCombinedBalance()){
+					ca.setBalance(ca.getBalance()-getBankingFee());
+					if (ca.getBalance() < 0 && sa.getBalance() > 0){
+						if(sa.getBalance() > Math.abs(ca.getBalance())){
+							sa.setBalance(sa.getBalance()-Math.abs(ca.getBalance()));
+							ca.setBalance(0);
+						}
+						else if (sa.getBalance() < Math.abs(ca.getBalance()) && sa.getBalance() > 0){
+							ca.setBalance(sa.getBalance()+ca.getBalance());
+							sa.setBalance(0);
+						}
+						else{
+							ca.setBalance(sa.getBalance()-ca.getBalance());
+							sa.setBalance(0);
+						}
+						
+					}
+				}
 			}
 			else if (ca != null && sa == null){
+				double overfee = (ca.getOverdraftFee()*ca.getNumberOverdrafts());
 				double cabal = ca.getBalance();
+				ca.setNumberOverdrafts(0);
 				if (cabal >= overfee){
 					ca.setBalance(cabal-overfee);
 				}
@@ -40,7 +63,17 @@ public class Banking extends AbstractBanking {
 					ca.setBalance((overfee-cabal)+getBankingFee());
 
 				}
+				if (ca.getBalance() <= getMinNoFeeCombinedBalance()){
+					ca.setBalance(ca.getBalance()-getBankingFee());
+				}
 			}
+			else if (ca == null && sa != null){
+				sa.setNumTransactions(0);
+				if (sa.getBalance() <= getMinNoFeeCombinedBalance()){
+					sa.setBalance(sa.getBalance()-getBankingFee());
+				}
+			}
+
 			if (sa != null && sa.getBalance() > 0){
 				sa.payInterest(days);
 			}
@@ -51,7 +84,7 @@ public class Banking extends AbstractBanking {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 
 	}
 

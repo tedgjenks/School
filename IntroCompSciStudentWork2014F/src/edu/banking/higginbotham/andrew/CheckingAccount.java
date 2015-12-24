@@ -40,7 +40,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 			getLinkedSavingsAccount().setBalance(getLinkedSavingsAccount().getBalance() + temp);
 			getLinkedSavingsAccount().setNumTransactions(getLinkedSavingsAccount().getNumTransactions() + 1);
 			return withdrawed;
-		}
+		} 
 		else if(isOverdraftProtected() && getBalance() + getOverdraftMax() >= requestedAmount){
 			setBalance(getBalance() - requestedAmount);
 			setNumberOverdrafts(getNumberOverdrafts() + 1);

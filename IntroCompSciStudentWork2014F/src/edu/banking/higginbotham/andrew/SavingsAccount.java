@@ -40,7 +40,6 @@ public class SavingsAccount extends AbstractSavingsAccount {
 
 	@Override
 	public boolean canTransact() {
-		
 		return getNumTransactions() < getMaxMonthlyTransactions();
 	}
 

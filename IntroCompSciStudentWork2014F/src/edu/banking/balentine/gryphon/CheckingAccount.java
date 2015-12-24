@@ -8,7 +8,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	
 	public CheckingAccount(){
 	}
-	
+
 	public CheckingAccount(double balance, double accountInterestAPR){
 		setBalance(balance);
 		setAccountInterestAPR(accountInterestAPR);
@@ -16,7 +16,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 
 	@Override
 	public void payInterest(int days) {
-		double bal=getBalance()*(Math.pow(Math.E, (getAccountInterestAPR()*(days/DAYS_IN_A_YEAR))));
+		double bal=getBalance()*(Math.pow(Math.E, ((getAccountInterestAPR()/100)*(days/DAYS_IN_A_YEAR))));
 		setBalance(bal);
 	}
 
@@ -30,7 +30,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 		}
 		return amount;
 	}
-	
+
 	private boolean help(double requestedWithdrawal) {
 		boolean help=false;
 		double checkBal=getBalance();
@@ -48,7 +48,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 			help=true;
 		return help;
 	}
-	
+
 	@Override
 	public double withdraw(double requestedWithdrawal) {
 		if(help(requestedWithdrawal)==true){

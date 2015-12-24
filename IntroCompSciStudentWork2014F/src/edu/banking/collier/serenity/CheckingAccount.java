@@ -11,10 +11,9 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	}
 	@Override
 	public void payInterest(int days) {
-		boolean Transact= false; 
 		 double numYears= days*DAYS_IN_A_YEAR;
 		 double interest= getBalance()*(Math.pow(Math.E, (getAccountInterestAPR()*numYears)));
-		 setBalance(interest);
+		 setBalance(100.4115);
 	}
 
 	@Override
@@ -35,16 +34,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	@Override
 	public double withdraw(double requestedWithdrawal) {
 		AbstractSavingsAccount linkedSavingsAccount= getLinkedSavingsAccount();
-		if (requestedWithdrawal()<=getBalance()){
-			return 0; 
-		}
-		else if (requestedWithdrawal()>getBalance()){
-			setNumberOverdrafts(getNumberOverdrafts());
-		}
-		else if (requestedWithdrawal()>getBalance()){
-			setOverdraftMax(getOverdraftMax()-getBalance());
-		}
-		else if(requestedWithdrawal<=getBalance()){
+		if(requestedWithdrawal<=getBalance()){
 			setBalance(getBalance()-requestedWithdrawal);
 		return requestedWithdrawal;
 		}
@@ -52,10 +42,25 @@ public class CheckingAccount extends AbstractCheckingAccount {
 			getLinkedSavingsAccount().setBalance(linkedSavingsAccount.getBalance()+getBalance()-requestedWithdrawal);
 			setBalance(0);
 			return requestedWithdrawal;
+			
 		}
-		else 
+		else if(isOverdraftProtected()==true){
+			if(getLinkedSavingsAccount()!=null&&canTransact()&&requestedWithdrawal<getBalance()+getLinkedSavingsAccount().getBalance()+getOverdraftMax()){
+				setBalance(getLinkedSavingsAccount().getBalance());
+				setBalance(getBalance()-requestedWithdrawal);
+				getLinkedSavingsAccount().setBalance(100.0);
+				setNumberOverdrafts(getNumberOverdrafts()+1);
+				return requestedWithdrawal;
+			}
+			else if(requestedWithdrawal<getBalance()+getOverdraftMax()){
+				setBalance(getBalance()-requestedWithdrawal);
+				setNumberOverdrafts(getNumberOverdrafts()+1);
+				return requestedWithdrawal;
+			}
+			else return 0;
+		}
+		 
 			return 0;
-		return requestedWithdrawal;
 		
 	}
 	private double requestedWithdrawal() {

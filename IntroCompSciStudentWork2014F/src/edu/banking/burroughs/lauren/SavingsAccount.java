@@ -35,15 +35,13 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	public void payInterest(int days) {
 		double years = days / DAYS_IN_A_YEAR;
 		double Interest;
-		Interest = getBalance() * Math.pow(Math.E,( getAccountInterestAPR() * years));
+		Interest = getBalance() * Math.pow(Math.E,((getAccountInterestAPR() / 100.0) * (years)));
 		setBalance(Interest);
 	}
 
 	@Override
 	public double transfer(Account arg0, double amount) {
-		if(getNumTransactions() >= getMaxMonthlyTransactions())
-		 return 0.0;
-		else{
+		if(getNumTransactions() < getMaxMonthlyTransactions()){
 			if(getBalance() >= amount){
 				arg0.setBalance(arg0.getBalance() + amount);
 				setBalance(getBalance() - amount);
@@ -52,8 +50,11 @@ public class SavingsAccount extends AbstractSavingsAccount {
 			}
 			else 
 				return 0.0;
-		}
 	}
+		else 
+			return 0.0;
+		}
+	
 
 	@Override
 	public double withdraw(double requestedWithdrawal) {
@@ -66,14 +67,10 @@ public class SavingsAccount extends AbstractSavingsAccount {
 			}
 			else{
 					return 0.0;
-				
-				
 			}
-			
-				
 		}
 		else{
-			System.out.println("Transaction Limit met.");
+
 			return 0.0;
 		}
 	

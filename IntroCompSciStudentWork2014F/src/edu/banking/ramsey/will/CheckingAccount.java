@@ -15,7 +15,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	public void payInterest(int arg0) {
 		// TODO Auto-generated method stub
 		double years = arg0/Account.DAYS_IN_A_YEAR;
-		double yearlyRate = getAccountInterestAPR() / 100;
+		double yearlyRate = getAccountInterestAPR() / 100.0;
 		setBalance(getBalance() * Math.pow(Math.E,(yearlyRate * years)));
 	}
 
@@ -62,6 +62,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 		// TODO Auto-generated method stub
 		double transfered = 0;
 		if(getBalance() >= arg1 && arg1 != 0 && arg0.canTransact() && canTransact()){
+			withdraw(arg1);
 			transfered = arg1;
 			arg0.deposit(arg1);
 		}	

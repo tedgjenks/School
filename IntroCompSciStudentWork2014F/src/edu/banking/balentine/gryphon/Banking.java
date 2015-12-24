@@ -13,16 +13,24 @@ public class Banking extends AbstractBanking {
 	public void addCustomer(String name,
 			AbstractCheckingAccount checkingAccount,
 			AbstractSavingsAccount savingsAccount) {
-	}
-
-	@Override
-	public void performMaintenance(int days) {
+		Customer c=new Customer(name, checkingAccount, savingsAccount);
+		getCustomers().add(c);
 	}
 
 	@Override
 	public boolean removeCustomer(String name) {
+		Customer c=new Customer(name);
+		getCustomers().remove(c);
 		return false;
 	}
+
+	@Override
+	public void performMaintenance(int days) {
+		if(days>0){
+			
+		}
+	}
+
 
 	public static void main(String[] args) {
 	}

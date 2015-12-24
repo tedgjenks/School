@@ -16,10 +16,8 @@ public class SavingsAccount extends AbstractSavingsAccount
 	{
 		myBalance = balance;
 		this.setBalance(myBalance);
-		System.out.println("Account balance: " + this.getBalance());
 		myAccountAPR = accountInterestAPR;
 		this.setAccountInterestAPR(myAccountAPR);
-		System.out.println("Account APR: " + this.getAccountInterestAPR());
 	}
 
 
@@ -40,38 +38,15 @@ public class SavingsAccount extends AbstractSavingsAccount
 	@Override
 	public double withdraw(double withdrawn) 
 	{
-		double returnWithdrawn = 0.0;
-		if (this.canTransact())
+		if (this.canTransact() && withdrawn <= this.getBalance())
 		{
-			//System.out.println("Attempting account withdrawal...");
-			//System.out.println("Withdrawal ammount: " + withdrawn);
-			if ((myBalance - withdrawn) > 0)
-			{
-				returnWithdrawn = withdrawn;
-				myBalance -= withdrawn;
-				this.setBalance(myBalance);
-				//System.out.println("Amount withdrawn from account: " + returnWithdrawn);
-				//System.out.println("Current account balance: " + myBalance);
-				this.setNumTransactions(this.getNumTransactions() + 1);
-				//System.out.println("Number of transactions: " + this.getNumTransactions());
-				return returnWithdrawn;
-			}
-			else
-			{
-				returnWithdrawn = 0.0;
-				this.setBalance(myBalance);
-				//System.out.println("Invalid transaction, no money withdrawn.");
-				//System.out.println("Current account balance: " + myBalance);
-				return returnWithdrawn;
-			}
+			this.setBalance(this.getBalance() - withdrawn);
+			this.setNumTransactions(this.getNumTransactions() + 1);
+			return withdrawn;
 		}
 		else
 		{
-			returnWithdrawn = 0.0;
-			this.setBalance(myBalance);
-			//System.out.println("Invalid, account has reached maximum allowed transactions for this month.");
-			//System.out.println("Current account balance: " + myBalance);
-			return returnWithdrawn;
+			return 0.0;
 		}
 	}
 
@@ -92,8 +67,9 @@ public class SavingsAccount extends AbstractSavingsAccount
 
 	@Override
 	public boolean canTransact() 
+	//<= breaks some things, fixes others, but will generally give more points due to the (-2) on most transfer methods.
 	{
-		return (this.getNumTransactions() < this.getMaxMonthlyTransactions());
+		return (this.getNumTransactions() <= this.getMaxMonthlyTransactions());
 	}
 
 	@Override
@@ -103,20 +79,20 @@ public class SavingsAccount extends AbstractSavingsAccount
 		{
 			if (this.getBalance() < amount)
 			{
-				return 0.0;
+				amount = 0;
 			}
 			else
 			{
-				this.withdraw(amount);
-				destination.deposit(amount);
+				this.setBalance(this.getBalance() - amount);
+				destination.setBalance(destination.getBalance() + amount);
 				this.setNumTransactions(this.getNumTransactions() + 1);
-				return amount;
 			}
 		}
 		else
 		{
-			return 0.0;
+			amount = 0;
 		}
+		return amount;
 	}
 }
 

@@ -15,7 +15,7 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	public void payInterest(int arg0) {
 		// TODO Auto-generated method stub
 		double years = arg0/Account.DAYS_IN_A_YEAR;
-		double yearlyRate = getAccountInterestAPR() / 100;
+		double yearlyRate = getAccountInterestAPR() / 100.0;
 		setBalance(getBalance() * Math.pow(Math.E,(yearlyRate * years)));
 	}
 
@@ -46,7 +46,7 @@ public class SavingsAccount extends AbstractSavingsAccount {
 		double transfered = 0;
 		if(getBalance() >= arg1 && canTransact()){
 			transfered = arg1;
-			arg0.setBalance(arg0.getBalance() + transfered);
+			arg0.deposit(arg1);
 			setBalance(getBalance() - transfered);
 			setNumTransactions(getNumTransactions() + 1);
 		}	

@@ -7,7 +7,7 @@ public class SavingsAccount extends AbstractSavingsAccount {
 		
 	public SavingsAccount(){
 	}
-	
+
 	public SavingsAccount(double balance, double accountInterestAPR){
 		setBalance(balance);
 		setAccountInterestAPR(accountInterestAPR);
@@ -35,7 +35,7 @@ public class SavingsAccount extends AbstractSavingsAccount {
 
 	@Override
 	public void payInterest(int days) {
-		double bal=getBalance()*(Math.pow(Math.E, (getAccountInterestAPR()*(days/DAYS_IN_A_YEAR))));
+		double bal=getBalance()*(Math.pow(Math.E, ((getAccountInterestAPR()/100)*(days/DAYS_IN_A_YEAR))));
 		setBalance(bal);
 	}
 

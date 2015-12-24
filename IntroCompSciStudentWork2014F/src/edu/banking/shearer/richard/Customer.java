@@ -19,7 +19,7 @@ public class Customer extends AbstractCustomer {
 	}
 	@Override
 	public boolean equals(Object customer) {
-	return this.getName().equals(((Customer)customer).getName());
+		return this.getName().equals(((Customer)customer).getName());
 	}
 	public String toString(){
 		return this.getName();

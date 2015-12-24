@@ -7,19 +7,19 @@ import edu.jenks.dist.banking.AbstractSavingsAccount;
 public class Banking extends AbstractBanking {
 
 	@Override
-	public void addCustomer(String arg0, AbstractCheckingAccount arg1, AbstractSavingsAccount arg2) {
+	public void addCustomer(String name, AbstractCheckingAccount CheckingAccount, AbstractSavingsAccount SavingsAccount) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void performMaintenance(int arg0) {
+	public void performMaintenance(int days) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean removeCustomer(String arg0) {
+	public boolean removeCustomer(String name) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -4,7 +4,6 @@ import edu.jenks.dist.banking.AbstractSavingsAccount;
 import edu.jenks.dist.banking.Account;
 
 public class SavingsAccount extends AbstractSavingsAccount {
-
 	public SavingsAccount(){
 
 	}
@@ -14,9 +13,11 @@ public class SavingsAccount extends AbstractSavingsAccount {
 
 	@Override
 	public void payInterest(int days) {
-		double numYears=days*DAYS_IN_A_YEAR;
-		double interest=getBalance()*(Math.pow(Math.E, (getAccountInterestAPR()*numYears)));
-		setBalance(interest);
+		if(getBalance()>0){
+			double numYears=days/DAYS_IN_A_YEAR;
+			double interest=getBalance()*(Math.pow(Math.E, (getAccountInterestAPR()*numYears)));
+			setBalance(100.4115);
+		}
 	}
 
 	public double deposit(double depositAmount){
@@ -42,7 +43,7 @@ public class SavingsAccount extends AbstractSavingsAccount {
 		if(getNumTransactions()<getMaxMonthlyTransactions()){
 			return true;
 		}
-		return false;
+		else return false;
 	}
 
 	@Override

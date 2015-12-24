@@ -18,21 +18,9 @@ public class Banking extends AbstractBanking
 			SavingsAccount s = new SavingsAccount();
 			CheckingAccount c = new CheckingAccount();
 			for(int i = 0; i<this.getCustomers().size(); i++)
-			{
-				System.out.println("Loop: " + i);
+			{	
 				temp = (Customer) this.getCustomers().get(i);
-				System.out.println(temp.toString());
-				if (temp.getCheckingAccount() != null)
-				{
-					c = (CheckingAccount) temp.getCheckingAccount();
-					System.out.println(c.getBalance());
-					int over = c.getNumberOverdrafts();
-					System.out.println("Overdrafts: " + over);
-					double fees = (over * c.getOverdraftFee());
-					System.out.println("Overdraft fees: " + fees);
-					c.withdraw(fees);
-					System.out.println(c.getBalance());
-				}
+				overdraft(temp);
 				if (temp.getSavingsAccount() != null)
 				{
 					s = (SavingsAccount) temp.getSavingsAccount();
@@ -45,9 +33,19 @@ public class Banking extends AbstractBanking
 						double saveBalance = s.getBalance();
 						if ((saveBalance + checkBalance) < this.getMinNoFeeCombinedBalance())
 						{
-							c.withdraw(this.getBankingFee());
+							c.setBalance(c.getBalance() - this.getBankingFee());
 						}
 					}
+					//remove if troublesome//
+					else
+					{
+						double saveBalance = s.getBalance();
+						if (saveBalance < this.getMinNoFeeCombinedBalance())
+						{
+							s.setBalance(s.getBalance() - this.getBankingFee());
+						}
+					}
+					/////////////////////////
 				}
 				else
 				{
@@ -57,11 +55,11 @@ public class Banking extends AbstractBanking
 						double checkBalance = c.getBalance();
 						if (checkBalance < this.getMinNoFeeCombinedBalance())
 						{
-							c.withdraw(this.getBankingFee());
+							c.setBalance(c.getBalance() - this.getBankingFee());
 						}
 					}
 				}
-		
+				
 				if (temp.getSavingsAccount() != null)
 				{
 					s = (SavingsAccount) temp.getSavingsAccount();
@@ -74,6 +72,20 @@ public class Banking extends AbstractBanking
 					c.payInterest(days);
 					c.setNumberOverdrafts(0);
 				}
+			}
+		}
+	}
+	
+	private void overdraft(AbstractCustomer customer)
+	{
+		if (customer.getCheckingAccount() != null)
+		{
+			CheckingAccount c = (CheckingAccount) customer.getCheckingAccount();
+			if (c.getNumberOverdrafts() > 0)
+			{
+				int temp = c.getNumberOverdrafts();
+				double fee = (temp * c.getOverdraftFee());
+				c.setBalance(c.getBalance() - fee);
 			}
 		}
 	}

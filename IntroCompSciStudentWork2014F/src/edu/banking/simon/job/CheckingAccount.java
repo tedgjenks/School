@@ -30,7 +30,7 @@ public class CheckingAccount extends AbstractCheckingAccount{
 	@Override
 	public double transfer(Account Destination, double amount) {
 		// TODO Auto-generated method stub
-		if (amount < getBalance()) {
+		if (amount <= getBalance() && canTransact() && Destination.canTransact() ) {
 			setBalance(getBalance()-amount);
 			Destination.setBalance(Destination.getBalance()+amount);
 
@@ -38,24 +38,44 @@ public class CheckingAccount extends AbstractCheckingAccount{
 			return amount;
 		}
 		return 0;
-	}
+	}	
+
 	@Override
 	public double withdraw(double withdraw) {
 		// TODO Auto-generated method stub
-		double savings = getLinkedSavingsAccount().getBalance();
-		if  (getBalance() >= withdraw) {
-			setBalance(getBalance() - withdraw);
+		double withdraw1 = withdraw;
+		if  (withdraw <= getBalance()) {
+			setBalance(getBalance() - withdraw1);
+			withdraw = withdraw1;
 			return withdraw;
 		}
-		else if (getLinkedSavingsAccount() != null && withdraw < getBalance() + getLinkedSavingsAccount().getBalance()) {
-			getLinkedSavingsAccount().setBalance(savings - withdraw);
-			setBalance(0);
+		else if (getLinkedSavingsAccount() != null && canTransact() && getBalance() + getLinkedSavingsAccount().getBalance() >= withdraw) {
+	double saving = getBalance() - withdraw;
+			setBalance(0.0);
+			getLinkedSavingsAccount().setBalance(getLinkedSavingsAccount().getBalance() + saving);
 			return withdraw;
 		}
 
+		else if (isOverdraftProtected() && getBalance() + getOverdraftMax() >=  withdraw){
+			setBalance(getBalance()-withdraw);
+			setNumberOverdrafts(getNumberOverdrafts() + 1);
+			return withdraw;
+		}
+		else if (getLinkedSavingsAccount() != null && getLinkedSavingsAccount().canTransact() && isOverdraftProtected() && getBalance() + getLinkedSavingsAccount().getBalance() + getOverdraftMax() >= withdraw) {
+			double w2 = getBalance() + getLinkedSavingsAccount().getBalance() - withdraw;
+			
+			setBalance(w2);
+			getLinkedSavingsAccount().setBalance(0);
+			setNumberOverdrafts(getNumberOverdrafts() + 1);
+			return withdraw;
+		}
 		else 
-			return 0;
+			return 0.0;
+		
 	}
+
+
+
 
 }
 

@@ -5,21 +5,21 @@ import edu.jenks.dist.banking.AbstractCustomer;
 import edu.jenks.dist.banking.AbstractSavingsAccount;
 
 public class Customer extends AbstractCustomer {
-
+	public Customer(String name){
+		super(name);
+	}
 	public Customer(String name, AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
 		super(name, checkingAccount, savingsAccount);
-		// TODO Auto-generated constructor stub
 	}
-	public boolean equals(){
-		return false;
+	
+	public boolean equals(Object cust){
+		return this.getName().equals(((Customer)(cust)).getName());
 	}
 	@Override
-	public int compareTo(AbstractCustomer arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(AbstractCustomer name) {
+		return this.toString().compareTo(name.toString());
 	}
 	public String toString(){
-		setName(getName());
-		return getName();
+		return this.getName();
 	}
 }

@@ -13,34 +13,45 @@ public class Banking extends AbstractBanking {
 	public void performMaintenance(int arg0) {
 		for(AbstractCustomer customer: getCustomers()){
 			if(customer != null){
-				boolean hasChecking = customer.getCheckingAccount() != null;
-				boolean hasSavings = customer.getSavingsAccount() != null;
-				double cBalance = 0;
-				double sBalance = 0;
-				if(hasChecking)
-				cBalance = customer.getCheckingAccount().getBalance();
-				if(hasSavings)
-				sBalance = customer.getSavingsAccount().getBalance();
-				if(hasChecking && hasSavings && (cBalance + sBalance)  < getMinNoFeeCombinedBalance()){
-					if(cBalance >= getBankingFee())
-					customer.getCheckingAccount().setBalance(cBalance - getBankingFee());
-					else{
-						customer.getSavingsAccount().setBalance(0);
-						customer.getCheckingAccount().setBalance(cBalance - (getBankingFee() - sBalance));
-					}
-				}
-				else if(hasChecking && cBalance < getMinNoFeeCombinedBalance())
-					customer.getCheckingAccount().setBalance(cBalance - getBankingFee());
-				else if(hasSavings && sBalance < getMinNoFeeCombinedBalance())
-					customer.getSavingsAccount().setBalance(sBalance - getBankingFee());
+				AbstractCheckingAccount cBalance = customer.getCheckingAccount();
+				AbstractSavingsAccount sBalance = customer.getSavingsAccount();
+				boolean hasChecking = cBalance != null;
+				boolean hasSavings = sBalance != null;
+				double combinedBalance = 0;
 				if(hasChecking){
-					customer.getCheckingAccount().setBalance(customer.getCheckingAccount().getBalance() - (customer.getCheckingAccount().getOverdraftFee() * customer.getCheckingAccount().getNumberOverdrafts()));
-					customer.getCheckingAccount().setNumberOverdrafts(0);
-					customer.getCheckingAccount().payInterest(arg0);
+					cBalance.setBalance(cBalance.getBalance()- (cBalance.getOverdraftFee() * cBalance.getNumberOverdrafts()));
+					combinedBalance += cBalance.getBalance();
+				}
+				if(hasSavings)
+					combinedBalance += sBalance.getBalance();
+				if(combinedBalance  < getMinNoFeeCombinedBalance()){
+					if(hasSavings && hasChecking){
+						if(cBalance.getBalance() > getBankingFee())
+							cBalance.setBalance(cBalance.getBalance() - getBankingFee());
+						else if(cBalance.getBalance() + sBalance.getBalance() > getBankingFee()){
+							sBalance.setBalance(sBalance.getBalance() - (getBankingFee() - cBalance.getBalance()));
+							cBalance.setBalance(0);
+						}
+						else{
+							cBalance.setBalance(cBalance.getBalance() - (getBankingFee() - sBalance.getBalance()));
+							sBalance.setBalance(0);
+						}
+					}
+					else if(hasChecking && !hasSavings)
+						cBalance.setBalance(cBalance.getBalance() -  getBankingFee());
+					else if(hasSavings&& !hasChecking)
+						sBalance.setBalance(sBalance.getBalance() - getBankingFee());
+				}
+					
+				if(hasChecking){
+					cBalance.setNumberOverdrafts(0);
+					if(cBalance.getBalance() > 0)
+					cBalance.payInterest(arg0);
 				}
 				if(hasSavings){
-					customer.getSavingsAccount().setNumTransactions(0);
-					customer.getSavingsAccount().payInterest(arg0);
+					sBalance.setNumTransactions(0);
+					if(sBalance.getBalance() > 0)
+					sBalance.payInterest(arg0);
 				}
 			}
 		}

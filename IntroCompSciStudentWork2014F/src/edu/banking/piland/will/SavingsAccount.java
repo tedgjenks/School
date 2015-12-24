@@ -34,12 +34,14 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	@Override
 	public double transfer(Account destination, double amount) {
 		double amountToWithDrawn = 0;
-		if(amount <= this.getBalance()){
-			amountToWithDrawn = amount;
+		if(destination.canTransact() && this.canTransact())
+			if(amount <= this.getBalance()){
+				amountToWithDrawn = amount;
 
-		}
+			}
 		this.setBalance(this.getBalance() - amountToWithDrawn);
 		destination.setBalance(destination.getBalance() + amountToWithDrawn);
+		setNumTransactions(getNumTransactions() +1);
 		return amountToWithDrawn;
 	}
 
@@ -47,18 +49,31 @@ public class SavingsAccount extends AbstractSavingsAccount {
 	public double withdraw(double requestedWithdrawal) {
 		// TODO Auto-generated method stub
 		double amountWithdrawn = 0;
+		int monthlyTransactions = getNumTransactions();
 
 		if(requestedWithdrawal > getBalance()){
 			System.out.println("Not Enough Money In Savings Account");
 		}
 		if(requestedWithdrawal <= getBalance())
-			if(getNumTransactions() <= getMaxMonthlyTransactions())
+			if(getNumTransactions() < getMaxMonthlyTransactions())
 				amountWithdrawn = requestedWithdrawal;
 		double newbalance = getBalance() - amountWithdrawn;
 		setBalance(newbalance);
-		int monthlyTransactions = getNumTransactions() +1;
+		if(amountWithdrawn != 0){
+		monthlyTransactions = getNumTransactions() +1;
+		}
 		setNumTransactions(monthlyTransactions);
 		return amountWithdrawn;
+	}
+
+	@Override
+	public double deposit(double depositAmount) {
+		if( this.canTransact()){
+			this.setNumTransactions(this.getNumTransactions()+1);
+			return super.deposit(depositAmount);
+		}
+		else 
+			return 0;
 	}
 
 }

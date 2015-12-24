@@ -22,12 +22,11 @@ public class Customer extends AbstractCustomer {
 		return this.getName().compareTo(arg0.getName());
 	}
 
-	public boolean equals(Object Customer)
+	public boolean equals(Customer customer)
 	{
-		return this.getName().equals(((Customer) Customer).getName());
-	
-
+		return this.getName().equals((customer).getName());
 	}
+	
 	public String toString()
 	{
 		return getName();

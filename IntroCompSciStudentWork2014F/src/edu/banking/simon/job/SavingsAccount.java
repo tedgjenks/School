@@ -12,10 +12,7 @@ public class SavingsAccount extends AbstractSavingsAccount{
 	@Override
 	public boolean canTransact() {
 		// TODO Auto-generated method stub
-		boolean transact = false;
-		if (getNumTransactions() < getMaxMonthlyTransactions() )
-			transact = true;
-		return transact;
+		return (getNumTransactions() < getMaxMonthlyTransactions());
 	}
 
 	@Override
@@ -32,7 +29,7 @@ public class SavingsAccount extends AbstractSavingsAccount{
 	@Override
 	public double transfer(Account Destination, double amount) {
 		// TODO Auto-generated method stub
-		if (amount <= getBalance() && getNumTransactions()<getMaxMonthlyTransactions()) {
+		if (amount <= getBalance() && canTransact() && Destination.canTransact() ) {
 			setBalance(getBalance()-amount);
 			Destination.setBalance(Destination.getBalance()+amount);
 
@@ -46,25 +43,24 @@ public class SavingsAccount extends AbstractSavingsAccount{
 	@Override
 	public double withdraw(double withdraw) {
 		// TODO Auto-generated method stub
-
-		if  (getBalance() >= withdraw) {
+		if (withdraw <= getBalance() && this.canTransact()) {
 			setBalance(getBalance() - withdraw);
+			setNumTransactions(getNumTransactions() + 1);
 			return withdraw;
 		}
-		else
-			return 0;
+		else return 0.0;
+	}
+		@Override
+		public double deposit(double depositAmount) {
+			// TODO Auto-generated method stub
+			if (canTransact()){
+				setBalance(getBalance() + depositAmount);
+				setNumTransactions(getNumTransactions() + 1);
 
-	}
-	@Override
-	public double deposit(double depositAmount) {
-		// TODO Auto-generated method stub
-		if (canTransact()){
-		setBalance(getBalance() + depositAmount);
-		setNumTransactions(getNumTransactions() + 1);
-		
-		return depositAmount;
+				return depositAmount;
+
+			}	
+			else return 0;
+		}
 	
-		}	
-		else return 0;
-	}
 }

@@ -6,20 +6,20 @@ import edu.jenks.dist.banking.AbstractSavingsAccount;
 
 public class Banking extends AbstractBanking {
 
+	public Banking(){
+	}
 	@Override
-	public void addCustomer(String arg0, AbstractCheckingAccount arg1, AbstractSavingsAccount arg2) {
-		// TODO Auto-generated method stub
-
+	public void performMaintenance(int days) {
+		
 	}
 
 	@Override
-	public void performMaintenance(int arg0) {
+	public void addCustomer(String name, AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public boolean removeCustomer(String arg0) {
+	public boolean removeCustomer(String name) {
 		// TODO Auto-generated method stub
 		return false;
 	}

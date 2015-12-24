@@ -7,7 +7,7 @@ import edu.jenks.dist.banking.AbstractSavingsAccount;
 public class Banking extends  AbstractBanking {
 
 	@Override
-	public void addCustomer(String arg0, AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
+	public void addCustomer(String name, AbstractCheckingAccount checkingAccount, AbstractSavingsAccount savingsAccount) {
 		// TODO Auto-generated method stub
 		
 	}

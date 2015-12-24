@@ -16,10 +16,8 @@ public class CheckingAccount extends AbstractCheckingAccount
 	{
 		myBalance = balance;
 		this.setBalance(myBalance);
-		System.out.println("Account balance: " + myBalance);
 		myAccountAPR = accountInterestAPR;
 		this.setAccountInterestAPR(myAccountAPR);
-		System.out.println("Account APR: " + myAccountAPR);
 	}
 
 	@Override
@@ -85,14 +83,14 @@ public class CheckingAccount extends AbstractCheckingAccount
 	{
 		if (this.getBalance() < amount)
 		{
-			return 0.0;
+			amount = 0;
 		}
 		else if (destination.canTransact() == true);
 		{
-				this.withdraw(amount);
 				destination.deposit(amount);
-				return amount;
+				this.setBalance(this.getBalance()-amount);
 		}
+		return amount;
 	}
 
 }

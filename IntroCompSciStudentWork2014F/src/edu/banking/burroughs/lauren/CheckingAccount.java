@@ -19,15 +19,17 @@ public class CheckingAccount extends AbstractCheckingAccount {
 	}
 
 
-	public double transfer(Account desination, double amount) {		
-		if(getBalance() >= amount){
-			setBalance(getBalance() - amount);
-			desination.setBalance(desination.getBalance() + amount);
-			return amount;
+	public double transfer(Account desination, double amount) {	
+	
+			if(getBalance() >= amount && desination.canTransact()){
+				setBalance(getBalance() - amount);
+				desination.deposit(amount);
+				return amount;
 			}
-		else
-			return 0.0;
-	}
+			else
+				return 0.0;
+		}
+	
 	public boolean willTransact(double requestedWithdrawal){
 		AbstractSavingsAccount SA = getLinkedSavingsAccount();
 		double total = getBalance() + getOverdraftMax();
@@ -67,17 +69,22 @@ public class CheckingAccount extends AbstractCheckingAccount {
 						return 0.0;
 				} 
 				else if(getBalance() + getLinkedSavingsAccount().getBalance() >= requestedWithdrawal){
-					AbstractSavingsAccount SA = getLinkedSavingsAccount();
-					double leftOver = requestedWithdrawal - getBalance();
-					double takeSavings = SA.getBalance() - leftOver;
-					double taken = SA.getBalance() - takeSavings;
-					SA.setBalance(takeSavings);
-					setBalance(taken + getBalance());
-					double withDrawal = getBalance() - requestedWithdrawal;
-					setBalance(withDrawal);
-					return requestedWithdrawal;
+					if(getLinkedSavingsAccount().getNumTransactions()< getLinkedSavingsAccount().getMaxMonthlyTransactions()){
+						AbstractSavingsAccount SA = getLinkedSavingsAccount();
+						double leftOver = requestedWithdrawal - getBalance();
+						double takeSavings = SA.getBalance() - leftOver;
+						double taken = SA.getBalance() - takeSavings;
+						SA.setBalance(takeSavings);
+						setBalance(taken + getBalance());
+						double withDrawal = getBalance() - requestedWithdrawal;
+						setBalance(withDrawal);
+						return requestedWithdrawal;
+					}
+					else
+						return 0.0;
 				}
 				else {
+					if(getLinkedSavingsAccount().getMaxMonthlyTransactions()> getLinkedSavingsAccount().getNumTransactions()){
 					setBalance(getBalance() + getLinkedSavingsAccount().getBalance());
 					if(isOverdraftProtected() == true){
 						if(getBalance() + getOverdraftMax() > requestedWithdrawal){
@@ -86,6 +93,9 @@ public class CheckingAccount extends AbstractCheckingAccount {
 							setNumberOverdrafts(getNumberOverdrafts() + 1);
 							return requestedWithdrawal;
 						}
+						else
+							return 0.0;
+						}
 
 						else 
 							return 0.0;	
@@ -93,6 +103,7 @@ public class CheckingAccount extends AbstractCheckingAccount {
 					else
 						return 0.0;
 				}
+				
 			}
 		}
 		else

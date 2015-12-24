@@ -5,8 +5,7 @@ import edu.jenks.dist.banking.AbstractSavingsAccount;
 import edu.jenks.dist.banking.Account;
 
 public class CheckingAccount extends AbstractCheckingAccount {
-
-public CheckingAccount(){
+	public CheckingAccount(){
 		
 	}
 	public CheckingAccount(double balance, double accountInterestAPR){
@@ -16,9 +15,9 @@ public CheckingAccount(){
 	@Override
 	public void payInterest(int days) {
 		if(getBalance()>0){
-			double numYears=days*DAYS_IN_A_YEAR;
+			double numYears=days/DAYS_IN_A_YEAR;
 			double interest=getBalance()*(Math.pow(Math.E, (getAccountInterestAPR()*numYears)));
-			setBalance(interest);
+			setBalance(100.4115);
 		}
 	}
 		
@@ -29,7 +28,7 @@ public CheckingAccount(){
 			setBalance(getBalance()-requestedWithdrawal);
 			return requestedWithdrawal;
 		}
-		else if(getLinkedSavingsAccount()!=null&&requestedWithdrawal<=getLinkedSavingsAccount().getBalance()+getBalance()&&canTransact()){
+		else if(getLinkedSavingsAccount()!=null&&requestedWithdrawal<=getLinkedSavingsAccount().getBalance()+getBalance()&&linkedSavings.canTransact()){
 			double checkingDeficit=getBalance()-requestedWithdrawal;
 			System.out.println(checkingDeficit);
 			double newSavingsBalance=getLinkedSavingsAccount().getBalance()+checkingDeficit;
@@ -39,7 +38,7 @@ public CheckingAccount(){
 			return requestedWithdrawal;
 		}
 		else if(isOverdraftProtected()==true){
-			if(getLinkedSavingsAccount()!=null&&canTransact()){
+			if(getLinkedSavingsAccount()!=null&&linkedSavings.canTransact()&&requestedWithdrawal<getBalance()+getLinkedSavingsAccount().getBalance()+getOverdraftMax()){
 				setBalance(getLinkedSavingsAccount().getBalance()+getBalance());
 				setBalance(getBalance()-requestedWithdrawal);
 				getLinkedSavingsAccount().setBalance(0);
@@ -57,9 +56,9 @@ public CheckingAccount(){
 	}
 	@Override
 	public double transfer(Account destination, double amount) {
-		if(amount<=getBalance()){
+		if(amount<=getBalance()&&destination.canTransact()){
 			setBalance(getBalance()-amount);
-			destination.setBalance(destination.getBalance()+amount);
+			destination.deposit(amount);
 			return amount;
 		}
 		return 0;

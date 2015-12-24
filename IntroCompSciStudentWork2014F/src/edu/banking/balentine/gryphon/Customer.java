@@ -18,15 +18,23 @@ public class Customer extends AbstractCustomer {
 
 	@Override
 	public int compareTo(AbstractCustomer arg0) {
-		return 0;
+		String thisName=toString();
+		String otherName=arg0.toString();
+		int compare=thisName.compareTo(otherName);
+		return compare;
 	}
 
 	public boolean equals(Object cust){
-		return false;
+		boolean returnVal=false;
+		String name1=toString();
+		String name2=cust.toString();
+		if(name1.equals(name2))
+			returnVal=true;
+		return returnVal;
 	}
 
 	public String toString(){
-		return null;
+		return getName();
 	}
 
 	public static void main(String[] args) {

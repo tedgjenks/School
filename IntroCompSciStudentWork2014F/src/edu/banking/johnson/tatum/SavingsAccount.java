@@ -31,24 +31,21 @@ public class SavingsAccount extends AbstractSavingsAccount {
 			}
 			else return 0.0;
 		}
+
 		else{
-			requestedWithdrawal = 0.0;
-			return requestedWithdrawal;}
+			return 0.0;
+		}
 
 	}
 
-	private void incrementTransactions() {
+	private void incrementTransactions(){
 		setNumTransactions(getNumTransactions() + 1);
 	}
 
 
 	@Override
 	public boolean canTransact() {
-		if(getNumTransactions() < getMaxMonthlyTransactions()){
-			return true;
-		}
-		else
-			return false;
+		return getNumTransactions() < getMaxMonthlyTransactions();
 	}
 
 	@Override
