@@ -23,6 +23,7 @@ public class TestRunner {
 	private static final String DUE_DATE_TAG = "due-date";
 	private static final String PENALTY_TAG = "penalty";
 	public static final String PROJECT_NAME_TAG = "name";
+	public static final String PROJECT_ACTIVE_ATTRIBUTE = "active";
 	private static final String PROJECT_MAX_RUNTIME_SECS_TAG = "max-runtime-secs";
 	private static final String FORMATTED_DATE;
 	
@@ -46,7 +47,8 @@ public class TestRunner {
 			System.setSecurityManager(new CustomSecurityManager());
 			initXml();
 			for(Element project : projects) {
-				processProject(project);
+				if(project.getAttribute(PROJECT_ACTIVE_ATTRIBUTE).getBooleanValue())
+					processProject(project);
 			}
 			JDOMHelper.updateXml(document, XML_FILE_PATH);
 		} catch (JDOMException | IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -85,7 +87,8 @@ public class TestRunner {
 			tester.setStudent(student);
 			tester.start();
 		}
-		TestableMonitor monitor = new TestableMonitor(threadGroup, project.getChildText(PROJECT_NAME_TAG), calcMaxRuntimeMillis(project), testMode);
+		String projectName = project.getChildText(PROJECT_NAME_TAG);
+		TestableMonitor monitor = new TestableMonitor(threadGroup, projectName, calcMaxRuntimeMillis(project), testMode);
 		monitor.start();
 		try {
 			monitor.getThread().join();
@@ -97,7 +100,7 @@ public class TestRunner {
 			try {
 				for(Student student : studentFeedbackLogPath.keySet()) {
 					String feedbackLogPath = studentFeedbackLogPath.get(student);
-					sendFeedbackLog(feedbackLogPath, student);
+					sendFeedbackLog(feedbackLogPath, student, projectName);
 					studentsElement.removeContent(student.getStudentElement());
 				}
 				System.out.println("Feedback sent " + StringUtil.buildString('*', 50));
@@ -113,8 +116,12 @@ public class TestRunner {
 		return Long.parseLong(maxRuntimeSecs) * 1000;
 	}
 	
-	private static void sendFeedbackLog(String source, Student student) throws IOException {
-		String target = googleDriveTurninRoot + student.getLastName() + student.getFirstName() + turninDirSuffix + "/" + source.substring(source.lastIndexOf("/") + 1);
+	private static void sendFeedbackLog(String source, Student student, String projectName) throws IOException {
+		StringBuilder directory = new StringBuilder(100).append(googleDriveTurninRoot).append(student.getLastName()).append(student.getFirstName());
+		directory.append(turninDirSuffix).append("/").append(projectName).append("/");
+		CopyFileHelper.makeDirectory(directory.toString());
+		//String target = googleDriveTurninRoot + student.getLastName() + student.getFirstName() + turninDirSuffix + "/" + projectName + "/" + source.substring(source.lastIndexOf("/") + 1);
+		String target = directory.append(source.substring(source.lastIndexOf("/") + 1)).toString();
 		CopyFileHelper.copyFeedbackLogFromEclipse(new File(source), new File(target));
 	}
 	
@@ -125,10 +132,11 @@ public class TestRunner {
 	}
 	
 	private static String initFeedbackLogger(Testable tester, Element project, Student student) throws IOException {
+		String projectName = project.getChildText(PROJECT_NAME_TAG);
 		StringBuilder sb = new StringBuilder(50);
 		sb.append(eclipseStudentRoot).append(project.getChildText(PACKAGE_ROOT_TAG));
 		sb.append(student.getLastName().toLowerCase()).append("/").append(student.getFirstName().toLowerCase()).append("/");
-		sb.append(project.getChildText(PROJECT_NAME_TAG)).append("Feedback");
+		sb.append(projectName).append("Feedback");
 		sb.append(FORMATTED_DATE).append(".log");
 		String path = sb.toString();
 		tester.setLogFilePathFeedback(path, student);

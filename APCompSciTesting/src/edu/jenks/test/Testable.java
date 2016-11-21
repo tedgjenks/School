@@ -191,6 +191,10 @@ public abstract class Testable implements Runnable {
 		feedbackLogger.log(level, sb.toString());
 	}
 	
+	public void logInfo(String message) {
+		feedbackLogger.log(Level.INFO, message);
+	}
+	
 	public void setLogFilePathFeedback(String path, Student student) throws IOException {
 		feedbackLogger = Logger.getLogger(student + " Feedback: " + getClass().getName());
 		LoggingUtil.initLocalFileLogger(feedbackLogger, path);

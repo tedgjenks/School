@@ -1,12 +1,14 @@
-<!ELEMENT projects (eclipse-student-root, google-drive, project+)>
+<!ELEMENT projects (eclipse-student-root, moji-root, google-drive, project+)>
 <!ATTLIST projects test-mode (true|false) "false">
 <!ELEMENT eclipse-student-root (#PCDATA)>
+<!ELEMENT moji-root (#PCDATA)>
 
 <!ELEMENT google-drive (turnin-root, turnin-dir-suffix)>
 <!ELEMENT turnin-root (#PCDATA)>
 <!ELEMENT turnin-dir-suffix (#PCDATA)>
 
 <!ELEMENT project (name, package-root, test-class, max-runtime-secs, deadline?, files, students)>
+<!ATTLIST project active (true|false) "true">
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT package-root (#PCDATA)>
 <!ELEMENT test-class (#PCDATA)>

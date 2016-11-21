@@ -79,6 +79,7 @@ public class MutableArrayTest extends Testable {
 		} catch(IndexOutOfBoundsException e) {}
 		try {
 			actual.add(actual.size() + 1, -1);
+			message += " - add -";
 			pass = false;
 		} catch(IndexOutOfBoundsException e) {}
 		
@@ -90,6 +91,7 @@ public class MutableArrayTest extends Testable {
 		} catch(IndexOutOfBoundsException e) {}
 		try {
 			actual.set(actual.size(), -1);
+			message += " - set -";
 			pass = false;
 		} catch(IndexOutOfBoundsException e) {}
 		
@@ -101,6 +103,7 @@ public class MutableArrayTest extends Testable {
 		} catch(IndexOutOfBoundsException e) {}
 		try {
 			actual.get(actual.size());
+			message += " - get -";
 			pass = false;
 		} catch(IndexOutOfBoundsException e) {}
 		
@@ -112,6 +115,7 @@ public class MutableArrayTest extends Testable {
 		} catch(IndexOutOfBoundsException e) {}
 		try {
 			actual.remove(actual.size());
+			message += " - remove -";
 			pass = false;
 		} catch(IndexOutOfBoundsException e) {}
 		

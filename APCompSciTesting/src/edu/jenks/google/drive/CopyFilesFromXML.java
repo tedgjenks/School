@@ -11,7 +11,8 @@ import static java.lang.System.out;
 
 public class CopyFilesFromXML {
 	
-	private static String targetRoot;
+	private static String targetEclipseRoot;
+	private static String targetMojiRoot;
 	private static File sourceRoot;
 	private static String turninDirSuffix;
 	private static Document document;
@@ -22,8 +23,9 @@ public class CopyFilesFromXML {
 			document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
 			Element rootElement = document.getRootElement();
 			testMode = Boolean.parseBoolean(rootElement.getAttributeValue("test-mode"));
-			targetRoot = rootElement.getChildText("eclipse-student-root");
-			//out.println(targetRoot);
+			targetEclipseRoot = rootElement.getChildText("eclipse-student-root");
+			targetMojiRoot = rootElement.getChildText("moji-root");
+			//out.println(targetEclipseRoot);
 			Element googleDriveElement = rootElement.getChild("google-drive");
 			sourceRoot = new File(googleDriveElement.getChildText("turnin-root"));
 			turninDirSuffix = googleDriveElement.getChildText("turnin-dir-suffix");
@@ -38,25 +40,35 @@ public class CopyFilesFromXML {
 		}
 	}
 	
-	private static void processProjects(List<Element> projects, File[] studentDirs) throws IOException {
+	private static void processProjects(List<Element> projects, File[] studentDirs) throws IOException, DataConversionException {
+		int totalStudentProjects = 0;
+		int projectsProcessed = 0;
 		for(Element project : projects) {
-			String packageRoot = project.getChildText("package-root");
-			//out.println(packageRoot);
+			if(!project.getAttribute(TestRunner.PROJECT_ACTIVE_ATTRIBUTE).getBooleanValue())
+				continue;
+			final String PROJECT_NAME = project.getChildText(TestRunner.PROJECT_NAME_TAG);
+			final String MOJI_ROOT = targetMojiRoot + PROJECT_NAME + "/";
+			final String PACKAGE_ROOT = project.getChildText("package-root");
+			//out.println(PACKAGE_ROOT);
 			List<Element> files = project.getChild("files").getChildren("file");
 			Set<Student> studentsToProcess = new HashSet<Student>();
 			for(Element file : files) {
 				String fileName = file.getText();
 				for(int index = studentDirs.length - 1; index >= 0; index--) {
-					//out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetRoot + packageRoot + ", " + turninDirSuffix);
+					//out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetEclipseRoot + PACKAGE_ROOT + ", " + turninDirSuffix);
 					String source = studentDirs[index].getPath() + "\\" + fileName;
 					Student student = CopyFileHelper.getStudent(source, turninDirSuffix);
-					String generalDest = targetRoot + packageRoot;
-					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, generalDest, student)) {
+					String generalDest = targetEclipseRoot + PACKAGE_ROOT;
+					String packageDest = new StringBuilder(50).append(generalDest).append(student.getLastName()).append("/").append(student.getFirstName()).append("/").toString().toLowerCase();
+					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, packageDest, false)) {
 						studentsToProcess.add(student);
 						if(!testMode) {
-							File directory = CopyFileHelper.makeDestinationDirectories(generalDest, student);
-							CopyFileHelper.deleteLogs(directory, project.getChildText(TestRunner.PROJECT_NAME_TAG));
+							File directory = CopyFileHelper.makeDestinationDirectories(packageDest);
+							CopyFileHelper.deleteLogs(directory, PROJECT_NAME);
 						}
+						String mossDest = new StringBuilder(50).append(MOJI_ROOT).append(student.getLastName()).append(student.getFirstName()).append("/").toString();
+						CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, mossDest, true);
+						System.out.println("Copied " + fileName + " for " + student);
 					}
 				}
 			}
@@ -72,9 +84,15 @@ public class CopyFilesFromXML {
 				studentElement.addContent(firstNameElement);
 				studentsElement.addContent(studentElement);
 			}
-			out.println(studentsToProcess.size() + " students processed for project " + project.getChildText(TestRunner.PROJECT_NAME_TAG));
+			int studentsToProcessSize = studentsToProcess.size();
+			totalStudentProjects += studentsToProcessSize;
+			out.println(studentsToProcessSize + " students processed for project " + project.getChildText(TestRunner.PROJECT_NAME_TAG));
 			out.println();
+			projectsProcessed++;
 		}
-		out.println(projects.size() + " projects processed.");
+		out.println(projectsProcessed + " projects processed out of " + projects.size() + " defined.");
+		out.println(totalStudentProjects + " total students processed.");
+		if(totalStudentProjects > 0)
+			out.println("Refresh student project folder!");
 	}
 }

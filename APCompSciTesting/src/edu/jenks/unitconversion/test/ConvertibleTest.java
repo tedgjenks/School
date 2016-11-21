@@ -80,8 +80,12 @@ public class ConvertibleTest extends Testable {
 	}
 	
 	private void testConvertHelper(String startingUnit, String desiredUnit, int points) {
-		double actVal = studentConvertible.convert(numberUnits, startingUnit, desiredUnit);
-		double expVal = solutionConvertible.convert(numberUnits, startingUnit, desiredUnit);
+		testConvertHelper(startingUnit, numberUnits, desiredUnit, points);
+	}
+	
+	private void testConvertHelper(String startingUnit, double numStartingUnit, String desiredUnit, int points) {
+		double actVal = studentConvertible.convert(numStartingUnit, startingUnit, desiredUnit);
+		double expVal = solutionConvertible.convert(numStartingUnit, startingUnit, desiredUnit);
 		String message = "convert " + startingUnit + " to " + desiredUnit;
 		if(MathUtil.equalsRelative(actVal, expVal, RELATIVE_DELTA)) {
 			logPass(message, expVal, actVal);
@@ -96,32 +100,40 @@ public class ConvertibleTest extends Testable {
 	public void test3Convert() {
 		if(passedIntermediateCalculations) {
 			String startingUnit = "nm", desiredUnit = "Gm";
-			testConvertHelper(startingUnit, desiredUnit, 4);
+			testConvertHelper(startingUnit, desiredUnit, 3);
 			
 			startingUnit = "Gm";
 			desiredUnit = "nm";
-			testConvertHelper(startingUnit, desiredUnit, 4);
+			testConvertHelper(startingUnit, desiredUnit, 3);
 			
 			startingUnit = "Mm";
 			desiredUnit = "um";
-			testConvertHelper(startingUnit, desiredUnit, 4);
+			testConvertHelper(startingUnit, desiredUnit, 3);
 			
 			startingUnit = "mm";
 			desiredUnit = "km";
-			testConvertHelper(startingUnit, desiredUnit, 4);
+			testConvertHelper(startingUnit, desiredUnit, 3);
+			
+			startingUnit = "m";
+			desiredUnit = "m";
+			testConvertHelper(startingUnit, 0, desiredUnit, 4);
 		} else
 			feedbackLogger.log(Level.WARNING, "convert method not tested due to failure of dependent methods.");
 	}
 	
-	private void testConvertForDisplayHelper(String startingUnit, String desiredUnit, int points) {
-		String expVal = solutionConvertible.convertForDisplay(numberUnits, startingUnit, desiredUnit);
-		String actVal = studentConvertible.convertForDisplay(numberUnits, startingUnit, desiredUnit);
+	private void testConvertForDisplayHelper(String startingUnit, double numStartingUnit, String desiredUnit, int points) {
+		String expVal = solutionConvertible.convertForDisplay(numStartingUnit, startingUnit, desiredUnit);
+		String actVal = studentConvertible.convertForDisplay(numStartingUnit, startingUnit, desiredUnit);
 		String message = "convertForDisplay";
 		if(testDisplay(expVal, actVal)) {
 			totalPoints += points;
 			logPass(message, expVal, actVal);
 		} else
 			logFail(message, expVal, actVal, points);
+	}
+	
+	private void testConvertForDisplayHelper(String startingUnit, String desiredUnit, int points) {
+		testConvertForDisplayHelper(startingUnit, numberUnits, desiredUnit, points);
 	}
 	
 	// 6 points
@@ -137,11 +149,15 @@ public class ConvertibleTest extends Testable {
 
 			startingUnit = "cm";
 			desiredUnit = "km";
-			testConvertForDisplayHelper(startingUnit, desiredUnit, 2);
+			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
 			startingUnit = "km";
 			desiredUnit = "cm";
-			testConvertForDisplayHelper(startingUnit, desiredUnit, 2);
+			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
+			
+			startingUnit = "m";
+			desiredUnit = "m";
+			testConvertForDisplayHelper(startingUnit, 0, desiredUnit, 2);
 		} else
 			feedbackLogger.log(Level.WARNING, "Display not tested due to failure of earlier tests.");
 	}

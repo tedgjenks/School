@@ -22,8 +22,29 @@ public class CopyFileHelper {
 		return parentFile.listFiles(textFilter);
 	}
 	
-	public static File makeDestinationDirectories(String generalDest, Student student) {
+	public static void makeDirectory(String path) {
+		File filePath = new File(path);
+		if(!filePath.exists())
+			filePath.mkdir();
+	}
+	
+	/*public static File makeDestinationDirectoriesPackage(String generalDest, Student student) {
 		String dest = generalDest + (student.getLastName() + "/" + student.getFirstName() + "/").toLowerCase();
+		File destFile = new File(dest);
+		if(!destFile.exists())
+			destFile.mkdirs();
+		return destFile;
+	}*/
+	
+	/*public static File makeDestinationDirectoriesMoss(String generalDest, Student student) {
+		String dest = generalDest + (student.getLastName() + "/" + student.getFirstName() + "/").toLowerCase();
+		File destFile = new File(dest);
+		if(!destFile.exists())
+			destFile.mkdirs();
+		return destFile;
+	}*/
+	
+	public static File makeDestinationDirectories(String dest) {
 		File destFile = new File(dest);
 		if(!destFile.exists())
 			destFile.mkdirs();
@@ -37,12 +58,12 @@ public class CopyFileHelper {
 			logFile.delete();
 	}
 	
-	public static boolean copyStudentFilesFromTurnIn(String source, final String fileName, String generalDest, Student student) throws IOException {
+	public static boolean copyStudentFilesFromTurnIn(String source, final String fileName, String dest, boolean delete) throws IOException {
 		File sourceFile = new File(source);
 		boolean sourceFileExists = sourceFile.exists();
 		if(sourceFileExists) {
-			File destDir = makeDestinationDirectories(generalDest, student);
-			String dest = destDir.getAbsolutePath() + "/";
+			File destDir = makeDestinationDirectories(dest);
+			//String dest = destDir.getAbsolutePath() + "/";
 			//System.out.println("destDir: " + dest);
 			dest += fileName;
 			//System.out.println("destDir: " + dest);
@@ -50,8 +71,9 @@ public class CopyFileHelper {
 			if(!destFile.exists())
 				destFile.createNewFile();
 			Files.copy(sourceFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			sourceFile.delete();
-			System.out.println("Copied " + fileName + " for " + student);
+			if(delete)
+				sourceFile.delete();
+			//System.out.println("Copied " + fileName + " for " + student);
 		}
 		return sourceFileExists;
 	}

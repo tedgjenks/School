@@ -124,6 +124,13 @@ public class RandomPhoneNumberTest extends Testable {
 		totalPoints += areaCodePoints > 0 ? areaCodePoints : 0;
 		totalPoints += exchangePoints > 0 ? exchangePoints : 0;
 		totalPoints += subscriberPoints > 0 ? subscriberPoints : 0;
+		
+		if(totalPoints != getPointsAvailable()) {
+			logInfo("Phone number points: " + phoneNumberPoints);
+			logInfo("Area code points: " + areaCodePoints);
+			logInfo("Exchange points: " + exchangePoints);
+			logInfo("Subscriber points: " + subscriberPoints);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -153,7 +160,6 @@ public class RandomPhoneNumberTest extends Testable {
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		studentRPN = (AbstractRandomPhoneNumber)ReflectionUtil.newInstance(studentClassName);
 		totalPoints += 50;
-		feedbackLogger.log(Level.INFO, "Pass: object creation.");
 	}
 
 }

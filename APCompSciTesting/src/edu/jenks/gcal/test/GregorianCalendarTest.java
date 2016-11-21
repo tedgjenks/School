@@ -90,7 +90,6 @@ public class GregorianCalendarTest extends Testable {
 			IllegalArgumentException, InvocationTargetException {
 		studentCalendar = (AbstractGregorianCalendar)ReflectionUtil.newInstance(studentClassName);
 		totalPoints += 5;
-		logPass("object created");
 	}
 
 }
