@@ -1,5 +1,7 @@
 package edu.jenks.util;
 
+import java.util.Random;
+
 /**
  * Performs operations on String objects.
  *
@@ -21,6 +23,17 @@ public class StringUtil {
 		return sb.toString();
 	}
 	
+	public static String buildRandomString(int numChars, int lowUnicode, int highUnicode) {
+		StringBuilder sb = new StringBuilder(numChars);
+		Random random = new Random(System.currentTimeMillis());
+		final int diff = highUnicode - lowUnicode;
+		for(int count = numChars; count > 0; count--) {
+			char c = Character.toChars((random.nextInt(diff) + lowUnicode))[0];
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+	
 	public static char convertToUpperCase(char lowerChar) {
 		return String.valueOf(lowerChar).toUpperCase().charAt(0);
 	}
@@ -35,5 +48,9 @@ public class StringUtil {
 		for(int numChars = desiredLength - sb.length(); numChars > 0; numChars--)
 			sb.insert(0, c);
 		return sb.toString();
+	}
+	
+	public static boolean equalAllowNull(String s1, String s2) {
+		return ComparisonUtil.equalAllowNull(s1, s2);
 	}
 }

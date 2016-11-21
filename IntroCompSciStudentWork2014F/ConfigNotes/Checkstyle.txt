@@ -1,6 +1,7 @@
 Coding Problems -> Illegal Type
 illegalClassNames: java.lang.Class, java.lang.ClassLoader, java.lang.ClassValue, java.lang.Compiler, java.lang.InheritableThreadLocal, java.lang.Package, java.lang.Process, java.lang.ProcessBuilder, java.lang.ProcessBuilder.Redirect, java.lang.Runtime, java.lang.RuntimePermission, java.lang.SecurityManager, java.lang.Thread, java.lang.ThreadGroup, java.lang.ThreadLocal
 Regex: .*\.[A-Z][a-z]+.*
+^((?!import\s).)*\.[A-Z][a-z]+.*
 
 Miscellaneous -> Regexp
 new\s+.*\.[A-Z][a-z]+.*

@@ -28,4 +28,12 @@ public class JDOMHelper {
 		xmlOutput.setFormat(Format.getPrettyFormat());
 		xmlOutput.output(document, new FileWriter(xmlFilePath));
 	}
+	
+	public static void main(String[] args) {
+		try {
+			buildDocument("testing/testing-config.xml");
+		} catch (JDOMException | IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

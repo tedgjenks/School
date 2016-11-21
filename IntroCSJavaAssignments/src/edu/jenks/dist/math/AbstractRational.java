@@ -11,7 +11,7 @@ package edu.jenks.dist.math;
  * @author Ted Jenks
  *
  */
-public abstract class AbstractRational {
+public abstract class AbstractRational implements Comparable<AbstractRational> {
 
 	private int numerator, denominator;
 	
@@ -98,7 +98,6 @@ public abstract class AbstractRational {
 	/**
 	 * <p>Determines if this rational number is equal to the one passed as a parameter.</p>
 	 * 
-	 * <b>precondition</b>: this number and <code>rn2</code> are reduced.<br>
 	 * @param rn2
 	 * @return
 	 */
@@ -110,7 +109,7 @@ public abstract class AbstractRational {
 	public abstract void reduce();
 	
 	/**
-	 * @return true if the decimal terminates, false if it repeats
+	 * @return true if the decimal terminates in base 10, false if it repeats
 	 */
 	public abstract boolean decimalTerminates();
 
@@ -126,7 +125,7 @@ public abstract class AbstractRational {
 	 */
 	public int gcd(int num1, int num2) throws IllegalArgumentException {
 		if(num1 == 0 || num2 == 0)
-			throw new IllegalArgumentException("Parameters must not be zero.");
+			throw new IllegalArgumentException("Arguments to method gcd must not be zero.");
 		if(num1 < 0)
 			num1 *= -1;
 		if(num2 < 0)

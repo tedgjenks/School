@@ -4,13 +4,13 @@
 package edu.jenks.dist.array;
 
 /**
- * <p>See the documentation for the corresponding methods in java.util.List</p>
+ * <p>See the documentation for the corresponding methods in <code>java.util.List</code> or <code>java.util.ArrayList</code></p>
  * Note that you do not have to implement generics or the associated syntax.<br>
  * An array should be used hold the data.<br>
  * When an element must be added and the array is full:<br>
  *  - A new array with double the length should be created.<br>
  *  - The old array should be copied into the new array, and then the element should be added.<br>
- * @author JenksT
+ * @author Ted Jenks
  */
 public interface List {
 	

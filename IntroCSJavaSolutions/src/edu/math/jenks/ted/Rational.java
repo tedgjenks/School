@@ -151,5 +151,23 @@ public class Rational extends AbstractRational {
 		int negatedNumerator = r.getNumerator() * -1;
 		return new Rational(negatedNumerator, r.getDenominator());
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(AbstractRational arg0) {
+		int retVal = 0;
+		AbstractRational arg = arg0;
+		int numerator = getNumerator(), argNumerator = arg.getNumerator();
+		AbstractRational difference = subtract(arg0);
+		if(argNumerator >= 0)
+			retVal = difference.getNumerator();
+		else if(numerator >= 0)
+			retVal = 1;
+		else
+			retVal = -1 * difference.getNumerator();
+		return retVal;
+	}
 	
 }

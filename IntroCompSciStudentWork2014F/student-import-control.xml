@@ -22,6 +22,12 @@
 	<subpackage name="cb.masterorder">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="lewis.ap">
+		<allow pkg="java.util"/>
+	</subpackage>
+	<subpackage name="barrons">
+		<allow pkg="java.util"/>
+	</subpackage>
 	<subpackage name="unitconversion">
 		<allow pkg="java.util"/>
 	</subpackage>
