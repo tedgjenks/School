@@ -8,7 +8,7 @@ import java.util.List;
 import edu.jenks.dist.cb.scrambler.Scrambler;
 
 /**
- * @author Ted
+ * @author Ted Jenks
  *
  */
 public class WordScrambler implements Scrambler {
