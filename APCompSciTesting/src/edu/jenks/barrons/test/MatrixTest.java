@@ -43,7 +43,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseMatrix", exp.toString(), act.toString(), points);
+			logFail("reverseMatrix", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 		
@@ -57,7 +57,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseMatrix", exp.toString(), act.toString(), points);
+			logFail("reverseMatrix", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 		
@@ -70,7 +70,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseMatrix", exp.toString(), act.toString(), points);
+			logFail("reverseMatrix", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 		
@@ -83,7 +83,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseMatrix", exp.toString(), act.toString(), points);
+			logFail("reverseMatrix", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 	}
@@ -101,7 +101,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseAllRows", exp.toString(), act.toString(), points);
+			logFail("reverseAllRows", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 		
@@ -115,7 +115,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseAllRows", exp.toString(), act.toString(), points);
+			logFail("reverseAllRows", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 		
@@ -128,7 +128,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.deepEquals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseAllRows", exp.toString(), act.toString(), points);
+			logFail("reverseAllRows", Arrays.toString(exp), Arrays.toString(act), points);
 			return;
 		}
 	}
@@ -144,7 +144,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.equals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseArray example", exp.toString(), act.toString(), points);
+			logFail("reverseArray example", Arrays.toString(exp), Arrays.toString(act), points);
 			continueTesting = false;
 			return;
 		}
@@ -157,7 +157,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.equals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseArray example", exp.toString(), act.toString(), points);
+			logFail("reverseArray example", Arrays.toString(exp), Arrays.toString(act), points);
 			continueTesting = false;
 			return;
 		}
@@ -169,7 +169,7 @@ public class MatrixTest extends Testable {
 		if(Arrays.equals(exp, act))
 			totalPoints += points;
 		else {
-			logFail("reverseArray example", exp.toString(), act.toString(), points);
+			logFail("reverseArray example", Arrays.toString(exp), Arrays.toString(act), points);
 			continueTesting = false;
 			return;
 		}

@@ -1,12 +1,12 @@
 package edu.jenks.google.drive;
 
+import static java.lang.System.out;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.regex.Pattern;
-
 import edu.jenks.util.FileUtil;
 
 public class CopyFileHelper {
@@ -58,11 +58,29 @@ public class CopyFileHelper {
 			logFile.delete();
 	}
 	
+	public static void handleCopies(String directory, String fileName) {
+		final String javaExt = ".java";
+		String regExp = fileName + "\\s\\(.*\\)" + "\\" + javaExt;
+		Pattern pattern = Pattern.compile(regExp);
+		File dest = new File(directory + "\\" + fileName + javaExt);
+		File[] copies = FileUtil.listFiles(directory, pattern);
+		for(File copy : copies) {
+			String copyAbsPath = copy.getAbsolutePath();
+			if(dest.exists()) {
+				copy.delete();
+				out.println("GD Copy deleted: " + copyAbsPath);
+			} else {
+				FileUtil.renameFile(copy, dest);
+				out.println("GD Copy renamed: " + copyAbsPath);
+			}
+		}
+	}
+	
 	public static boolean copyStudentFilesFromTurnIn(String source, final String fileName, String dest, boolean delete) throws IOException {
 		File sourceFile = new File(source);
 		boolean sourceFileExists = sourceFile.exists();
 		if(sourceFileExists) {
-			File destDir = makeDestinationDirectories(dest);
+			makeDestinationDirectories(dest);
 			//String dest = destDir.getAbsolutePath() + "/";
 			//System.out.println("destDir: " + dest);
 			dest += fileName;

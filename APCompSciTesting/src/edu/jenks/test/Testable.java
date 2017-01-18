@@ -92,9 +92,13 @@ public abstract class Testable implements Runnable {
 		if(getPointsAvailable() == finalPoints)
 			feedbackLogger.log(Level.INFO, "Congratulations!  You earned all available points!");
 		else {
-			double pointsAvailable = getPointsAvailable() - penaltyPoints - finalPoints;
-			if(pointsAvailable > 0)
-				feedbackLogger.log(Level.INFO, "You can earn another " + pointsAvailable + " points.");
+			double pointsAvailableAfterPenalty = getPointsAvailable() - penaltyPoints - finalPoints;
+			if(finalPoints == 0)
+				feedbackLogger.log(Level.INFO, "KABOOM!  Your object(s) exploded!");
+			else if(finalPoints / getPointsAvailable() <= .5)
+				feedbackLogger.log(Level.INFO, "Congratulations - here is your participation trophy!");
+			if(pointsAvailableAfterPenalty > 0)
+				feedbackLogger.log(Level.INFO, "You can earn another " + pointsAvailableAfterPenalty + " points.");
 		}
 		String percent = NumberFormat.getPercentInstance().format(finalPoints / getPointsAvailable());
 		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + finalPoints + " -> " + percent);
@@ -171,6 +175,14 @@ public abstract class Testable implements Runnable {
 	
 	public void logFail(String message, double expected, double actual, int points) {
 		logFail(message, String.valueOf(expected), String.valueOf(actual), points);
+	}
+	
+	public void logFail(String message, Object expected, Object actual, int points) {
+		logFail(message, expected == null ? "null" : expected.toString(), actual == null ? "null" : actual.toString(), points);
+	}
+	
+	public void logFail(String message, boolean expected, boolean actual, int points) {
+		logFail(message, Boolean.toString(expected), Boolean.toString(actual), points);
 	}
 	
 	public void logFail(String message, String expected, String actual, int points) {

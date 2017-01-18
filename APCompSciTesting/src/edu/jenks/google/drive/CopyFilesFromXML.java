@@ -40,6 +40,14 @@ public class CopyFilesFromXML {
 		}
 	}
 	
+	private static void handleCopies(String studentDirPath, String fileName) {
+		int beginFileExt = fileName.lastIndexOf('.');
+		if(beginFileExt > 0) {
+			String fileNameNoExtension = fileName.substring(0, beginFileExt);
+			CopyFileHelper.handleCopies(studentDirPath, fileNameNoExtension);
+		}
+	}
+	
 	private static void processProjects(List<Element> projects, File[] studentDirs) throws IOException, DataConversionException {
 		int totalStudentProjects = 0;
 		int projectsProcessed = 0;
@@ -55,11 +63,15 @@ public class CopyFilesFromXML {
 			for(Element file : files) {
 				String fileName = file.getText();
 				for(int index = studentDirs.length - 1; index >= 0; index--) {
-					//out.println(studentDirs[index].getName() + ", " + fileName + ", " + targetEclipseRoot + PACKAGE_ROOT + ", " + turninDirSuffix);
-					String source = studentDirs[index].getPath() + "\\" + fileName;
+					String studentDirPath = studentDirs[index].getPath();
+					handleCopies(studentDirPath, fileName);
+					String source = studentDirPath + "\\" + fileName;
+					//out.println("Suffix: " + turninDirSuffix);
 					Student student = CopyFileHelper.getStudent(source, turninDirSuffix);
 					String generalDest = targetEclipseRoot + PACKAGE_ROOT;
 					String packageDest = new StringBuilder(50).append(generalDest).append(student.getLastName()).append("/").append(student.getFirstName()).append("/").toString().toLowerCase();
+					//out.println("source: " + source);
+					//out.println("fileName: " + fileName);
 					if(CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, packageDest, false)) {
 						studentsToProcess.add(student);
 						if(!testMode) {
@@ -68,7 +80,7 @@ public class CopyFilesFromXML {
 						}
 						String mossDest = new StringBuilder(50).append(MOJI_ROOT).append(student.getLastName()).append(student.getFirstName()).append("/").toString();
 						CopyFileHelper.copyStudentFilesFromTurnIn(source, fileName, mossDest, true);
-						System.out.println("Copied " + fileName + " for " + student);
+						out.println("Copied " + fileName + " for " + student);
 					}
 				}
 			}

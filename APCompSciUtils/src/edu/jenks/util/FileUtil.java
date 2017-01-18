@@ -30,6 +30,18 @@ public class FileUtil {
 		return packages.iterator();
 	}
 	
+	public static boolean renameFile(File currentFile, File newFile) {
+		boolean success = false;
+		if(currentFile != null && newFile != null && currentFile.exists())
+			success = currentFile.renameTo(newFile);
+		return success;
+	}
+	
+	public static File[] listFiles(String directory, final Pattern pattern) {
+		File fileDir = new File(directory);
+		return listFiles(fileDir, pattern);
+	}
+	
 	public static File[] listFiles(File directory, final Pattern pattern) {
 		FilenameFilter textFilter = new FilenameFilter() {
 			@Override

@@ -27,7 +27,7 @@ public abstract class AbstractMatrix {
 	 *    are the same as the original elements of <code>mat</code> when read<br>
 	 *    from the bottom corner, right to left, going upward.<br>
 	 *  - <code>mat[0][0]</code> contains what was originally the last element.<br>
-	 *  - <code>mat[mat.length-1][mat[0].length-1</code> contains what was<br>
+	 *  - <code>mat[mat.length-1][mat[0].length-1]</code> contains what was<br>
 	 *    originally the first element.
 	 */
 	public abstract void reverseMatrix();

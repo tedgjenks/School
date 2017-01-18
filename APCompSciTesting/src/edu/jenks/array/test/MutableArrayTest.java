@@ -20,7 +20,7 @@ public class MutableArrayTest extends Testable {
 
 	public MutableArrayTest() {}
 	
-	public void testClear() {
+	public void testClear() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 2;
 		String message = "clear";
 		int size = 10;
@@ -35,7 +35,7 @@ public class MutableArrayTest extends Testable {
 			logFail(message);
 	}
 	
-	public void testIsEmpty() {
+	public void testIsEmpty() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 2;
 		String message = "is empty";
 		int size = 10;
@@ -62,7 +62,7 @@ public class MutableArrayTest extends Testable {
 	}
 	
 	// add, set, get, remove
-	public void test08IndexOutOfBounds() {
+	public void test08IndexOutOfBounds() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 5;
 		String message = "index out of bounds";
 		boolean pass = true;
@@ -126,7 +126,7 @@ public class MutableArrayTest extends Testable {
 			logFail(message);
 	}
 	
-	public void test07Set() {
+	public void test07Set() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 6;
 		String message = "set";
 		int size = 10;
@@ -148,7 +148,7 @@ public class MutableArrayTest extends Testable {
 		continueTesting = testListEquality(points, message, expected, actual, size);
 	}
 	
-	public void test06Remove() {
+	public void test06Remove() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 6;
 		String message = "remove";
 		int size = 10;
@@ -167,7 +167,7 @@ public class MutableArrayTest extends Testable {
 		continueTesting = testListEquality(points, message, expected, actual, size);
 	}
 	
-	public void test05Get() {
+	public void test05Get() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 6;
 		String message = "get";
 		int size = 10;
@@ -188,7 +188,7 @@ public class MutableArrayTest extends Testable {
 		}
 	}
 	
-	public void test04AddIndex() {
+	public void test04AddIndex() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 6;
 		String message = "add index";
 		int size = 5;
@@ -208,7 +208,7 @@ public class MutableArrayTest extends Testable {
 		continueTesting = testListEquality(points, message, expected, actual, 10);
 	}
 	
-	public void test03AddTail() {
+	public void test03AddTail() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 3;
 		String message = "add tail";
 		int size = 10;
@@ -248,7 +248,7 @@ public class MutableArrayTest extends Testable {
 		return pass;
 	}
 	
-	public void test02ToArray() {
+	public void test02ToArray() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 6;
 		String message = "toArray";
 		int expLength = 1;
@@ -277,7 +277,7 @@ public class MutableArrayTest extends Testable {
 		}
 	}
 	
-	public void test01SingleAdd() {
+	public void test01SingleAdd() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int points = 3;
 		String message = "single add";
 		String element = "e0";
@@ -315,23 +315,14 @@ public class MutableArrayTest extends Testable {
 	@Override
 	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		List studentInstance = studentInstance(5);
-		if(studentInstance != null)
-			totalPoints += 49;
-		else {
-			continueTesting = false;
-			logFail("object creation");
-		}
+		studentInstance(5);
+		totalPoints += 49;
 	}
 	
-	private List studentInstance(int capacity) {
+	private List studentInstance(int capacity) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		List instance = null;
-		try {
-			Object[] value = {capacity};
-			instance = (List)ReflectionUtil.newInstance(studentClassName, CONSTRUCTOR_TYPE, value);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
-			logException("studentInstance", e);
-		}
+		Object[] value = {capacity};
+		instance = (List)ReflectionUtil.newInstance(studentClassName, CONSTRUCTOR_TYPE, value);
 		return instance;
 	}
 

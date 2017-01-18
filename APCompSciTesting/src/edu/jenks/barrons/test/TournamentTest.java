@@ -154,7 +154,12 @@ public class TournamentTest extends Testable {
 		Player newPlayer = new Player(playerName, index);
 		expSlots[index] = newPlayer;
 		actPlayer = studentTournament.requestSlot(playerName);
-		if(!newPlayer.equals(actPlayer) || !expEqualsAct(expSlots, expWaitingList, studentTournament, method + " - first request", points)) {
+		if(!newPlayer.equals(actPlayer)) {
+			logFail(method + " - returned player", newPlayer, actPlayer, points);
+			continueTesting = passAll = false;
+			return;
+		}
+		if(!expEqualsAct(expSlots, expWaitingList, studentTournament, method + " - first request", points)) {
 			continueTesting = passAll = false;
 			return;
 		}

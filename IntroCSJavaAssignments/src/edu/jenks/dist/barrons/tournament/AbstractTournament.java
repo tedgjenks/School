@@ -38,10 +38,11 @@ public abstract class AbstractTournament {
 	
 	/**
 	 * If there are any empty slots (slots with no <code>Player</code>)<br>
-	 * assign the player with the specified <code>playerName</code> to an<br>
+	 * assign the player with the specified <code>playerName</code> to the first<br>
 	 * empty slot. Create and return the new <code>Player</code>.<br>
 	 * If there are not available slots, add the player's name<br>
-	 * to the end of the waiting list and return <code>null</code>.
+	 * to the end of the waiting list and return <code>null</code>.<br>
+	 * <b>Precondition:</b> <code>playerName</code> is not <code>null</code>.
 	 * @param playerName the name of the person requesting a slot
 	 * @return the new <code>Player</code>
 	 */
