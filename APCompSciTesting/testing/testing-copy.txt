@@ -1,48 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE projects SYSTEM "testing-config.dtd">
 <projects test-mode="false">
-  <eclipse-student-root>C:/Users/Ted/git/School14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
+  <eclipse-student-root>C:/Users/jenkst/ICS_repository/School14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
+  <moji-root>C:/Users/jenkst/JavaPrograms/F2016_ICS/</moji-root>
   <google-drive>
-    <turnin-root>C:/Users/Ted/Google Drive/Courses/IntroCS/TurnIn/F2015_ICS/</turnin-root>
+    <turnin-root>C:/Users/jenkst/Google Drive/Courses/ComputerScience/CSA/TurnIn/S2017_CSA/</turnin-root>
     <turnin-dir-suffix>_ICS_TurnIn</turnin-dir-suffix>
   </google-drive>
-  <project>
-    <name>UnitConversion</name>
-    <package-root>edu/unitconversion/</package-root>
-    <test-class>edu.jenks.unitconversion.test.ConvertibleTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <files>
-      <file>MetricLengthConverter.java</file>
-    </files>
-    <students />
-  </project>
-  <project>
-    <name>RandomPhoneNumber</name>
-    <package-root>edu/phone/</package-root>
-    <test-class>edu.jenks.phone.test.RandomPhoneNumberTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <files>
-      <file>RandomPhoneNumber.java</file>
-    </files>
-    <students />
-  </project>
-  <project>
-    <name>Rational</name>
-    <package-root>edu/math/</package-root>
-    <test-class>edu.jenks.math.test.RationalTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <files>
-      <file>Rational.java</file>
-    </files>
-    <students />
-  </project>
-  <project>
+  <project active="false">
     <name>Banking</name>
     <package-root>edu/banking/</package-root>
     <test-class>edu.jenks.banking.test.BankingTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>1/4/2016</due-date>
+      <due-date>1/4/2017</due-date>
       <penalty>10</penalty>
     </deadline>
     <files>
@@ -53,27 +24,13 @@
     </files>
     <students />
   </project>
-  <project>
-    <name>MutableArray</name>
-    <package-root>edu/array/</package-root>
-    <test-class>edu.jenks.array.test.MutableArrayTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <deadline>
-      <due-date>1/8/2016</due-date>
-      <penalty>10</penalty>
-    </deadline>
-    <files>
-      <file>MutableArray.java</file>
-    </files>
-    <students />
-  </project>
-  <project>
+  <project active="false">
     <name>ClimbingClub</name>
     <package-root>edu/cb/climbingclub/</package-root>
-    <test-class>edu.jenks.cb.climbingclub.test.ClimbingClubTest</test-class>
+    <test-class>edu.jenks.cb.test.ClimbingClubTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>12/9/2015</due-date>
+      <due-date>12/9/2016</due-date>
       <penalty>10</penalty>
     </deadline>
     <files>
@@ -83,27 +40,42 @@
     </files>
     <students />
   </project>
-  <project>
-    <name>Lunch</name>
-    <package-root>edu/cb/lunch/</package-root>
-    <test-class>edu.jenks.cb.lunch.test.LunchTest</test-class>
+  <project active="true">
+    <name>BaseConverter</name>
+    <package-root>edu/math/</package-root>
+    <test-class>edu.jenks.math.test.BaseConverterTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>12/11/2015</due-date>
+      <due-date>1/31/2017</due-date>
       <penalty>10</penalty>
     </deadline>
     <files>
-      <file>Trio.java</file>
+      <file>BaseConverter.java</file>
     </files>
     <students />
   </project>
-  <project>
-    <name>Scrambler</name>
-    <package-root>edu/cb/scrambler/</package-root>
-    <test-class>edu.jenks.cb.scrambler.test.ScramblerTest</test-class>
+  <project active="true">
+    <name>Matrix</name>
+    <package-root>edu/barrons/matrix/</package-root>
+    <test-class>edu.jenks.barrons.test.MatrixTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>12/15/2015</due-date>
+      <due-date>1/27/2017</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>ArrayUtil.java</file>
+      <file>Matrix.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>Scrambler</name>
+    <package-root>edu/cb/scrambler/</package-root>
+    <test-class>edu.jenks.cb.test.ScramblerTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/15/2016</due-date>
       <penalty>10</penalty>
     </deadline>
     <files>
@@ -111,17 +83,205 @@
     </files>
     <students />
   </project>
-  <project>
-    <name>MusicDownloads</name>
-    <package-root>edu/cb/songlist/</package-root>
-    <test-class>edu.jenks.cb.songlist.test.MusicDownloadsTest</test-class>
+  <project active="true">
+    <name>Lunch</name>
+    <package-root>edu/cb/lunch/</package-root>
+    <test-class>edu.jenks.cb.test.LunchTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>12/17/2015</due-date>
+      <due-date>12/14/2016</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>Trio.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>MusicDownloads</name>
+    <package-root>edu/cb/songlist/</package-root>
+    <test-class>edu.jenks.cb.test.MusicDownloadsTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/7/2016</due-date>
       <penalty>10</penalty>
     </deadline>
     <files>
       <file>MusicDownloads.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>SelfCheckout</name>
+    <package-root>edu/inheritance/</package-root>
+    <test-class>edu.jenks.inheritance.test.SelfCheckoutTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>1/4/2017</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>AlcoholItem.java</file>
+      <file>BarcodeItem.java</file>
+      <file>Item.java</file>
+      <file>SelfCheckout.java</file>
+      <file>WeighedItem.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>Tournament</name>
+    <package-root>edu/barrons/</package-root>
+    <test-class>edu.jenks.barrons.test.TournamentTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>11/30/2016</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>Tournament.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>Sentence</name>
+    <package-root>edu/barrons/</package-root>
+    <test-class>edu.jenks.barrons.test.SentenceTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>12/1/2016</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>Sentence.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>HighSchoolClass</name>
+    <package-root>edu/lewis/ap/</package-root>
+    <test-class>edu.jenks.lewis.ap.test.HighSchoolClassTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>11/17/2016</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>HighSchoolClass.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>MutableArray</name>
+    <package-root>edu/array/</package-root>
+    <test-class>edu.jenks.array.test.MutableArrayTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <deadline>
+      <due-date>11/15/2016</due-date>
+      <penalty>10</penalty>
+    </deadline>
+    <files>
+      <file>MutableArray.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>Name</name>
+    <package-root>edu/lewis/ap/</package-root>
+    <test-class>edu.jenks.lewis.ap.test.NameTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>Name.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>Rational</name>
+    <package-root>edu/math/</package-root>
+    <test-class>edu.jenks.math.test.RationalTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>Rational.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>MidtermICS</name>
+    <package-root>edu/midterm/ics/</package-root>
+    <test-class>edu.jenks.midterm.ics.test.MidtermTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>Midterm.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="true">
+    <name>Student</name>
+    <package-root>edu/student/</package-root>
+    <test-class>edu.jenks.student.test.StudentTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>Student.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>Series</name>
+    <package-root>edu/math/</package-root>
+    <test-class>edu.jenks.math.test.SeriesTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>Series.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>UnitConversion</name>
+    <package-root>edu/unitconversion/</package-root>
+    <test-class>edu.jenks.unitconversion.test.ConvertibleTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>MetricLengthConverter.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>Palindrome</name>
+    <package-root>edu/palindrome/</package-root>
+    <test-class>edu.jenks.palindrome.test.PalindromeCheckerTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>PalindromeChecker.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>GregorianCalendar</name>
+    <package-root>edu/gcal/</package-root>
+    <test-class>edu.jenks.gcal.test.GregorianCalendarTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>GregorianCalendar.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>Payroll</name>
+    <package-root>edu/payroll/</package-root>
+    <test-class>edu.jenks.payroll.test.PayrollCalculatorTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>PayrollCalculator.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>RandomPhoneNumber</name>
+    <package-root>edu/phone/</package-root>
+    <test-class>edu.jenks.phone.test.RandomPhoneNumberTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>RandomPhoneNumber.java</file>
     </files>
     <students />
   </project>
