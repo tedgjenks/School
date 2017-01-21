@@ -28,9 +28,6 @@
 	<subpackage name="barrons">
 		<allow pkg="java.util"/>
 	</subpackage>
-	<subpackage name="unitconversion">
-		<allow pkg="java.util"/>
-	</subpackage>
 	<subpackage name="phone">
 		<allow pkg="java.util"/>
 	</subpackage>
