@@ -1,9 +1,9 @@
 Coding Problems -> Illegal Type
 illegalClassNames: java.lang.Class, java.lang.ClassLoader, java.lang.ClassValue, java.lang.Compiler, java.lang.InheritableThreadLocal, java.lang.Package, java.lang.Process, java.lang.ProcessBuilder, java.lang.ProcessBuilder.Redirect, java.lang.Runtime, java.lang.RuntimePermission, java.lang.SecurityManager, java.lang.Thread, java.lang.ThreadGroup, java.lang.ThreadLocal
 Regex:
-.*\.[A-Z][a-z]+.*
-^((?!import\s).)*\.[A-Z][a-z]+.*
-System\.\w*\(.*\)
+^((?!import\s).)*\.[A-Z][a-z]+.* #ignore comments - prevents fully qualified class names except in imports
+System\.\w+\(.*\) #allows System.out, but prevents System method calls
 (parseInt|parseUnsignedInt|toString|toUnsignedString|valueOf)\([^\)]+,[^\)]+\)
 
-Archive (caught by more general): new\s+.*\.[A-Z][a-z]+.*
+Archive (errors on legal imports): .*\.[A-Z][a-z]+.*
+new\s+.*\.[A-Z][a-z]+.*

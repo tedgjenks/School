@@ -91,6 +91,7 @@ public class BaseConverterTest extends Testable {
 			continueTesting = false;
 	}
 	
+	// 10 points
 	public void test03ConvertBase() {
 		boolean allPass = true;
 		String message = "convertBase", currentNumber, exp, act;
@@ -99,7 +100,7 @@ public class BaseConverterTest extends Testable {
 		//convert up - do not use 2 or 10
 		decNumberToConvert = RANDOM.nextInt(9000) + 1000;
 		currentRadix = 3 + RANDOM.nextInt(7);
-		newRadix = 11 + RANDOM.nextInt(9);
+		newRadix = 11 + RANDOM.nextInt(AbstractBaseConverter.MAX_RADIX - 11);
 		currentNumber = Integer.toString(decNumberToConvert, currentRadix);
 		exp = Integer.toString(decNumberToConvert, newRadix);
 		act = studentInstance.convertBase(currentNumber, currentRadix, newRadix);
@@ -112,7 +113,7 @@ public class BaseConverterTest extends Testable {
 		
 		//convert down - do not use 2 or 10
 		decNumberToConvert = RANDOM.nextInt(9000) + 1000;
-		currentRadix = 11 + RANDOM.nextInt(9);
+		currentRadix = 11 + RANDOM.nextInt(AbstractBaseConverter.MAX_RADIX - 11);
 		newRadix = 3 + RANDOM.nextInt(7);
 		currentNumber = Integer.toString(decNumberToConvert, currentRadix);
 		exp = Integer.toString(decNumberToConvert, newRadix);
@@ -130,10 +131,22 @@ public class BaseConverterTest extends Testable {
 			continueTesting = false;
 	}
 	
+	private boolean equalToLastSignificatDecimal(String exp, String act) {
+		boolean equal = false;
+		int decIndexExp = exp.indexOf('.'), decIndexAct = act.indexOf('.');
+		if(decIndexExp < 0)
+			throw new IllegalArgumentException("Silly Mr. Jenks - your expected float value does not have a decimal point!  What are you doing?");
+		if(decIndexAct >= 0) {
+			int endIndex = Math.min(exp.length(), decIndexExp + AbstractBaseConverter.DECIMAL_PRECISION);
+			equal = endIndex <= act.length() && exp.substring(0, endIndex).equals(act.substring(0, endIndex));
+		}
+		return equal;
+	}
+	
 	public void test04ConvertBaseWithFloat() {
 		boolean allPass = true;
 		String message = "convertBaseWithFloat", logMessage, currentNumber, exp, act;
-		int points = 1, currentRadix, newRadix, decNumberToConvert;
+		int points = 1, currentRadix, newRadix;
 		
 		currentNumber = "10.1";
 		currentRadix = 2;
@@ -141,7 +154,7 @@ public class BaseConverterTest extends Testable {
 		exp = "2.5";
 		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
 		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-		if(exp.equals(act)) {
+		if(equalToLastSignificatDecimal(exp, act)) {
 			totalPoints += points;
 			logPass(logMessage);
 		} else {
@@ -155,7 +168,7 @@ public class BaseConverterTest extends Testable {
 		exp = "1.1";
 		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
 		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-		if(exp.equals(act)) {
+		if(equalToLastSignificatDecimal(exp, act)) {
 			totalPoints += points;
 			logPass(logMessage);
 		} else {
@@ -163,8 +176,56 @@ public class BaseConverterTest extends Testable {
 			logFail(logMessage, exp, act, points);
 		}
 		
-		if(allPass)
+		// convert base 10 down
+		currentNumber = String.valueOf(1 + 100 * RANDOM.nextDouble());
+		currentRadix = 10;
+		newRadix = 3 + RANDOM.nextInt(currentRadix);
+		exp = solutionInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
+		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
+		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
+		if(equalToLastSignificatDecimal(exp, act)) {
+			totalPoints += points;
+			logPass(logMessage, exp, act);
+		} else {
+			allPass = false;
+			logFail(logMessage, exp, act, points);
+		}
+		
+		// convert base 10 up
+		currentNumber = String.valueOf(1 + 100 * RANDOM.nextDouble());
+		currentRadix = 10;
+		newRadix = 11 + RANDOM.nextInt(AbstractBaseConverter.MAX_RADIX - 11);
+		exp = solutionInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
+		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
+		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
+		if(equalToLastSignificatDecimal(exp, act)) {
+			totalPoints += points;
+			logPass(logMessage, exp, act);
+		} else {
+			allPass = false;
+			logFail(logMessage, exp, act, points);
+		}
+		
+		// convert between bases 3 and MAX
+		final int minRadix = 3, maxRadix = AbstractBaseConverter.MAX_RADIX;
+		for(int count = 100; count > 0 && allPass; count--) {
+			String decNumber = String.valueOf(1 + 100 * RANDOM.nextDouble());
+			currentRadix = minRadix + RANDOM.nextInt(maxRadix - minRadix);
+			currentNumber = solutionInstance.convertBaseWithFloat(decNumber, 10, currentRadix);
+			newRadix = minRadix + RANDOM.nextInt(maxRadix - minRadix);
+			exp = solutionInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
+			act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
+			logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
+			if(!equalToLastSignificatDecimal(exp, act)) {
+				allPass = false;
+				logFail(logMessage, exp, act, points);
+			}
+		}
+		
+		if(allPass) {
+			totalPoints += 4;
 			logPass(message);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -172,7 +233,7 @@ public class BaseConverterTest extends Testable {
 	 */
 	@Override
 	public int getPointsAvailable() {
-		return 94;
+		return 100;
 	}
 
 	/* (non-Javadoc)

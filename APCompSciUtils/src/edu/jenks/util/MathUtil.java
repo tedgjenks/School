@@ -21,8 +21,8 @@ public class MathUtil {
 		return Math.abs(d1 - d2) <= Math.max(Math.abs(d1),  Math.abs(d2)) * delta;
 	}
 	
-	public static int calculateRadixPrecision(double radix10Precision, double desiredRadix) {
-		return (int)(radix10Precision / Math.log10(desiredRadix));
+	public static long calculateRadixPrecision(double precisionCurrentRadix, double currentRadix, double desiredRadix) {
+		return Math.round(precisionCurrentRadix / (Math.log10(desiredRadix) / Math.log10(currentRadix)));
 	}
 	
 	public static boolean isRealNumber(String s) {
@@ -55,5 +55,9 @@ public class MathUtil {
 		if(quotient > 1)
 			factors.add(quotient);
 		return factors;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(calculateRadixPrecision(2, 6, 10));
 	}
 }

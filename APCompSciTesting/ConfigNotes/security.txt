@@ -1,3 +1,6 @@
+create a 'security' folder
+create a java.policy file in the folder with contents (modify for specific device):
+
 grant codeBase "file:${{java.ext.dirs}}/*" {
 	permission java.security.AllPermission;
 };
@@ -13,6 +16,7 @@ grant codeBase "file:/D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/APCom
 grant codeBase "file:/D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/APCompSciUtils/bin/-" {
 	permission java.security.AllPermission;
 };
+
 
 Set TestRunner VM arguments:
 -Djava.security.manager -Djava.security.policy==${git_work_tree}${project_path}/security/java.policy

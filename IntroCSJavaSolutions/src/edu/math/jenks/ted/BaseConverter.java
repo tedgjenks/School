@@ -18,6 +18,8 @@ public class BaseConverter extends AbstractBaseConverter {
 	 */
 	@Override
 	public String convertBase(String numberToConvert, int currentRadix, int newRadix) {
+		if(!radixSupported(currentRadix) || !radixSupported(newRadix))
+			throw new IllegalArgumentException("Radix out of bounds. current : " + currentRadix + "; new: " + newRadix);
 		//System.out.println("Convert " + numberToConvert + " base " + currentRadix + " to base " + newRadix);
 		String base10Int = ((currentRadix == 10) ? numberToConvert : convertToBase10(numberToConvert, currentRadix));
 		//System.out.println("converted base 10 number: " + base10Int);
@@ -29,28 +31,33 @@ public class BaseConverter extends AbstractBaseConverter {
 	 */
 	@Override
 	public String convertBaseWithFloat(String numberToConvert, int currentRadix, int newRadix) {
+		if(!radixSupported(currentRadix) || !radixSupported(newRadix))
+			throw new IllegalArgumentException("Radix out of bounds. current : " + currentRadix + "; new: " + newRadix);
 		String convertedNumber = null;
-		int decimalIndex = numberToConvert.indexOf(".");
-		int numberToConvertLength = numberToConvert.length();
-		if(decimalIndex < 0) // no decimal
-			convertedNumber = convertBase(numberToConvert, currentRadix, newRadix);
-		else if(decimalIndex == numberToConvertLength - 1) // nothing after decimal
-			convertedNumber = convertBase(numberToConvert.substring(0, numberToConvertLength - 1), currentRadix, newRadix);
-		else {
-			StringBuilder sb = new StringBuilder(10);
-			if(decimalIndex == 0) // nothing before the decimal
-				sb.append("0");
-			else
-				sb.append(convertBase(numberToConvert.substring(0, decimalIndex), currentRadix, newRadix));
-			
-			//System.out.println("Value before float conversion: " + sb);
-			String afterDecimal = numberToConvert.substring(decimalIndex + 1, numberToConvertLength);
-			//System.out.println("Float part before conversion: " + afterDecimal);
-			double base10Float = currentRadix == 10 ? Double.parseDouble("." + afterDecimal) : convertFloatToBase10(afterDecimal, currentRadix);
-			//System.out.println("Float part converted to base 10: " + base10Float);
-			sb.append(convertFloatFromBase10(base10Float, newRadix));
-			convertedNumber = sb.toString();
-		}
+		if(currentRadix != newRadix) {
+			int decimalIndex = numberToConvert.indexOf(".");
+			int numberToConvertLength = numberToConvert.length();
+			if(decimalIndex < 0) // no decimal
+				convertedNumber = convertBase(numberToConvert, currentRadix, newRadix);
+			else if(decimalIndex == numberToConvertLength - 1) // nothing after decimal
+				convertedNumber = convertBase(numberToConvert.substring(0, numberToConvertLength - 1), currentRadix, newRadix);
+			else {
+				StringBuilder sb = new StringBuilder(10);
+				if(decimalIndex == 0) // nothing before the decimal
+					sb.append("0");
+				else
+					sb.append(convertBase(numberToConvert.substring(0, decimalIndex), currentRadix, newRadix));
+				
+				//System.out.println("Value before float conversion: " + sb);
+				String afterDecimal = numberToConvert.substring(decimalIndex + 1, numberToConvertLength);
+				//System.out.println("Float part before conversion: " + afterDecimal);
+				double base10Float = currentRadix == 10 ? Double.parseDouble("." + afterDecimal) : convertFloatToBase10(afterDecimal, currentRadix);
+				//System.out.println("Float part converted to base 10: " + base10Float);
+				sb.append(convertFloatFromBase10(base10Float, newRadix));
+				convertedNumber = sb.toString();
+			}
+		} else
+			convertedNumber = numberToConvert;
 		return convertedNumber;
 	}
 
@@ -72,7 +79,7 @@ public class BaseConverter extends AbstractBaseConverter {
 
 	private String convertFloatFromBase10(double base10Float, int newRadix) {
 		if(base10Float > 1)
-			throw new IllegalArgumentException("argument must be less than 1");
+			throw new IllegalArgumentException("argument must be less than 1: " + base10Float);
 		StringBuilder sb = new StringBuilder(10);
 		if(newRadix == 10) {
 			String s = String.valueOf(base10Float);
@@ -80,14 +87,15 @@ public class BaseConverter extends AbstractBaseConverter {
 		} else {
 			sb.append(".");
 			double factor = base10Float;
-			int newRadixPrecision = MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, newRadix);
-			for(int count = newRadixPrecision; count > 0 && factor > 0; count--) {
+			long newRadixPrecision = MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, 10, newRadix) + 2;
+			for(long count = newRadixPrecision; count > 0 && factor > 0; count--) {
 				double product = factor * newRadix;
-				if(product > 9) {
-					char alphaDigit = translateAlphaDigit((int)product);
+				int wholeProduct = (int)product;
+				if(wholeProduct > 9) {
+					char alphaDigit = translateAlphaDigit(wholeProduct);
 					sb.append(alphaDigit);
 				} else
-					sb.append((int)product);
+					sb.append(wholeProduct);
 				factor = MathUtil.stripInteger(product);
 			}
 		}
@@ -112,7 +120,7 @@ public class BaseConverter extends AbstractBaseConverter {
 	
 	private double convertFloatToBase10(String numberToConvert, int currentRadix) {
 		double base10Number = 0;
-		int newRadixPrecision = MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, currentRadix);
+		int newRadixPrecision = (int)MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, currentRadix, 10) + 2;
 		for(int loopCount = newRadixPrecision, numberToConvertIndex = 0, numberToConvertLength = numberToConvert.length(), power = -1;
 				loopCount > 0 && numberToConvertIndex < numberToConvertLength;
 				loopCount--, numberToConvertIndex++, power--) {
@@ -158,6 +166,18 @@ public class BaseConverter extends AbstractBaseConverter {
 				case 'f':
 					base10Value = 15;
 					break;
+				case 'g':
+					base10Value = 16;
+					break;
+				case 'h':
+					base10Value = 17;
+					break;
+				case 'i':
+					base10Value = 18;
+					break;
+				case 'j':
+					base10Value = 19;
+					break;
 				default:
 					throw new IllegalArgumentException("Unsupported digit: " + digit);
 			}
@@ -186,9 +206,33 @@ public class BaseConverter extends AbstractBaseConverter {
 			case 15:
 				alphaDigit = 'f';
 				break;
+			case 16:
+				alphaDigit = 'g';
+				break;
+			case 17:
+				alphaDigit = 'h';
+				break;
+			case 18:
+				alphaDigit = 'i';
+				break;
+			case 19:
+				alphaDigit = 'j';
+				break;
 			default:
 				throw new IllegalArgumentException(String.valueOf(digitOver9));
 		}
 		return alphaDigit;
+	}
+	
+	private boolean radixSupported(int radix) {
+		return radix >= MIN_RADIX && radix < MAX_RADIX;
+	}
+	
+	public static void main(String[] args) {
+		BaseConverter bc = new BaseConverter();
+		String curR = bc.convertBaseWithFloat("1.6443693833718012", 10, 8);
+		System.out.println(curR);
+		String newR = bc.convertBaseWithFloat(curR, 8, 16);
+		System.out.println(newR);
 	}
 }

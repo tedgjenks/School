@@ -1,12 +1,12 @@
 package jenks.system;
 
-import java.lang.reflect.Field;
+//import java.lang.reflect.Field;
 
 //import sun.misc.Unsafe;
 
 public class VirtualMachineDetails {
 	
-	private static boolean is64bit = true;
+	//private static boolean is64bit = true;
 	
 	/*public static void printAddresses(String label, Object... objects) {
 	    System.out.print(label + ": 0x");
