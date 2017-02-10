@@ -21,8 +21,18 @@ public class MathUtil {
 		return Math.abs(d1 - d2) <= Math.max(Math.abs(d1),  Math.abs(d2)) * delta;
 	}
 	
-	public static long calculateRadixPrecision(double precisionCurrentRadix, double currentRadix, double desiredRadix) {
-		return Math.round(precisionCurrentRadix / (Math.log10(desiredRadix) / Math.log10(currentRadix)));
+	public static double log(double input, int base) {
+		return Math.log(input) / Math.log(base);
+	}
+	
+	/**
+	 * @param precisionCurrentRadix the number of accurate decimal places in <code>currentRadix</code>
+	 * @param currentRadix
+	 * @param desiredRadix
+	 * @return the number of decimal places required for <code>desiredRadix</code> to maintain the precision
+	 */
+	public static long calculateRadixPrecision(double precisionCurrentRadix, int currentRadix, int desiredRadix) {
+		return (long) Math.ceil(precisionCurrentRadix / log(desiredRadix, currentRadix));
 	}
 	
 	public static boolean isRealNumber(String s) {
@@ -58,6 +68,7 @@ public class MathUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(calculateRadixPrecision(2, 6, 10));
+		assert(calculateRadixPrecision(2, 6, 10) == 2);
+		assert(calculateRadixPrecision(4, 10, 2) == 14);
 	}
 }

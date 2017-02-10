@@ -10,9 +10,14 @@ package edu.jenks.dist.math;
 public abstract class AbstractBaseConverter {
 	
 	/**
-	 * The expected number of correct decimal places
+	 * The default expected number of correct decimal places in the converted number
 	 */
 	public static final int DECIMAL_PRECISION = 5;
+	
+	/**
+	 * The maximum number of correct decimal places in the converted number
+	 */
+	public static final int MAX_DECIMAL_PRECISION = 30;
 	
 	/**
 	 * The minimum supported radix (2 inclusive)

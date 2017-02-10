@@ -22,7 +22,7 @@ public abstract class Testable implements Runnable {
 	private static final String TEST_METHOD_PREFIX = "test";
 	protected static final Object[] EMPTY_OJBECT_ARRAY = {};
 	
-	protected String studentPackage;
+	protected String studentPackage, inputToStudentCode;
 	protected Logger feedbackLogger;
 	protected int totalPoints, latePenalty = 0;
 	protected boolean continueTesting = true;
@@ -111,9 +111,14 @@ public abstract class Testable implements Runnable {
 			String methodName = method.getName();
 			feedbackLogger.log(Level.FINE, "Begin test of " + methodName);
 			try {
+				inputToStudentCode = null;
 				method.invoke(this, EMPTY_OJBECT_ARRAY);
 			} catch(Exception e) {
 				logException(methodName, e);
+				if(inputToStudentCode != null && inputToStudentCode.length() > 0) {
+					feedbackLogger.log(Level.WARNING, "input: " + inputToStudentCode);
+				}
+					
 			}
 			feedbackLogger.log(Level.FINE, "End test of " + methodName);
 		}

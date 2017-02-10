@@ -9,7 +9,7 @@ import edu.jenks.util.StringUtil;
 
 /**
  * @author Ted Jenks
- *
+ * TODO - use correct precision in intermediate steps
  */
 public class BaseConverter extends AbstractBaseConverter {
 
@@ -25,12 +25,9 @@ public class BaseConverter extends AbstractBaseConverter {
 		//System.out.println("converted base 10 number: " + base10Int);
 		return (newRadix == 10) ? base10Int : convertFromBase10(Integer.parseInt(base10Int), newRadix);
 	}
-
-	/* (non-Javadoc)
-	 * @see edu.jenks.dist.math.AbstractBaseConverter#convertBaseWithFloat(java.lang.String, int, int)
-	 */
-	@Override
-	public String convertBaseWithFloat(String numberToConvert, int currentRadix, int newRadix) {
+	
+	public String convertBaseWithFloat(String numberToConvert, int currentRadix, int newRadix, int newRadixPrecision) {
+		int precision = (int)MathUtil.calculateRadixPrecision(newRadixPrecision, newRadix, currentRadix) + 2;
 		if(!radixSupported(currentRadix) || !radixSupported(newRadix))
 			throw new IllegalArgumentException("Radix out of bounds. current : " + currentRadix + "; new: " + newRadix);
 		String convertedNumber = null;
@@ -51,9 +48,47 @@ public class BaseConverter extends AbstractBaseConverter {
 				//System.out.println("Value before float conversion: " + sb);
 				String afterDecimal = numberToConvert.substring(decimalIndex + 1, numberToConvertLength);
 				//System.out.println("Float part before conversion: " + afterDecimal);
-				double base10Float = currentRadix == 10 ? Double.parseDouble("." + afterDecimal) : convertFloatToBase10(afterDecimal, currentRadix);
+				precision = (int)MathUtil.calculateRadixPrecision(precision, currentRadix, 10) + 2;
+				double base10Float = currentRadix == 10 ? Double.parseDouble("." + afterDecimal) : convertFloatToBase10(afterDecimal, currentRadix, precision);
 				//System.out.println("Float part converted to base 10: " + base10Float);
-				sb.append(convertFloatFromBase10(base10Float, newRadix));
+				sb.append(convertFloatFromBase10(base10Float, newRadix, precision));
+				convertedNumber = sb.toString();
+			}
+		} else
+			convertedNumber = numberToConvert;
+		return convertedNumber;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.jenks.dist.math.AbstractBaseConverter#convertBaseWithFloat(java.lang.String, int, int)
+	 */
+	@Override
+	public String convertBaseWithFloat(String numberToConvert, int currentRadix, int newRadix) {
+		int precision = (int)MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, newRadix, currentRadix) + 2;
+		if(!radixSupported(currentRadix) || !radixSupported(newRadix))
+			throw new IllegalArgumentException("Radix out of bounds. current : " + currentRadix + "; new: " + newRadix);
+		String convertedNumber = null;
+		if(currentRadix != newRadix) {
+			int decimalIndex = numberToConvert.indexOf(".");
+			int numberToConvertLength = numberToConvert.length();
+			if(decimalIndex < 0) // no decimal
+				convertedNumber = convertBase(numberToConvert, currentRadix, newRadix);
+			else if(decimalIndex == numberToConvertLength - 1) // nothing after decimal
+				convertedNumber = convertBase(numberToConvert.substring(0, numberToConvertLength - 1), currentRadix, newRadix);
+			else {
+				StringBuilder sb = new StringBuilder(10);
+				if(decimalIndex == 0) // nothing before the decimal
+					sb.append("0");
+				else
+					sb.append(convertBase(numberToConvert.substring(0, decimalIndex), currentRadix, newRadix));
+				
+				//System.out.println("Value before float conversion: " + sb);
+				String afterDecimal = numberToConvert.substring(decimalIndex + 1, numberToConvertLength);
+				//System.out.println("Float part before conversion: " + afterDecimal);
+				precision = (int)MathUtil.calculateRadixPrecision(precision, currentRadix, 10) + 2;
+				double base10Float = currentRadix == 10 ? Double.parseDouble("." + afterDecimal) : convertFloatToBase10(afterDecimal, currentRadix, precision);
+				//System.out.println("Float part converted to base 10: " + base10Float);
+				sb.append(convertFloatFromBase10(base10Float, newRadix, precision));
 				convertedNumber = sb.toString();
 			}
 		} else
@@ -77,7 +112,7 @@ public class BaseConverter extends AbstractBaseConverter {
 		return convertBase(decimalNumber, 10, 2);
 	}
 
-	private String convertFloatFromBase10(double base10Float, int newRadix) {
+	private String convertFloatFromBase10(double base10Float, int newRadix, int precision) {
 		if(base10Float > 1)
 			throw new IllegalArgumentException("argument must be less than 1: " + base10Float);
 		StringBuilder sb = new StringBuilder(10);
@@ -87,8 +122,7 @@ public class BaseConverter extends AbstractBaseConverter {
 		} else {
 			sb.append(".");
 			double factor = base10Float;
-			long newRadixPrecision = MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, 10, newRadix) + 2;
-			for(long count = newRadixPrecision; count > 0 && factor > 0; count--) {
+			for(int count = precision; count > 0 && factor > 0; count--) {
 				double product = factor * newRadix;
 				int wholeProduct = (int)product;
 				if(wholeProduct > 9) {
@@ -118,10 +152,9 @@ public class BaseConverter extends AbstractBaseConverter {
 		return newBase.toString();
 	}
 	
-	private double convertFloatToBase10(String numberToConvert, int currentRadix) {
+	private double convertFloatToBase10(String numberToConvert, int currentRadix, int precision) {
 		double base10Number = 0;
-		int newRadixPrecision = (int)MathUtil.calculateRadixPrecision(DECIMAL_PRECISION, currentRadix, 10) + 2;
-		for(int loopCount = newRadixPrecision, numberToConvertIndex = 0, numberToConvertLength = numberToConvert.length(), power = -1;
+		for(int loopCount = precision, numberToConvertIndex = 0, numberToConvertLength = numberToConvert.length(), power = -1;
 				loopCount > 0 && numberToConvertIndex < numberToConvertLength;
 				loopCount--, numberToConvertIndex++, power--) {
 			int digit = parseDigit(numberToConvert.charAt(numberToConvertIndex));
