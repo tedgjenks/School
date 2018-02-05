@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Dec 13, 2017 11:30:56 AM by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="edu.jenks.scrape.gpa.hib.Student" table="STUDENT">
+        <id name="studentId" type="long">
+            <column name="STUDENT_ID" />
+            <generator class="assigned" />
+        </id>
+        <property name="firstName" type="java.lang.String">
+            <column name="F_NAME" />
+        </property>
+        <property name="lastName" type="java.lang.String">
+            <column name="L_NAME" />
+        </property>
+        <property name="gradeLevel" type="byte">
+            <column name="GRADE_LEVEL" />
+        </property>
+        <property name="rank" type="short">
+            <column name="RANK" />
+        </property>
+        <property name="gpa" type="java.lang.String">
+            <column name="GPA" />
+        </property>
+    </class>
+</hibernate-mapping>
