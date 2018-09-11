@@ -4,12 +4,8 @@ import edu.jenks.dist.student.AbstractStudent;
 import edu.jenks.dist.student.Address;
 
 /**
- * @author Ted Jenks
- *
- */
-/**
  * <p><b>Data:</b> three test scores (test numbers 1, 2, and 3).</p>
- * @author jenkst
+ * @author Ted Jenks
  *
  */
 public class Student extends AbstractStudent {

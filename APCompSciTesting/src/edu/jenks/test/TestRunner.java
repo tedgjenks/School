@@ -17,7 +17,6 @@ import edu.jenks.xml.JDOMHelper;
 
 public class TestRunner {
 	
-	public static final String XML_FILE_PATH = "testing/testing-config.xml";
 	private static final String PACKAGE_ROOT_TAG = "package-root";
 	private static final String DEADLINE_TAG = "deadline";
 	private static final String DUE_DATE_TAG = "due-date";
@@ -27,6 +26,7 @@ public class TestRunner {
 	private static final String PROJECT_MAX_RUNTIME_SECS_TAG = "max-runtime-secs";
 	private static final String FORMATTED_DATE;
 	
+	public static String xmlFilePath;
 	private static Document document;
 	private static boolean testMode;
 	private static String eclipseStudentRoot;
@@ -44,19 +44,29 @@ public class TestRunner {
 	public static void main(String[] args) {
 		out.println("Begin TestRunner");
 		try {
+			System.out.println(System.getProperty("java.security.policy"));
 			System.setSecurityManager(new CustomSecurityManager());
+			processCommandLineArgs(args);
 			initXml();
 			for(Element project : projects) {
 				if(project.getAttribute(PROJECT_ACTIVE_ATTRIBUTE).getBooleanValue())
 					processProject(project);
 			}
-			JDOMHelper.updateXml(document, XML_FILE_PATH);
+			JDOMHelper.updateXml(document, xmlFilePath);
 		} catch (JDOMException | IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace(System.err);
 		} finally {
 			out.println("End TestRunner");
 		}
 
+	}
+	
+	public static void processCommandLineArgs(String[] args) {
+		StringBuilder sb = new StringBuilder("testing/testing-config");
+		if(args.length > 0)
+			sb.append("-").append(args[0]);
+		sb.append(".xml");
+		xmlFilePath = sb.toString();
 	}
 	
 	private static void processProject(Element project) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
@@ -108,7 +118,7 @@ public class TestRunner {
 				e.printStackTrace(System.err);
 			}
 		} else
-			out.println("TESTING MODE - no feedback sent & testing-config.xml not cleared!");
+			out.println("TESTING MODE - no feedback sent & " + xmlFilePath + " not cleared!");
 	}
 	
 	private static long calcMaxRuntimeMillis(Element project) {
@@ -195,7 +205,7 @@ public class TestRunner {
 	}
 	
 	private static void initXml() throws JDOMException, IOException {
-		document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
+		document = JDOMHelper.buildDocument(xmlFilePath);
 		Element rootElement = document.getRootElement();
 		testMode = Boolean.valueOf(rootElement.getAttributeValue("test-mode"));
 		eclipseStudentRoot = rootElement.getChildText("eclipse-student-root");

@@ -113,7 +113,8 @@ public class RationalTest extends Testable {
 					pass = true;
 				}
 			}
-		}
+		} else
+			logFail("the current state of the data must always be in reduced form - check constructor");
 		if(!pass) {
 			continueTesting = false;
 			logFail("reduce", expected, actual, points);
@@ -320,27 +321,37 @@ public class RationalTest extends Testable {
 			}
 		}
 		
-		expected = true;
-		// power of 2
-		denom = (int)Math.pow(2, RANDOM.nextInt(10) + 1);
-		if(!testDecimalTerminates(points, expected, denom))
-			pass = false;
-		
-		// power of 5
-		denom = (int)Math.pow(5, RANDOM.nextInt(10) + 1);
-		if(!testDecimalTerminates(points, expected, denom))
-			pass = false;
-		
-		// power of 2 and 5
-		denom = (int)Math.pow(2, RANDOM.nextInt(10) + 1) * (int)Math.pow(5, RANDOM.nextInt(10) + 1);
-		if(!testDecimalTerminates(points, expected, denom))
-			pass = false;
-		
-		// not power of only 2 or 5
-		expected = false;
-		denom = 410 * nonZeroRandomNumer(1000);
-		if(!testDecimalTerminates(points, expected, denom))
-			pass = false;
+		for(int count = 100; count > 0 && pass; count--) {
+			expected = true;
+			// power of 2
+			denom = (int)Math.pow(2, RANDOM.nextInt(10) + 1);
+			if(!testDecimalTerminates(points, expected, denom)) {
+				logFail(message + " P2");
+				pass = false;
+			}
+			
+			// power of 5
+			denom = (int)Math.pow(5, RANDOM.nextInt(10) + 1);
+			if(!testDecimalTerminates(points, expected, denom)) {
+				logFail(message + " P5");
+				pass = false;
+			}
+			
+			// power of 2 and 5
+			denom = (int)Math.pow(2, RANDOM.nextInt(8) + 1) * (int)Math.pow(5, RANDOM.nextInt(8) + 1);
+			if(!testDecimalTerminates(points, expected, denom)) {
+				logFail(message + " P2&5");
+				pass = false;
+			}
+			
+			// not power of only 2 or 5
+			expected = false;
+			denom = 410 * nonZeroRandomNumer(1000);
+			if(!testDecimalTerminates(points, expected, denom)) {
+				logFail(message + " !(P2|5)");
+				pass = false;
+			}
+		}
 		
 		if(pass) {
 			totalPoints += points;
@@ -350,6 +361,8 @@ public class RationalTest extends Testable {
 	
 	private boolean testDecimalTerminates(int points, boolean expected, int denom) {
 		int numer = nonZeroRandomNumer(1000);
+		while(denom > 1 && numer % denom == 0)
+			numer /= denom;
 		AbstractRational studentRational = studentInstance(numer, denom);
 		boolean actual = studentRational.decimalTerminates();
 		boolean pass = expected == actual;

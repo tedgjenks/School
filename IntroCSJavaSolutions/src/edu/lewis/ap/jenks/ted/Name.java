@@ -19,7 +19,8 @@ public class Name extends AbstractName {
 		super(firstName, lastName);
 	}
 
-	/* (non-Javadoc)
+	/** 
+	 * Compare by last name.  If last name is the same, compare by first name.  If last name and first name are the same, increment duplicates.
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override

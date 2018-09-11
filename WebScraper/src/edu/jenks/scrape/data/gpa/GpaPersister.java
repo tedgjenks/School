@@ -15,6 +15,7 @@ public class GpaPersister extends Persister {
 	private PreparedStatement selectAllCoursesForStudent, selectGradesForCourse;
 	private PreparedStatement updateGradesGpaWeightedCalc;
 	//private PreparedStatement updateGradesStoredGrades;
+	private PreparedStatement selectAllMathCoursesForStudent;
 	
 	public static GpaPersister getInstance(Logger logger) {
 		if(singleton == null)
@@ -24,6 +25,52 @@ public class GpaPersister extends Persister {
 	
 	public GpaPersister(Logger logger) {
 		super(logger);
+	}
+	
+	public List<Course> getMathCoursesByStudent(Student student) {
+		List<Course> courses = new ArrayList<>(50);
+		try {
+			if(selectAllMathCoursesForStudent == null) {
+				String sql = "select course_name, course_number, grade, gpa_wtd_calc, year_term from grades, courses where grades.course_id = courses.course_id and courses.student_id = ? and (course_name like '%Algebra%' or course_name like '%Calculus%' or course_name like '%Geometry%' or course_name like '%Pre-Cal%' or course_name like '%Trig%' or course_name like '%Stat%')";
+				selectAllMathCoursesForStudent = openPreparedStatement(sql);
+			}
+			selectAllMathCoursesForStudent.setLong(1, student.getStudentId());
+			ResultSet rs = selectAllMathCoursesForStudent.executeQuery();
+			while(rs.next()) {
+				Course course = new Course(student);
+				course.setCourseName(rs.getString(1));
+				course.setCourseNumber(rs.getString(2));
+				List<Grade> grades = new ArrayList<>(1);
+				course.setGrades(grades);
+				Grade grade = new Grade(rs.getByte(3));
+				grades.add(grade);
+				grade.setGpaWeightedCalc(rs.getFloat(4));
+				course.setYearTerm(rs.getString(5));
+				courses.add(course);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			handleSQLException(e);
+		}
+		return courses;
+	}
+	
+	public List<Student> getStudentsByGrade(int grade) {
+		List<Student> students = new ArrayList<>(50);
+		Statement studentQuery = null;
+		try {
+			String sql = "select student_id, f_name, l_name, rank, gpa_ps, gpa_hg from student where grade_level=" + grade;
+			System.out.println(sql);
+			studentQuery = conn.createStatement();
+			ResultSet results = studentQuery.executeQuery(sql);
+			loadStudentData(students, results);
+			results.close();
+		} catch (SQLException e) {
+			handleSQLException(e);
+		} finally {
+			closeStatement(studentQuery);
+		}
+		return students;
 	}
 	
 	/*private void updateGradesStoredGrades(Grade grade) {
@@ -124,6 +171,7 @@ public class GpaPersister extends Persister {
 				course.setCourseNumber(results.getString(3));
 				course.setCourseName(results.getString(4));
 				course.setEarnedCredit(results.getFloat(5));
+				course.setGradeLevel(results.getByte(6));
 				courses.add(course);
 			}
 			results.close();
@@ -185,6 +233,7 @@ public class GpaPersister extends Persister {
 				insertCourse.setString(3, course.getCourseNumber());
 				insertCourse.setString(4,  course.getCourseName());
 				insertCourse.setFloat(5, course.getEarnedCredit());
+				insertCourse.setByte(6, course.getGradeLevel());
 				insertCourse.addBatch();
 			}
 			insertCourse.executeBatch();
@@ -241,13 +290,13 @@ public class GpaPersister extends Persister {
 	}
 	
 	protected void initStatements() throws SQLException {
-		String insertCourseSQL = "insert into courses(student_id, year_term, course_number, course_name, earned_credit) values(?,?,?,?,?)";
+		String insertCourseSQL = "insert into courses(student_id, year_term, course_number, course_name, earned_credit, grade_level) values(?,?,?,?,?,?)";
 		insertCourse = openPreparedStatement(insertCourseSQL);
 		String selectCourseSQL = "select course_id from courses where student_id = ? and year_term = ? and course_number = ?";
 		selectCourse = openPreparedStatement(selectCourseSQL);
 		String insertGradesSQL = "insert into grades(course_id, student_id, grade) values(?,?,?)";
 		insertGrade = openPreparedStatement(insertGradesSQL);
-		String selectAllCoursesForStudentSQL = "select course_id, year_term, course_number, course_name, earned_credit from courses where student_id = ?";
+		String selectAllCoursesForStudentSQL = "select course_id, year_term, course_number, course_name, earned_credit, grade_level from courses where student_id = ?";
 		selectAllCoursesForStudent = openPreparedStatement(selectAllCoursesForStudentSQL);
 		String selectGradesForCourseSQL = "select grades_id, grade, gpa_wtd_calc, earned_credit_calc, gpa_sg, earned_credit_sg from grades where student_id = ? and course_id = ?";
 		selectGradesForCourse = openPreparedStatement(selectGradesForCourseSQL);

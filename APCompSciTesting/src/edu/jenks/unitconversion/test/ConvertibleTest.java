@@ -20,6 +20,33 @@ import edu.jenks.util.ReflectionUtil;
  */
 public class ConvertibleTest extends Testable {
 	
+	private static final String NANOMETER = "nm";
+	private static final String MICROMETER = "um";
+	private static final String MILLIMETER = "mm";
+	private static final String CENTIMETER = "cm";
+	private static final String DECIMETER = "dm";
+	private static final String METER = "m";
+	private static final String DECAMETER = "dam";
+	private static final String HECTOMETER = "hm";
+	private static final String KILOMETER = "km";
+	private static final String MEGAMETER = "Mm";
+	private static final String GIGAMETER = "Gm";
+	private static final Map<String, String> UNITS = new HashMap<>(22);
+	
+	static {
+		UNITS.put(NANOMETER, new String(NANOMETER));
+		UNITS.put(MICROMETER, new String(MICROMETER));
+		UNITS.put(MILLIMETER, new String(MILLIMETER));
+		UNITS.put(CENTIMETER, new String(CENTIMETER));
+		UNITS.put(DECIMETER, new String(DECIMETER));
+		UNITS.put(METER, new String(METER));
+		UNITS.put(DECAMETER, new String(DECAMETER));
+		UNITS.put(HECTOMETER, new String(HECTOMETER));
+		UNITS.put(KILOMETER, new String(KILOMETER));
+		UNITS.put(MEGAMETER, new String(MEGAMETER));
+		UNITS.put(GIGAMETER, new String(GIGAMETER));
+	}
+	
 	private String studentClassName;
 	private Convertible studentConvertible;
 	private Convertible solutionConvertible = new edu.unitconversion.jenks.ted.MetricLengthConverter();
@@ -44,13 +71,13 @@ public class ConvertibleTest extends Testable {
 	
 	//10 points
 	public void test2ConvertFromMeters() {
-		String unit = "m";
+		String unit = UNITS.get(METER);
 		testConvertFromMetersHelper(unit, 2);
 		
-		unit = "dm";
+		unit = UNITS.get(DECIMETER);
 		testConvertFromMetersHelper(unit, 4);
 		
-		unit = "dam";
+		unit = UNITS.get(DECAMETER);
 		testConvertFromMetersHelper(unit, 4);
 	}
 	
@@ -69,13 +96,13 @@ public class ConvertibleTest extends Testable {
 	
 	//10 points
 	public void test1ConvertToMeters() {
-		String unit = "m";
+		String unit = UNITS.get(METER);
 		testConvertToMetersHelper(unit, 2);
 		
-		unit = "cm";
+		unit = UNITS.get(CENTIMETER);
 		testConvertToMetersHelper(unit, 4);
 		
-		unit = "km";
+		unit = UNITS.get(KILOMETER);
 		testConvertToMetersHelper(unit, 4);
 	}
 	
@@ -99,23 +126,23 @@ public class ConvertibleTest extends Testable {
 	//16 points
 	public void test3Convert() {
 		if(passedIntermediateCalculations) {
-			String startingUnit = "nm", desiredUnit = "Gm";
+			String startingUnit = UNITS.get(NANOMETER), desiredUnit = UNITS.get(GIGAMETER);
 			testConvertHelper(startingUnit, desiredUnit, 3);
 			
-			startingUnit = "Gm";
-			desiredUnit = "nm";
+			startingUnit = UNITS.get(GIGAMETER);
+			desiredUnit = UNITS.get(NANOMETER);
 			testConvertHelper(startingUnit, desiredUnit, 3);
 			
-			startingUnit = "Mm";
-			desiredUnit = "um";
+			startingUnit = UNITS.get(MEGAMETER);
+			desiredUnit = UNITS.get(MICROMETER);
 			testConvertHelper(startingUnit, desiredUnit, 3);
 			
-			startingUnit = "mm";
-			desiredUnit = "km";
+			startingUnit = UNITS.get(MILLIMETER);
+			desiredUnit = UNITS.get(KILOMETER);
 			testConvertHelper(startingUnit, desiredUnit, 3);
 			
-			startingUnit = "m";
-			desiredUnit = "m";
+			startingUnit = UNITS.get(METER);
+			desiredUnit = UNITS.get(METER);
 			testConvertHelper(startingUnit, 0, desiredUnit, 4);
 		} else
 			feedbackLogger.log(Level.WARNING, "convert method not tested due to failure of dependent methods.");
@@ -140,23 +167,23 @@ public class ConvertibleTest extends Testable {
 	public void test4ConvertForDisplay() {
 		if(passedIntermediateCalculations) {
 			String startingUnit = "bm";
-			String desiredUnit = "m";
+			String desiredUnit = UNITS.get(METER);
 			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
-			startingUnit = "m";
+			startingUnit = UNITS.get(METER);
 			desiredUnit = "bm";
 			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
-			startingUnit = "cm";
-			desiredUnit = "km";
+			startingUnit = UNITS.get(CENTIMETER);
+			desiredUnit = UNITS.get(KILOMETER);
 			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
-			startingUnit = "km";
-			desiredUnit = "cm";
+			startingUnit = UNITS.get(KILOMETER);
+			desiredUnit = UNITS.get(CENTIMETER);
 			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 			
-			startingUnit = "m";
-			desiredUnit = "m";
+			startingUnit = UNITS.get(METER);
+			desiredUnit = UNITS.get(METER);
 			testConvertForDisplayHelper(startingUnit, 0, desiredUnit, 2);
 		} else
 			feedbackLogger.log(Level.WARNING, "Display not tested due to failure of earlier tests.");

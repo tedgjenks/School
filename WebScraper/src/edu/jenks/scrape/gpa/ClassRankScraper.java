@@ -7,6 +7,7 @@ import java.util.logging.*;
 import com.gargoylesoftware.htmlunit.html.*;
 import edu.jenks.scrape.Scraper;
 import edu.jenks.scrape.data.gpa.*;
+import static java.lang.System.out;
 
 public class ClassRankScraper extends Scraper {
 	
@@ -36,11 +37,14 @@ public class ClassRankScraper extends Scraper {
 	}
 
 	public static void main(String[] args) throws IOException {
+		final long startTime = System.currentTimeMillis();
 		LOGGER.log(Level.INFO, "Begin class rank scrape.");
 		try {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
-			/*List<Student> topSeniors = INSTANCE.scrapeTopSeniorsAndPersist(curPage);
-			INSTANCE.scrapeAndPersistHistoricalGrades(curPage, topSeniors);*/
+			if(curPage.getUrl().toString().indexOf("home.html") < 0)
+				System.out.println("PROBABLE LOGIN FAILURE!");
+			List<Student> students = INSTANCE.scrapeStudentsAndPersist(curPage);
+			INSTANCE.scrapeAndPersistHistoricalGrades(curPage, students);
 			INSTANCE.calculateAndPersistGpaFromPersistedHistoricalGrades();
 			List<Student> studentsWithGpaMismatch = INSTANCE.reportGpaVerifcationErrors();
 			INSTANCE.reportCoursesWithGpaMismatch(curPage, studentsWithGpaMismatch);
@@ -51,6 +55,7 @@ public class ClassRankScraper extends Scraper {
 		} finally {
 			INSTANCE.close();
 		}
+		LOGGER.log(Level.INFO, "Total time (minutes): " + (System.currentTimeMillis() - startTime) / 1000 / 60);
 		LOGGER.log(Level.INFO, "End class rank scrape.");
 	}
 	
@@ -67,7 +72,7 @@ public class ClassRankScraper extends Scraper {
 			calcGrade.setGpaStoredGrade(Float.parseFloat(gpaPointsInput.getValueAttribute()));
 			HtmlInput earnedCreditHoursInput = (HtmlInput)storedGradesPage.getElementById(STORED_GRADE_PROPERTIES.getProperty("EARNED_CREDIT_HOURS_INPUT_ID"));
 			calcGrade.setEarnedCreditStoredGrade(Float.parseFloat(earnedCreditHoursInput.getValueAttribute()));
-			float expectedEarnedCreditFromCourseNumber = calcExpectedEarnedCredit(calcCourse.getCourseNumber()) / numGrades;
+			float expectedEarnedCreditFromCourseNumber = GPAUtils.calcExpectedEarnedCredit(calcCourse.getCourseNumber()) / numGrades;
 			if(Math.abs(calcGrade.getGpaWeightedCalc() - calcGrade.getGpaStoredGrade()) > GPA_DELTA ||
 					Math.abs(calcGrade.getEarnedCreditCalc() - calcGrade.getEarnedCreditStoredGrade()) > EARNED_CREDIT_DELTA ||
 					expectedEarnedCreditFromCourseNumber != calcGrade.getEarnedCreditStoredGrade()) {
@@ -78,34 +83,29 @@ public class ClassRankScraper extends Scraper {
 		return gpaMismatches;
 	}
 	
-	private float calcExpectedEarnedCredit(String courseNumber) {
-		char earnedCreditCode = courseNumber.charAt(courseNumber.length() - 1);
-		switch(earnedCreditCode) {
-		case 'W': return 1;
-		case 'H': return .5F;
-		case 'D': return 2;
-		default: return 0;
-		}
-	}
-	
 	private void reportCoursesWithGpaMismatch(HtmlPage curPage, List<Student> students) throws IOException {
 		if(PERSISTENCE_INTERFACE.connect()) {
 			LOGGER.info("Connected to DB");
-			for(int sIndex = students.size() - 1; sIndex >= 0; sIndex--) {
+			final long startTime = System.currentTimeMillis();
+			final int numStudents = students.size();
+			for(int sIndex = numStudents - 1; sIndex >= 0; sIndex--) {
 				Student student = students.get(sIndex);
 				List<Course> hgCourses = scrapeHistoricalGrades(curPage, student);
-				List<Course> calcCourses = PERSISTENCE_INTERFACE.getCourses(student);
-				byte gpaMismatches = 0;
-				//LOGGER.info("Begin GPA comparison for " + student.getFullName());
-				for(int hgIndex = hgCourses.size() - 1; hgIndex >= 0; hgIndex--) {
-					Course hgCourse = hgCourses.get(hgIndex);
-					if(hgCourse.getEarnedCredit() > 0) {
-						Course calcCourse = calcCourses.get(calcCourses.indexOf(hgCourse));
-						calcCourse.setGrades(PERSISTENCE_INTERFACE.getGrades(calcCourse));
-						gpaMismatches += scrapeStoredGrades(hgCourse, calcCourse);
+				if(hgCourses != null) {
+					List<Course> calcCourses = PERSISTENCE_INTERFACE.getCourses(student);
+					byte gpaMismatches = 0;
+					//LOGGER.info("Begin GPA comparison for " + student.getFullName());
+					for(int hgIndex = hgCourses.size() - 1; hgIndex >= 0; hgIndex--) {
+						Course hgCourse = hgCourses.get(hgIndex);
+						if(hgCourse.getEarnedCredit() > 0) {
+							Course calcCourse = calcCourses.get(calcCourses.indexOf(hgCourse));
+							calcCourse.setGrades(PERSISTENCE_INTERFACE.getGrades(calcCourse));
+							gpaMismatches += scrapeStoredGrades(hgCourse, calcCourse);
+						}
 					}
+					logStudent(student.getFullName(), "Compared " + hgCourses.size() + " course GPAs; found " + gpaMismatches + " GPA mismatches.");
+					printRemainingTime("report GPA mismatches", startTime, numStudents, numStudents - sIndex);
 				}
-				logStudent(student.getFullName(), "Compared " + hgCourses.size() + " course GPAs; found " + gpaMismatches + " GPA mismatches.");
 			}
 		} else {
 			handleDatabaseConnectionFailure();
@@ -151,22 +151,37 @@ public class ClassRankScraper extends Scraper {
 		}
 	}
 	
+	private void printRemainingTime(String message, long startTime, int total, int numFinished) {
+		int remaining = total - numFinished;
+		out.println(remaining + " remaining in " + message);
+		double elapsedMinutes = (System.currentTimeMillis() - startTime) / 1000D / 60;
+		double avgMinutes = elapsedMinutes / numFinished;
+		out.println((int)(avgMinutes * remaining) + " estimated minutes remaining in " + message);
+	}
+	
 	private void scrapeAndPersistHistoricalGrades(HtmlPage curPage, List<Student> students) throws IOException {
 		if(PERSISTENCE_INTERFACE.connect()) {
 			LOGGER.info("Connected to DB");
-			for(int index = students.size() - 1; index >= 0; index--) {
+			final int numStudents = students.size();
+			final long startTime = System.currentTimeMillis();
+			int numStudentsPersisted = 0;
+			for(int index = numStudents - 1; index >= 0; index--) {
 				List<Course> courses = INSTANCE.scrapeHistoricalGrades(curPage, students.get(index));
-				PERSISTENCE_INTERFACE.addCourses(courses);
+				if(courses != null) {
+					PERSISTENCE_INTERFACE.addCourses(courses);
+					numStudentsPersisted++;
+				}
+				printRemainingTime("scrape and persist historical grades", startTime, numStudents, numStudents - index);
 			}
-			LOGGER.info("Historical grades persisted for " + students.size() + " students");
+			LOGGER.info("Historical grades persisted for " + numStudentsPersisted + " students");
 		} else {
 			handleDatabaseConnectionFailure();
 		}
 	}
 	
-	private List<Student> scrapeTopSeniorsAndPersist(HtmlPage curPage) throws IOException {
-		List<Student> students = scrapeTopSeniors(curPage);
-		LOGGER.info("Top seniors scraped from class rank.");
+	private List<Student> scrapeStudentsAndPersist(HtmlPage curPage) throws IOException {
+		List<Student> students = scrapeStudents(curPage);
+		LOGGER.info("Students scraped from class rank.");
 		if(PERSISTENCE_INTERFACE.connect()) {
 			LOGGER.info("Connected to DB");
 			persistClassRankFromPowerSchool(students);
@@ -175,6 +190,10 @@ public class ClassRankScraper extends Scraper {
 			handleDatabaseConnectionFailure();
 		}
 		return students;
+	}
+	
+	private boolean includeCourseInGpa(Course course) {
+		return course.getEarnedCredit() > 0 || (course.getGrades() != null && course.getGrades().size() > 0 && GPAUtils.isTranscriptCourse(course.getCourseNumber()) && !GPAUtils.isCurrentTerm(course.getYearTerm()));
 	}
 	
 	private List<Student> calculateGpaFromHistoricalGrades() {
@@ -187,22 +206,28 @@ public class ClassRankScraper extends Scraper {
 			for(int cIndex = courses.size() - 1; cIndex >= 0; cIndex--) {
 				Course course = courses.get(cIndex);
 				float fullEarnedCredit = course.getEarnedCredit();
+				List<Grade> grades = PERSISTENCE_INTERFACE.getGrades(course);
+				course.setGrades(grades);
 				if(fullEarnedCredit > 0) {
 					totalEarnedCredits += fullEarnedCredit;
-					List<Grade> grades = PERSISTENCE_INTERFACE.getGrades(course);
 					int numberGrades = grades.size();
 					/*if(numberGrades != 1)
 						logStudent(student.getFullName(), numberGrades + " grades for course " + course.getCourseName());*/
 					float earnedCredit = fullEarnedCredit / numberGrades;
 					for(int gIndex = numberGrades - 1; gIndex >= 0; gIndex--) {
 						Grade grade = grades.get(gIndex);
-						float weightedGpa = weightGpaWithYear(grade.getGrade(), course.getCourseNumber(), course.getYearTerm());
+						float weightedGpa = GPAUtils.weightGpaWithYear(grade.getGrade(), course.getCourseNumber(), course.getYearTerm());
 						grade.setGpaWeightedCalc(weightedGpa);
 						grade.setEarnedCreditCalc(earnedCredit);
 						float gpaPoints = earnedCredit * weightedGpa;
 						totalGpaPoints += gpaPoints;
 						PERSISTENCE_INTERFACE.updateGradesGpaWeightedCalc(grade, student, course);
 					}
+				} else if(includeCourseInGpa(course)) {
+					//logStudent(student.getFullName(), "Failed course: " + course.getCourseName());
+					totalEarnedCredits += GPAUtils.calcExpectedEarnedCredit(course.getCourseNumber());
+				} else {
+					//logStudent(student.getFullName(), "Ignored course: " + course.getCourseName());
 				}
 			}
 			student.setGpaHistoricalGrades(totalGpaPoints / totalEarnedCredits);
@@ -210,35 +235,19 @@ public class ClassRankScraper extends Scraper {
 		return students;
 	}
 	
-	private float weightGpaWithYear(float grade, String courseNumber, String yearTerm) {
-		float weightedGpa = 0;
-		int hyphenIndex = yearTerm.indexOf('-');
-		byte lastYear = Byte.parseByte(yearTerm.substring(hyphenIndex + 1, hyphenIndex + 3));
-		boolean newScale = lastYear >= 17;
-		if(newScale)
-			weightedGpa = .1F + .1F * (grade - 51);
-		else
-			weightedGpa = .125F + .125F * (grade - 62);
-		if(weightedGpa > 0) {
-			if(courseNumber.indexOf("HW") >= 0 || courseNumber.indexOf("HH") >= 0 || courseNumber.indexOf("HD") >= 0) // honors
-				weightedGpa += .5F;
-			else if(courseNumber.indexOf("AW") >= 0 || courseNumber.indexOf("EW") >= 0) // AP or dual-credit
-				weightedGpa += 1;
-		} else
-			weightedGpa = 0;
-		return weightedGpa;
-	}
-	
 	private List<Course> scrapeHistoricalGrades(HtmlPage curPage, Student student) throws IOException {
-		curPage = searchStudent(student.getStudentId()); // will be on students or throw exception
-		curPage = requestHistoricalGrades(curPage);
-		DomElement element = (HtmlElement)curPage.getElementById(HISTORICAL_GRADES_PROPERTIES.getProperty("CONTENT_MAIN_ID"));
-		DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(HISTORICAL_GRADES_PROPERTIES.getProperty("ROW_TAG"));
-		List<Course> courses = new ArrayList<>(50);
-		for(int index = courseDataRows.size() - 1; index > 0; index--) {
-			Course course = processCourseData(courseDataRows.get(index), student);
-			if(course != null)
-				courses.add(course);
+		List<Course> courses = null;
+		curPage = searchStudent(student); // will be on students or throw exception
+		if(curPage != null) {
+			curPage = requestHistoricalGrades(curPage);
+			DomElement element = (HtmlElement)curPage.getElementById(HISTORICAL_GRADES_PROPERTIES.getProperty("CONTENT_MAIN_ID"));
+			DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(HISTORICAL_GRADES_PROPERTIES.getProperty("ROW_TAG"));
+			courses = new ArrayList<>(50);
+			for(int index = courseDataRows.size() - 1; index > 0; index--) {
+				Course course = processCourseData(courseDataRows.get(index), student);
+				if(course != null)
+					courses.add(course);
+			}
 		}
 		return courses;
 	}
@@ -249,6 +258,7 @@ public class ClassRankScraper extends Scraper {
 		float earnedCredit = Float.parseFloat(tableData.get(4).getTextContent());
 		course = new Course(student);
 		course.setYearTerm(tableData.get(0).getTextContent());
+		course.setGradeLevel(tableData.get(1).getTextContent());
 		course.setCourseNumber(tableData.get(2).getTextContent());
 		course.setCourseName(tableData.get(3).getTextContent());
 		course.setEarnedCredit(earnedCredit);
@@ -267,29 +277,33 @@ public class ClassRankScraper extends Scraper {
 		return curPage;
 	}
 	
-	private HtmlPage searchStudent(long studentId) throws IOException {
+	private HtmlPage searchStudent(Student student) throws IOException {
 		final String expectedPathComponent = "students";
 		HtmlPage curPage = null;
-		for(byte waitSeconds = DEFAULT_WAIT_SECONDS, multiplier = 2, attempts = 0; attempts < 3 && (curPage == null || curPage.getUrl().toString().indexOf(expectedPathComponent) < 0); waitSeconds *= multiplier, attempts++) {
+		for(byte waitSeconds = DEFAULT_WAIT_SECONDS, multiplier = 2, attempts = 0; attempts < 4 && (curPage == null || curPage.getUrl().toString().indexOf(expectedPathComponent) < 0); waitSeconds *= multiplier, attempts++) {
 			curPage = WEB_CLIENT.getPage("https://powerschool.gwd50.org/admin/home.html");
-			System.out.println("Wait " + waitSeconds + " seconds for AngularJS on landing page: " + curPage.getUrl());
+			out.println("Wait " + waitSeconds + " seconds for AngularJS on landing page: " + curPage.getUrl());
 			WEB_CLIENT.waitForBackgroundJavaScriptStartingBefore(waitSeconds * 1000);
-			System.out.println("End wait for AngularJS on landing page");
+			//System.out.println("End wait for AngularJS on landing page");
 			HtmlTextInput searchInput = (HtmlTextInput)curPage.getElementById("studentSearchInput");
-			searchInput.setValueAttribute("student_number=" + studentId);
+			searchInput.setValueAttribute("student_number=" + student.getStudentId());
 			HtmlButton searchButton = (HtmlButton)curPage.getElementById("searchButton");
 			curPage = searchButton.click();
 		}
-		if(curPage.getUrl().toString().indexOf(expectedPathComponent) < 0)
-			throw new IOException("Student page not loaded");
+		if(curPage.getUrl().toString().indexOf(expectedPathComponent) < 0) {
+			logStudent(student.getFullName(), "Student page not loaded from searchStudent");
+			curPage = null;
+		}
 		return curPage;
 	}
 	
-	private List<Student> scrapeTopSeniors(HtmlPage curPage) throws IOException {
+	private List<Student> scrapeStudents(HtmlPage curPage) throws IOException {
 		curPage = clickAnchorByID(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("SYS_REPORTS_ANCHOR_ID"));
 		curPage = clickAnchorByText(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("CLASS_RANKING_ANCHOR_TEXT"));
-		curPage = fillClassRankTable(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("MIN_GPA_ATTRIBUTE"), CLASS_RANKING_REPORT_PROPERTIES.getProperty("MAX_GPA_ATTRIBUTE"));
-		List<Student> students = processGpaData(curPage);
+		//System.out.println("Class rank page: " + curPage.getUrl());
+		String gradeLevel = CLASS_RANKING_REPORT_PROPERTIES.getProperty("GRADE_LEVEL_ATTRIBUTE");
+		curPage = fillClassRankTable(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("MIN_GPA_ATTRIBUTE"), CLASS_RANKING_REPORT_PROPERTIES.getProperty("MAX_GPA_ATTRIBUTE"), gradeLevel);
+		List<Student> students = processGpaData(curPage, Byte.parseByte(gradeLevel));
 		return students;
 	}
 	
@@ -300,7 +314,7 @@ public class ClassRankScraper extends Scraper {
 		LOGGER.info("Students data added");
 	}
 	
-	private Student processClassRankRow(HtmlTableRow studentData) {
+	private Student processClassRankRow(HtmlTableRow studentData, byte gradeLevel) {
 		List<HtmlTableCell> cells = studentData.getCells();
 		Student student = new Student();
 		String rank = cells.get(0).getTextContent();
@@ -310,22 +324,23 @@ public class ClassRankScraper extends Scraper {
 		student.setLastName(names[0]);
 		student.setFirstName(names[1]);
 		student.setGpaPowerSchool(Float.parseFloat(cells.get(3).getTextContent()));
+		student.setGradeLevel(gradeLevel);
 		return student;
 	}
 	
-	private List<Student> processGpaData(HtmlPage curPage) {
+	private List<Student> processGpaData(HtmlPage curPage, byte gradeLevel) {
 		HtmlTableBody tableBody = (HtmlTableBody)curPage.getElementsByTagName("tbody").get(0);
 		List<HtmlTableRow> tableRows = tableBody.getRows();
 		List<Student> students = new ArrayList<>(40);
 		for(int index = 1; index < tableRows.size(); index ++)
-			students.add(processClassRankRow(tableRows.get(index)));
+			students.add(processClassRankRow(tableRows.get(index), gradeLevel));
 		return students;
 	}
 	
-	private HtmlPage fillClassRankTable(HtmlPage curPage, String minGPA, String maxGPA) throws IOException {
+	private HtmlPage fillClassRankTable(HtmlPage curPage, String minGPA, String maxGPA, String gradeLevel) throws IOException {
 		String gradeLevelName = CLASS_RANKING_REPORT_PROPERTIES.getProperty("GRADE_LEVEL_NAME");
 		HtmlSelect gradeSelect = curPage.getElementByName(gradeLevelName);
-		gradeSelect.setSelectedAttribute(CLASS_RANKING_REPORT_PROPERTIES.getProperty("GRADE_LEVEL_ATTRIBUTE"), true);
+		gradeSelect.setSelectedAttribute(gradeLevel, true);
 		HtmlInput mingpaInput = curPage.getElementByName(CLASS_RANKING_REPORT_PROPERTIES.getProperty("MIN_GPA_NAME"));
 		mingpaInput.setValueAttribute(minGPA);
 		HtmlInput maxgpaInput = curPage.getElementByName(CLASS_RANKING_REPORT_PROPERTIES.getProperty("MAX_GPA_NAME"));

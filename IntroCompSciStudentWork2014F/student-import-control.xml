@@ -4,6 +4,9 @@
 <import-control pkg="edu">
 	<allow pkg="java.text"/>
 	<allow pkg="edu.jenks"/>
+	<subpackage name="list">
+		<allow class="java.util.NoSuchElementException"/>
+	</subpackage>
 	<subpackage name="cb.scrambler">
 		<allow pkg="java.util"/>
 	</subpackage>

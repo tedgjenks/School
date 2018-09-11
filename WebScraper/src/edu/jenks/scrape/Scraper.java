@@ -11,24 +11,35 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 import edu.jenks.util.LoggingUtil;
 
 public abstract class Scraper {
 	public static final Logger LOGGER = Logger.getGlobal();
-	private static final String LOG_PATH = "C:\\Users\\Jenks\\Documents\\temp\\";
+	public static final String LOG_PATH = "C:\\Users\\Jenks\\Documents\\temp\\scraper\\";
 	public static final String CREDENTIALS_PROPERTIES_PATH = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolCredentials.properties";
-	private static final String DB_CONNECTION_ERROR = "Cannot establish DB connection";
+	public static final String DB_CONNECTION_ERROR = "Cannot establish DB connection";
+	public static final Properties CREDENTIALS_PROPS = new Properties();
+	private static final Properties CURRENT_TERM_PROPS = new Properties();
 	
 	protected static void initLogger() throws IOException {
 		LoggingUtil.initLocalFileLogger(LOGGER, LOG_PATH + "Scraper.log");
 		LOGGER.setLevel(Level.ALL);
 	}
 	
+	protected static void initCredentials() throws IOException {
+		CREDENTIALS_PROPS.load(new FileInputStream(CREDENTIALS_PROPERTIES_PATH));
+	}
+	
 	static {
+		final String currentTermPropertiesPath = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\CurrentTerm.properties";
 		try {
 			initLogger();
+			initCredentials();
+			CURRENT_TERM_PROPS.load(new FileInputStream(currentTermPropertiesPath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,12 +93,12 @@ public abstract class Scraper {
 			throw new IOException(message);
 	}
 	
-	protected HtmlPage authenticatePowerSchool(String urlHome, Properties credentials) throws IOException {
+	protected HtmlPage authenticatePowerSchool(String urlHome) throws IOException {
 		HtmlPage startPage = WEB_CLIENT.getPage(urlHome);
 		HtmlInput userInput = startPage.getElementByName("username");
-		userInput.setValueAttribute(credentials.getProperty("username"));
+		userInput.setValueAttribute(CREDENTIALS_PROPS.getProperty("username"));
 		HtmlInput passwordInput = startPage.getElementByName("password");
-		passwordInput.setValueAttribute(credentials.getProperty("password"));
+		passwordInput.setValueAttribute(CREDENTIALS_PROPS.getProperty("password"));
 		HtmlButton submitBtn = (HtmlButton)startPage.getElementById("btnEnter");
 		HtmlPage curPage = submitBtn.click();
 		LOGGER.info("Authentication Submitted");
@@ -95,14 +106,11 @@ public abstract class Scraper {
 	}
 	
 	protected HtmlPage authenticatePowerSchoolAdmin() throws IOException {
-		Properties credentials = new Properties();
-		return authenticatePowerSchool(credentials.getProperty("urlHomeAdmin"), credentials);
+		return authenticatePowerSchool(CREDENTIALS_PROPS.getProperty("urlHomeAdmin"));
 	}
 	
 	protected HtmlPage authenticatePowerSchoolTeacher() throws IOException {
-		Properties credentials = new Properties();
-		credentials.load(new FileInputStream(CREDENTIALS_PROPERTIES_PATH));
-		return authenticatePowerSchool(credentials.getProperty("urlHomeTeacher"), credentials);
+		return authenticatePowerSchool(CREDENTIALS_PROPS.getProperty("urlHomeTeacher"));
 	}
 	
 	public void handleDatabaseConnectionFailure() throws IOException {
@@ -115,8 +123,19 @@ public abstract class Scraper {
 		LOGGER.info("Signed Out");
 	}
 	
+	protected void selectTerm(HtmlPage curPage) throws IOException {
+		clickAnchorByID(curPage, "termContext");
+		LOGGER.info("Term clicked.");
+		final String termOption = CURRENT_TERM_PROPS.getProperty("TERM_OPTION");
+		LOGGER.info("Select term: " + termOption);
+		HtmlSelect select = (HtmlSelect)curPage.getElementByName("termid");
+		HtmlOption option = select.getOptionByText(termOption);
+		select.setSelectedAttribute(option, true);
+		LOGGER.info("Term selected");
+	}
+	
 	protected HtmlPage clickAnchorByText(HtmlPage curPage, String text) throws IOException {
-		HtmlAnchor link = (HtmlAnchor)curPage.getAnchorByText(text);
+		HtmlAnchor link = curPage.getAnchorByText(text);
 		return link.click();
 	}	
 	

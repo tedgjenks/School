@@ -14,7 +14,21 @@ public class Course {
 	private String courseNumber;
 	private String courseName;
 	private float earnedCredit;
+	private byte gradeLevel;
 	private List<Grade> grades = new ArrayList<>(50);
+	
+	public byte getGradeLevel() {
+		return gradeLevel;
+	}
+
+	public void setGradeLevel(byte gradeLevel) {
+		this.gradeLevel = gradeLevel;
+	}
+	
+	public void setGradeLevel(String gradeLevel) {
+		if(MathUtil.isRealNumber(gradeLevel))
+			this.gradeLevel = Byte.parseByte(gradeLevel);
+	}
 	
 	public void setGrades(List<Grade> grades) {
 		this.grades = grades;

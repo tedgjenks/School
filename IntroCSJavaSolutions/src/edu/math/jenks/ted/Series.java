@@ -23,12 +23,12 @@ public class Series extends AbstractSeries {
 	}
 
 	/* (non-Javadoc)
-	 * @see edu.jenks.dist.math.AbstractSeries#sumGeometric(int, int, int)
+	 * @see edu.jenks.dist.math.AbstractSeries#sumGeometric(float, float, float)
 	 */
 	@Override
-	public int sumGeometric(int firstTerm, int lastTerm, int commonRatio) {
-		int sum = firstTerm;
-		for(int term = lastTerm; term != firstTerm; term /= commonRatio)
+	public double sumGeometric(float firstTerm, float lastTerm, float commonRatio) {
+		double sum = firstTerm;
+		for(double term = lastTerm; !equalsRelative(firstTerm, term, RELATIVE_DELTA); term /= commonRatio)
 			sum += term;
 		return sum;
 	}

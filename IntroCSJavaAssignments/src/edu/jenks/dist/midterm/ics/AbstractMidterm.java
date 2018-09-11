@@ -36,7 +36,7 @@ public abstract class AbstractMidterm {
 	/**
 	 * <b>precondition: </b><code>lastNumber</code> is greater than 0.
 	 * @param lastNumber
-	 * @return the sum of the integers from 1 to <code>lastNumber</code>.
+	 * @return the sum of the integers from 1 to <code>lastNumber</code> inclusive.
 	 */
 	public abstract int sum(int lastNumber);
 	

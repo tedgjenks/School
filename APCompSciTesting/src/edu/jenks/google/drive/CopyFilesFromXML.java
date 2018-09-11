@@ -20,7 +20,8 @@ public class CopyFilesFromXML {
 
 	public static void main(String[] args) {
 		try {
-			document = JDOMHelper.buildDocument(TestRunner.XML_FILE_PATH);
+			TestRunner.processCommandLineArgs(args);
+			document = JDOMHelper.buildDocument(TestRunner.xmlFilePath);
 			Element rootElement = document.getRootElement();
 			testMode = Boolean.parseBoolean(rootElement.getAttributeValue("test-mode"));
 			targetEclipseRoot = rootElement.getChildText("eclipse-student-root");
@@ -32,7 +33,7 @@ public class CopyFilesFromXML {
 			File[] studentDirs = CopyFileHelper.getStudentDirectories(sourceRoot, turninDirSuffix);
 			if(studentDirs != null) {
 				processProjects(rootElement.getChildren("project"), studentDirs);
-				JDOMHelper.updateXml(document, TestRunner.XML_FILE_PATH);
+				JDOMHelper.updateXml(document, TestRunner.xmlFilePath);
 			} else
 				out.println("No student directories for " + sourceRoot + " and " + turninDirSuffix);
 		} catch (JDOMException | IOException e) {

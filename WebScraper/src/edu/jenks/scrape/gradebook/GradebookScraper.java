@@ -1,7 +1,6 @@
 package edu.jenks.scrape.gradebook;
 
 import java.io.*;
-import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -11,8 +10,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.host.event.KeyboardEvent;
 import edu.jenks.scrape.Scraper;
-import edu.jenks.scrape.data.ka.Assignment;
-import edu.jenks.scrape.data.ka.KaCsvReader;
+import edu.jenks.scrape.data.Assignment;
+import edu.jenks.scrape.data.app.KaCsvParser;
 
 public class GradebookScraper extends Scraper {
 	
@@ -20,7 +19,7 @@ public class GradebookScraper extends Scraper {
 	private static final String GRADEBOOK_PROPERTIES_FILEPATH = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolPages\\Gradebook.properties";
 	private static final GradebookScraper INSTANCE = new GradebookScraper();
 	
-	private KaCsvReader kaReader;
+	private KaCsvParser kaReader;
 	
 	public GradebookScraper() {}
 
@@ -67,12 +66,12 @@ public class GradebookScraper extends Scraper {
 	public void initKaReader() throws IOException {
 		Properties kaProps = new Properties();
 		kaProps.load(new FileInputStream(KA_PROPERTIES_FILEPATH));
-		Reader reader = new FileReader(kaProps.getProperty("CSV_FILEPATH"));
-		int year = Integer.parseInt(kaProps.getProperty("DUE_YEAR"));
-		int month = Integer.parseInt(kaProps.getProperty("DUE_MONTH"));
-		int day = Integer.parseInt(kaProps.getProperty("DUE_DAY"));
-		LocalDate date = LocalDate.of(year, month, day);
-		kaReader =  new KaCsvReader(date, reader);
+		//Reader reader = new FileReader(kaProps.getProperty("CSV_FILEPATH"));
+		//int year = Integer.parseInt(kaProps.getProperty("DUE_YEAR"));
+		//int month = Integer.parseInt(kaProps.getProperty("DUE_MONTH"));
+		//int day = Integer.parseInt(kaProps.getProperty("DUE_DAY"));
+		//LocalDate date = LocalDate.of(year, month, day);
+		kaReader =  new KaCsvParser();
 		kaReader.loadAssignments();
 	}
 	

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 public class MathUtil {
 	
 	private static final Pattern REAL_NUMBER_PATTERN = Pattern.compile("(-?\\d+)|(-?\\d*\\.\\d+)");
+	private static final Pattern INTEGER_NUMBER_PATTERN = Pattern.compile("-?\\d+");
 
 	public static double stripInteger(double number) {
 		int wholePart = (int)number;
@@ -27,6 +28,10 @@ public class MathUtil {
 	
 	public static boolean isRealNumber(String s) {
 		return REAL_NUMBER_PATTERN.matcher(s).matches();
+	}
+	
+	public static boolean isIntegerNumber(String s) {
+		return INTEGER_NUMBER_PATTERN.matcher(s).matches();
 	}
 	
 	public static int findGreatestCommonFactor(int num1, int num2) throws IllegalArgumentException {

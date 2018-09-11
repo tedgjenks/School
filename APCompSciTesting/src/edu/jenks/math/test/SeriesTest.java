@@ -9,6 +9,7 @@ import java.util.Map;
 
 import edu.jenks.dist.math.AbstractSeries;
 import edu.jenks.test.Testable;
+import edu.jenks.util.MathUtil;
 import edu.jenks.util.ReflectionUtil;
 
 /**
@@ -16,6 +17,9 @@ import edu.jenks.util.ReflectionUtil;
  *
  */
 public class SeriesTest extends Testable {
+	
+	private static final float RELATIVE_DELTA = 0.001f;
+	
 	private AbstractSeries studentSeries;
 	private String studentClassName;
 
@@ -24,16 +28,18 @@ public class SeriesTest extends Testable {
 	 */
 	public SeriesTest() {}
 	
-	// 20 points
+	// 27 points
 	public void testSumGeometric() {
-		int fTerm, lTerm, cRatio, points, exp, act;
-		points = 5;
+		int points;
+		float fTerm, lTerm, cRatio;
+		double exp, act;
+		points = 3;
 		fTerm = 1;
 		lTerm = 16;
 		cRatio = 2;
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
-		if(exp == act)
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
 			totalPoints += points;
 		else
 			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
@@ -43,7 +49,7 @@ public class SeriesTest extends Testable {
 		cRatio = 1000;
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
-		if(exp == act)
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
 			totalPoints += points;
 		else
 			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
@@ -53,7 +59,7 @@ public class SeriesTest extends Testable {
 		cRatio = 5;
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
-		if(exp == act)
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
 			totalPoints += points;
 		else
 			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
@@ -63,18 +69,68 @@ public class SeriesTest extends Testable {
 		cRatio = -8;
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
-		if(exp == act)
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
+			totalPoints += points;
+		else
+			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
+
+		fTerm = 6;
+		lTerm = -1458;
+		cRatio = -3;
+		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
+		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
+			totalPoints += points;
+		else
+			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
+		
+		fTerm = 128;
+		lTerm = 1;
+		cRatio = 1f/2;
+		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
+		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
+			totalPoints += points;
+		else
+			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
+		
+		fTerm = 16;
+		lTerm = 1;
+		cRatio = -1f/2;
+		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
+		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
+			totalPoints += points;
+		else
+			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
+		
+		fTerm = 8;
+		lTerm = 1f/32;
+		cRatio = 1f/4;
+		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
+		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
+			totalPoints += points;
+		else
+			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
+		
+		fTerm = (float)Math.pow(3, 5);
+		lTerm = fTerm/(float)Math.pow(3, 7);
+		cRatio = 1f/3;
+		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
+		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
+		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
 			totalPoints += points;
 		else
 			logFail("testSumGeometric, first term: " + fTerm + ", last term: " + lTerm + ", common ratio: " + cRatio, exp, act, points);
 	}
 	
-	private int geometricSeriesFormula(int fTerm, int lTerm, int cRatio) {
-		int numTerms = (int)(Math.log(Math.abs(lTerm / fTerm)) / Math.log(Math.abs(cRatio))) + 1;
-		return fTerm * (1 - (int)Math.pow(cRatio, numTerms)) / (1 - cRatio);
+	private double geometricSeriesFormula(float fTerm, float lTerm, float cRatio) {
+		int numTerms = (int)Math.round(Math.log(Math.abs(lTerm / fTerm)) / Math.log(Math.abs(cRatio))) + 1;
+		return fTerm * (1 - Math.pow(cRatio, numTerms)) / (1 - cRatio);
 	}
 	
-	// 20 points
+	// 25 points
 	public void testSumArithmetic() {
 		int fTerm, lTerm, cDiff, points, exp, act;
 		points = 5;
@@ -101,6 +157,16 @@ public class SeriesTest extends Testable {
 		fTerm = 132;
 		lTerm = 20;
 		cDiff = -7;
+		exp = arithmeticSeriesFormula(fTerm, lTerm, cDiff);
+		act = studentSeries.sumArithmetic(fTerm, lTerm, cDiff);
+		if(exp == act)
+			totalPoints += points;
+		else
+			logFail("testSumArithmetric, first term: " + fTerm + ", last term: " + lTerm + ", common difference: " + cDiff, exp, act, points);
+		
+		fTerm = 80;
+		lTerm = 80;
+		cDiff = -700;
 		exp = arithmeticSeriesFormula(fTerm, lTerm, cDiff);
 		act = studentSeries.sumArithmetic(fTerm, lTerm, cDiff);
 		if(exp == act)
@@ -150,7 +216,7 @@ public class SeriesTest extends Testable {
 	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		studentSeries = (AbstractSeries)ReflectionUtil.newInstance(studentClassName);
-		totalPoints += 60;
+		totalPoints += 48;
 	}
 
 }
