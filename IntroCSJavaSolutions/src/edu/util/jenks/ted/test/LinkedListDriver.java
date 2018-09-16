@@ -1,6 +1,6 @@
-package edu.list.jenks.ted.test;
+package edu.util.jenks.ted.test;
 
-import edu.list.jenks.ted.LinkedList;
+import edu.util.jenks.ted.LinkedList;
 
 public class LinkedListDriver {
 

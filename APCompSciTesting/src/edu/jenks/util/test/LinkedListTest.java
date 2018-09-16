@@ -1,11 +1,12 @@
 /**
  * 
  */
-package edu.jenks.list.test;
+package edu.jenks.util.test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import edu.jenks.dist.list.AbstractLinkedList;
+
+import edu.jenks.dist.util.AbstractLinkedList;
 import edu.jenks.test.Testable;
 import edu.jenks.util.ReflectionUtil;
 
@@ -15,8 +16,8 @@ import edu.jenks.util.ReflectionUtil;
  */
 public class LinkedListTest extends Testable {
 	private static final String[] TEST_ELEMENTS = {"E10", "E20", "E30", "E40", "E50"};
-	private static final AbstractLinkedList<String> SOLUTION_LIST = new edu.list.jenks.ted.LinkedList<>();
 	
+	private final AbstractLinkedList<String> SOLUTION_LIST = new edu.util.jenks.ted.LinkedList<>();
 	private AbstractLinkedList<String> studentList;
 	private String studentClassName;
 	
@@ -459,7 +460,6 @@ public class LinkedListTest extends Testable {
 	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		studentList = (AbstractLinkedList<String>)ReflectionUtil.newInstance(studentClassName);
-		SOLUTION_LIST.clear();
 		totalPoints += 52;
 	}
 

@@ -1,4 +1,4 @@
-package edu.jenks.dist.list;
+package edu.jenks.dist.util;
 
 import java.util.NoSuchElementException;
 

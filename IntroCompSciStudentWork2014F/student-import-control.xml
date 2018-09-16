@@ -1,11 +1,17 @@
+<?xml version="1.0"?>
 <!DOCTYPE import-control PUBLIC
-    "-//Puppy Crawl//DTD Import Control 1.1//EN"
-    "http://www.puppycrawl.com/dtds/import_control_1_1.dtd">
+    "-//Checkstyle//DTD ImportControl Configuration 1.4//EN"
+    "https://checkstyle.org/dtds/import_control_1_4.dtd">
 <import-control pkg="edu">
 	<allow pkg="java.text"/>
 	<allow pkg="edu.jenks"/>
-	<subpackage name="list">
-		<allow class="java.util.NoSuchElementException"/>
+	<subpackage name="util">
+		<file name="Hashtable">
+			<allow class="java.lang.reflect.Array"/>
+		</file>
+		<file name="LinkedList" >
+			<allow class="java.util.NoSuchElementException"/>
+		</file>
 	</subpackage>
 	<subpackage name="cb.scrambler">
 		<allow pkg="java.util"/>

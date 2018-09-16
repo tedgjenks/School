@@ -1,8 +1,8 @@
-package edu.list.jenks.ted;
+package edu.util.jenks.ted;
 
 import java.util.NoSuchElementException;
 
-import edu.jenks.dist.list.AbstractLinkedList;
+import edu.jenks.dist.util.AbstractLinkedList;
 
 public class LinkedList<E> implements AbstractLinkedList<E> {
 	private Node head, tail;
@@ -88,7 +88,7 @@ public class LinkedList<E> implements AbstractLinkedList<E> {
 		Node curNode = head;
 		for(int curIndex = 0; curIndex < size && foundIndex < 0; curIndex++, curNode = curNode.nextNode) {
 			E nodeValue = curNode.nodeValue;
-			if(o == null ? nodeValue == null : o.equals(nodeValue))
+			if(nodeValue == null ? o == null : nodeValue.equals(o))
 				foundIndex = curIndex;
 		}
 		return foundIndex;
@@ -100,7 +100,7 @@ public class LinkedList<E> implements AbstractLinkedList<E> {
 		Node curNode = tail;
 		for(int curIndex = size - 1; curIndex >= 0 && foundIndex < 0; curIndex--, curNode = curNode.previousNode) {
 			E nodeValue = curNode.nodeValue;
-			if(o == null ? nodeValue == null : o.equals(nodeValue))
+			if(nodeValue == null ? o == null : nodeValue.equals(o))
 				foundIndex = curIndex;
 		}
 		return foundIndex;
