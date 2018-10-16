@@ -4,7 +4,6 @@
 package edu.util.jenks.ted;
 
 import edu.jenks.dist.util.*;
-
 import java.lang.reflect.Array;
 
 /**
@@ -21,6 +20,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 	/**
 	 * @param initialCapacity - the initial capacity (length) of the backing array
 	 */
+	@SuppressWarnings("unchecked")
 	public Hashtable(int initialCapacity) {
 		entries = new AbstractLinkedList[initialCapacity];
 		calculateLoadFactor();
@@ -31,10 +31,11 @@ public class Hashtable<K, V> implements Map<K, V> {
 		return entries.length;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
-		for(int index = entries.length - 1; index >= 0; index--)
-			entries[index] = null;
+		int length = entries.length;
+		entries = new AbstractLinkedList[length]; 
 		size = 0;
 	}
 
@@ -70,6 +71,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 		return Math.abs(MapHelper.hashFunction(key) % entries.length);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public K[] getKeys() {
 		K[] keys = null;
@@ -82,6 +84,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 		return keys;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public V[] getValues() {
 		V[] values = null;
@@ -95,7 +98,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 	}
 	
 	private Entry<K, V>[] getEntries() {
-		AbstractLinkedList<Entry<K, V>> entriesList = new LinkedList();
+		AbstractLinkedList<Entry<K, V>> entriesList = new LinkedList<Entry<K, V>>();
 		for(int arrayIndex = entries.length - 1; arrayIndex >= 0; arrayIndex--) {
 			AbstractLinkedList<Entry<K, V>> list = entries[arrayIndex];
 			if(list != null) {
@@ -103,6 +106,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 					entriesList.add(list.get(listIndex));
 			}
 		}
+		@SuppressWarnings("unchecked")
 		Entry<K, V>[] entriesArray = (Entry<K, V>[])(new Entry[entriesList.size()]);
 		for(int index = entriesArray.length - 1; index >= 0; index--)
 			entriesArray[index] = entriesList.remove();
@@ -124,9 +128,9 @@ public class Hashtable<K, V> implements Map<K, V> {
 		boolean rehash = checkLoadFactor;
 		int index = getArrayIndexFromKey(key);
 		AbstractLinkedList<Entry<K, V>> list = entries[index];
-		Entry<K, V> newEntry = new Entry(key, value);
+		Entry<K, V> newEntry = new Entry<K, V>(key, value);
 		if(list == null) {
-			list = new LinkedList();
+			list = new LinkedList<Entry<K, V>>();
 			entries[index] = list;
 		} else {
 			int listIndex = list.indexOf(newEntry);
@@ -163,7 +167,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 		return size;
 	}
 	
-	public static class Entry<K, V> {
+	private static class Entry<K, V> {
 		public final K KEY;
 		public final V VALUE;
 		public Entry(K key, V value) {
@@ -188,6 +192,7 @@ public class Hashtable<K, V> implements Map<K, V> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void rehash() {
 		calculateLoadFactor();
 		if(currentLoadFactor > LOAD_FACTOR) {

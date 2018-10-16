@@ -93,6 +93,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
+	// pre: E00, EMid, E40, E10, E20, ELast
 	public void testAddLast18() {
 		int points = 1;
 		String message = "testAddLast", element = "E70";
@@ -311,7 +312,7 @@ public class LinkedListTest extends Testable {
 		String message = "testRemoveFirstByValue";
 		addToLists(TEST_ELEMENTS);
 		// now E30, E40, E50, E20, E30, E40, E10, E20, E30, E40, E50
-		boolean pass = removeFromLists("E40");
+		boolean pass = removeFromLists("E40") && removeFromLists("E30") && removeFromLists("E50") && removeFromLists("E50");
 		if(pass)
 			pass = removeFromLists("E70");
 		if(pass)
@@ -331,7 +332,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	// pre: E30, E50, E20, E30, E40, E10, E20, E30, E40, E50
+	// pre: E20, E30, E40, E10, E20, E30, E40
 	public void testRemoveLast16() {
 		int points = 1;
 		String message = "testRemoveLast";
@@ -347,16 +348,44 @@ public class LinkedListTest extends Testable {
 		}
 	}
 	
-	// 5 points
-	// pre: E30, E50, E20, E30, E40, E10, E20, E30, E40
+	// 1 point
+	// pre: E00, EMid, E40, E10, E20, ELast, E70
+	public void testRemoveSpecial19() {
+		String message = "testRemoveSpecial";
+		int points = 1;
+		SOLUTION_LIST.clear();
+		studentList.clear();
+		boolean pass = removeFromLists("E100");
+		if(pass) {
+			addToLists(0, "E10");
+			pass = removeFromLists("E100");
+		}
+		if(pass)
+			pass = removeFromLists("E10");
+		if(pass) {
+			totalPoints += points;
+			logPass(message);
+		} else {
+			continueTesting = false;
+			logFail(message, SOLUTION_LIST, studentList, points);
+		}
+	}
+	
+	// 4 points
+	// pre: E20, E30, E40, E10, E20, E30
 	public void testSet17() {
-		int points = 5;
+		int points = 4;
 		String message = "testSet";
 		String value = "E00";
+		// now E00, E30, E40, E10, E20, E30
 		boolean pass = setLists(0, value);
 		value = "ELast";
 		if(pass)
 			pass = setLists(SOLUTION_LIST.size() - 1, value);
+		// now E00, E30, E40, E10, E20, ELast
+		if(pass)
+			pass = setLists(1, "EMid");
+		// now E00, EMid, E40, E10, E20, ELast
 		if(pass)
 			pass = listsEqual();
 		if(pass) {
@@ -380,8 +409,10 @@ public class LinkedListTest extends Testable {
 		if(passException) {
 			logPass(message);
 			totalPoints++;
-		} else
+		} else {
+			continueTesting = false;
 			logFail(message);
+		}
 	}
 	
 	// 1 point

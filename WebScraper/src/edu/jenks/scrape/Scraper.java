@@ -123,6 +123,16 @@ public abstract class Scraper {
 		LOGGER.info("Signed Out");
 	}
 	
+	protected void selectSchool(HtmlPage curPage, String school) throws IOException {
+		clickAnchorByID(curPage, "schoolContext");
+		LOGGER.info("School clicked");
+		LOGGER.info("Select school: " + school);
+		HtmlSelect select = (HtmlSelect)curPage.getElementByName("Schoolid");
+		HtmlOption option = select.getOptionByText(school);
+		select.setSelectedAttribute(option, true);
+		LOGGER.info("School selected");
+	}
+	
 	protected void selectTerm(HtmlPage curPage) throws IOException {
 		clickAnchorByID(curPage, "termContext");
 		LOGGER.info("Term clicked.");

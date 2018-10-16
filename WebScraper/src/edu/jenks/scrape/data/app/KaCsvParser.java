@@ -59,7 +59,7 @@ public class KaCsvParser extends AbstractCsvParser {
 		}
 	}
 	
-	private LocalDate dueDate;
+	private LocalDate dueDateAfter, dueDateBefore;
 	private final Map<String, Assignment> ASSIGNMENTS = new HashMap<>(100);
 	private final Map<String, Integer> HEADER_INDECES = new HashMap<>(8);
 
@@ -75,9 +75,12 @@ public class KaCsvParser extends AbstractCsvParser {
 		EXPORT_FILE_PROPS.load(new FileInputStream(KA_PROPERTIES_FILEPATH));
 		Reader csvFile = new FileReader(EXPORT_FILE_PROPS.getProperty("CSV_FILEPATH") + EXPORT_FILE_PROPS.getProperty("CSV_EXPORT_FILE"));
 		int year = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_YEAR"));
-		int month = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_MONTH"));
-		int day = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_DAY"));
-		dueDate = LocalDate.of(year, month, day);
+		int monthAfter = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_MONTH_AFTER"));
+		int dayAfter = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_DAY_AFTER"));
+		dueDateAfter = LocalDate.of(year, monthAfter, dayAfter);
+		int monthBefore = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_MONTH_BEFORE"));
+		int dayBefore = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_DAY_BEFORE"));
+		dueDateBefore = LocalDate.of(year, monthBefore, dayBefore);
 		csvReader = new CSVReader(csvFile);
 	}
 	
@@ -106,41 +109,66 @@ public class KaCsvParser extends AbstractCsvParser {
 			loadHeaderIndeces(records.next());
 		while(records.hasNext()) {
 			String[] record = records.next();
-			String dueDate = record[HEADER_INDECES.get(HEADER_DUE_DATE)];
-			if(processRecord(dueDate)) {
-				String assignmentName = record[HEADER_INDECES.get(HEADER_ASSIGNMENT_NAME)];
-				if(!ASSIGNMENTS.containsKey(assignmentName))
-					ASSIGNMENTS.put(assignmentName, new Assignment(assignmentName));
-				Assignment assignment = ASSIGNMENTS.get(assignmentName);
-				String studentName = record[HEADER_INDECES.get(HEADER_STUDENT_NAME)];
-				studentName = studentName.replaceAll("'", "");
-				if(!"null".equals(studentName)) {
-					String grade = record[HEADER_INDECES.get(HEADER_BEST_SCORE)];
-					String section = STUDENT_SECTION_MAP.get(studentName);
-					if(section != null)
-						assignment.addAssignment(Byte.parseByte(section), studentName, (grade == null || grade.length() == 0) ? 0 : Byte.parseByte(grade));
-					else
-						System.out.println(studentName + " does not have a section");
-					processedCount++;
+			int dueDateIndex = HEADER_INDECES.get(HEADER_DUE_DATE);
+			if(dueDateIndex < record.length) {
+				String dueDate = record[dueDateIndex];
+				if(processRecord(dueDate)) {
+					String assignmentName = record[HEADER_INDECES.get(HEADER_ASSIGNMENT_NAME)];
+					if(!ASSIGNMENTS.containsKey(assignmentName))
+						ASSIGNMENTS.put(assignmentName, new Assignment(assignmentName));
+					Assignment assignment = ASSIGNMENTS.get(assignmentName);
+					String studentName = record[HEADER_INDECES.get(HEADER_STUDENT_NAME)];
+					//studentName = studentName.replaceAll("'", "");
+					if(!"null".equals(studentName)) {
+						String grade = record[HEADER_INDECES.get(HEADER_BEST_SCORE)];
+						String section = STUDENT_SECTION_MAP.get(studentName);
+						if(section != null)
+							assignment.addAssignment(Byte.parseByte(section), studentName, (grade == null || grade.length() == 0) ? 0 : Byte.parseByte(grade));
+						else
+							System.out.println(studentName + " does not have a section");
+						processedCount++;
+					}
 				}
-			}
+			} else
+				System.out.println("Stub record length " + record.length + ": " + Arrays.toString(record));
 			totalCount++;
 		}
 		System.out.println("KA records meeting due date: " + processedCount + " out of " + totalCount);
 	}
 	
 	private boolean processRecord(String recordDueDate) {
+		return testDateBefore(recordDueDate) && testDateAfter(recordDueDate);
+	}
+	
+	private boolean testDateBefore(String recordDueDate) {
 		boolean meetsDueDate = false;
 		String monthDay = recordDueDate.split(",")[0];
 		String month = monthDay.substring(0, 3);
-		if(dueDate.getMonthValue() < MONTHS.get(month))
+		if(dueDateBefore.getMonthValue() > MONTHS.get(month))
 			meetsDueDate = true;
-		else if(dueDate.getMonthValue() == MONTHS.get(month)) {
+		else if(dueDateBefore.getMonthValue() == MONTHS.get(month)) {
 			String day = String.valueOf(monthDay.charAt(4));
 			char second = monthDay.charAt(5);
 			if(Character.isDigit(second))
 				day += second;
-			if(dueDate.getDayOfMonth() <= Integer.parseInt(day))
+			if(dueDateBefore.getDayOfMonth() >= Integer.parseInt(day))
+				meetsDueDate = true;
+		}
+		return meetsDueDate;
+	}
+	
+	private boolean testDateAfter(String recordDueDate) {
+		boolean meetsDueDate = false;
+		String monthDay = recordDueDate.split(",")[0];
+		String month = monthDay.substring(0, 3);
+		if(dueDateAfter.getMonthValue() < MONTHS.get(month))
+			meetsDueDate = true;
+		else if(dueDateAfter.getMonthValue() == MONTHS.get(month)) {
+			String day = String.valueOf(monthDay.charAt(4));
+			char second = monthDay.charAt(5);
+			if(Character.isDigit(second))
+				day += second;
+			if(dueDateAfter.getDayOfMonth() <= Integer.parseInt(day))
 				meetsDueDate = true;
 		}
 		return meetsDueDate;

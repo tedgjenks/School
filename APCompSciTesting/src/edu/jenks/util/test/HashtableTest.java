@@ -4,6 +4,7 @@
 package edu.jenks.util.test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import edu.jenks.test.Testable;
@@ -50,6 +51,38 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
+	public void testGetValues37() {
+		String message = "testGetValues";
+		int points = 3;
+		Integer[] actValues = studentMap.getValues();
+		Integer[] expValues = SOLUTION_MAP.getValues();
+		arraysEqual(message, points, actValues, expValues);
+	}
+	
+	// points: 3
+	public void testGetKeys36() {
+		String message = "testGetKeys";
+		int points = 3;
+		String[] actKeys = studentMap.getKeys();
+		String[] expKeys = SOLUTION_MAP.getKeys();
+		arraysEqual(message, points, actKeys, expKeys);
+	}
+	
+	private void arraysEqual(String message, int points, Object[] actKeys, Object[] expKeys) {
+		boolean pass = false;
+		if(actKeys != null) {
+			Arrays.sort(actKeys);
+			Arrays.sort(expKeys);
+			pass = Arrays.equals(actKeys, expKeys);
+		}
+		if(pass) {
+			totalPoints += points;
+			logPass(message);
+		} else
+			logFail(message, Arrays.toString(expKeys), Arrays.toString(actKeys), points);
+	}
+	
+	// points: 3
 	public void testClearAndIsEmpty40() {
 		String message = "testClearAndIsEmpty";
 		int points = 1;
@@ -83,10 +116,10 @@ public class HashtableTest extends Testable {
 		}
 	}
 	
-	// points: 5
+	// points: 3
 	public void testGetArrayIndexFromKey01() {
 		String message = "testGetArrayIndexFromKey";
-		int points = 5;
+		int points = 3;
 		if(compareHash(message, points, INIT_MAP_1_7.keySet().iterator()) && compareHash(message, points, INIT_MAP_9_16.keySet().iterator())) {
 			totalPoints += points;
 			logPass(message);
@@ -122,10 +155,10 @@ public class HashtableTest extends Testable {
 			logFail(message);
 	}
 	
-	// points: 4
+	// points: 3
 	public void testContainsValue30() {
 		String message = "testContainsValue";
-		int points = 4;
+		int points = 3;
 		if(studentMap.containsValue(5) && !studentMap.containsValue(3)) {
 			totalPoints += points;
 			logPass(message);
@@ -133,10 +166,10 @@ public class HashtableTest extends Testable {
 			logFail(message);
 	}
 	
-	// points: 4
+	// points: 3
 	public void testContainsKey25() {
 		String message = "testContainsKey";
-		int points = 4;
+		int points = 3;
 		if(studentMap.containsKey("Five") && !studentMap.containsKey("Three")) {
 			totalPoints += points;
 			logPass(message);
@@ -144,10 +177,10 @@ public class HashtableTest extends Testable {
 			logFail(message);
 	}
 	
-	// points: 10
+	// points: 8
 	public void testRemove20() {
 		String message = "testRemove";
-		int points = 10;
+		int points = 8;
 		boolean pass = true;
 		pass = new Integer(3).equals(removeFromMaps("Three"));
 		if(pass) {
@@ -155,7 +188,7 @@ public class HashtableTest extends Testable {
 			pass = mapsEqual();
 		}
 		if(pass) {
-			totalPoints += 5;
+			totalPoints += points;
 			logPass(message);
 		} else {
 			continueTesting = false;
@@ -264,6 +297,7 @@ public class HashtableTest extends Testable {
 		return map;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {

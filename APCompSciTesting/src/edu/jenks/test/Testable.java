@@ -50,11 +50,11 @@ public abstract class Testable implements Runnable {
 	}
 	
 	public void start() {
-		feedbackLogger.log(Level.INFO, "Begin test of package " + studentPackage + "\r\n" + LoggingUtil.ASTERISKS);
+		feedbackLogger.log(Level.INFO, "Begin test of package " + studentPackage + System.lineSeparator() + LoggingUtil.ASTERISKS);
 		try {
 			verifySuperClass(buildStudentClassNameToSuperclassName());
 			setUp();
-			feedbackLogger.log(Level.INFO, "Pass - object creation");
+			feedbackLogger.log(Level.INFO, "Pass - object creation" + System.lineSeparator());
 		} catch(Exception e) {
 			feedbackLogger.log(Level.SEVERE, "Fail - object creation failed; abort testing: " + e.getMessage());
 			continueTesting = false;
@@ -85,10 +85,10 @@ public abstract class Testable implements Runnable {
 		double finalPoints = totalPoints;
 		double penaltyPoints = getLatePenalty();
 		if(penaltyPoints > 0) {
-			feedbackLogger.log(Level.WARNING, "Late penalty applied - " + penaltyPoints);
+			feedbackLogger.log(Level.WARNING, "Late penalty applied - " + penaltyPoints + System.lineSeparator());
 			finalPoints -= penaltyPoints;
 		}
-		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":\n" + finalPoints + " points.\r\n" + LoggingUtil.ASTERISKS + "\r\n");
+		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":" + System.lineSeparator() + finalPoints + " points." + System.lineSeparator() + LoggingUtil.ASTERISKS + System.lineSeparator());
 		if(getPointsAvailable() == finalPoints)
 			feedbackLogger.log(Level.INFO, "Congratulations!  You earned all available points!");
 		else {
@@ -116,9 +116,9 @@ public abstract class Testable implements Runnable {
 			} catch(Exception e) {
 				logException(methodName, e);
 				if(inputToStudentCode != null && inputToStudentCode.length() > 0) {
-					feedbackLogger.log(Level.WARNING, "input: " + inputToStudentCode);
+					feedbackLogger.log(Level.WARNING, "input: " + inputToStudentCode + System.lineSeparator());
 				}
-					
+				continueTesting = false;
 			}
 			feedbackLogger.log(Level.FINE, "End test of " + methodName);
 		}
@@ -144,7 +144,7 @@ public abstract class Testable implements Runnable {
 	public void logException(String method, Exception e) {
 		StringBuilder sb = new StringBuilder(100);
 		String notice = StringUtil.buildString('*', 20);
-		sb.append("Unhandled exception on method: ").append(method).append(notice).append("\n");
+		sb.append("Unhandled exception on method: ").append(method).append(notice).append(System.lineSeparator());
 		sb.append(e.toString());
 		String message = e.getMessage();
 		if(message != null)
@@ -152,12 +152,12 @@ public abstract class Testable implements Runnable {
 		Throwable t = e.getCause();
 		if(t != null)
 			sb.append("; CAUSE: ").append(t.toString());
-		sb.append("\n").append(notice).append("End unhandled exception").append(notice);
+		sb.append(System.lineSeparator()).append(notice).append("End unhandled exception").append(notice).append(System.lineSeparator());
 		feedbackLogger.log(Level.WARNING, sb.toString());
 	}
 	
 	public void logPass(String message) {
-		feedbackLogger.log(Level.INFO, "Pass: " + message);
+		feedbackLogger.log(Level.INFO, "Pass: " + message + System.lineSeparator());
 	}
 	
 	public void logFailPrereq() {
@@ -165,7 +165,7 @@ public abstract class Testable implements Runnable {
 	}
 	
 	public void logFail(String message) {
-		feedbackLogger.log(Level.WARNING, "Fail: " + message);
+		feedbackLogger.log(Level.WARNING, "Fail: " + message + System.lineSeparator());
 	}
 	
 	public void logPass(String message, String expected, String actual) {
@@ -202,14 +202,14 @@ public abstract class Testable implements Runnable {
 	
 	public void logExpectedActual(Level level, String message, String expected, String actual) {
 		StringBuilder sb = new StringBuilder(100);
-		sb.append(message).append("\n ");
-		sb.append("\tExpected: ").append(expected).append("\n ");
-		sb.append("\tActual: " ).append(actual).append("\n ");
+		sb.append(message).append(System.lineSeparator());
+		sb.append("\tExpected: ").append(expected).append(System.lineSeparator());
+		sb.append("\tActual: " ).append(actual).append(System.lineSeparator());
 		feedbackLogger.log(level, sb.toString());
 	}
 	
 	public void logInfo(String message) {
-		feedbackLogger.log(Level.INFO, message);
+		feedbackLogger.log(Level.INFO, message + System.lineSeparator());
 	}
 	
 	public void setLogFilePathFeedback(String path, Student student) throws IOException {
