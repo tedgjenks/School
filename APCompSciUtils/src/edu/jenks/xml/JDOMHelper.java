@@ -18,6 +18,7 @@ public class JDOMHelper {
 		File file = new File(fileName);
 		if(file.exists()) {
 			SAXBuilder builder = new SAXBuilder(XMLReaders.DTDVALIDATING);
+			//SAXBuilder builder = new SAXBuilder();
 			document = builder.build(file);
 		}
 		return document;
