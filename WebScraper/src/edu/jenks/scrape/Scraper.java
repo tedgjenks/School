@@ -49,7 +49,7 @@ public abstract class Scraper {
 		double elapsedMillis = System.currentTimeMillis() - startTimeMillis;
 		double millisPerUnit = elapsedMillis / currentCount;
 		long estimatedRemainingMillis = (long)((totalCount - currentCount) * millisPerUnit);
-		out.println("Minutes remaining:" + estimatedRemainingMillis / 1000 / 60);
+		out.println("Minutes remaining: " + estimatedRemainingMillis / 1000 / 60);
 	}
 	
 	protected final WebClient WEB_CLIENT = new WebClient(BrowserVersion.CHROME);
