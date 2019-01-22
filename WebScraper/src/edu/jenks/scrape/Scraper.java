@@ -3,7 +3,7 @@ package edu.jenks.scrape;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
-
+import static java.lang.System.out;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
@@ -45,6 +45,13 @@ public abstract class Scraper {
 		}
 	}
 	
+	protected static void reportEstimatedRemainingMinutes(long startTimeMillis, int currentCount, int totalCount) {
+		double elapsedMillis = System.currentTimeMillis() - startTimeMillis;
+		double millisPerUnit = elapsedMillis / currentCount;
+		long estimatedRemainingMillis = (long)((totalCount - currentCount) * millisPerUnit);
+		out.println("Minutes remaining:" + estimatedRemainingMillis / 1000 / 60);
+	}
+	
 	protected final WebClient WEB_CLIENT = new WebClient(BrowserVersion.CHROME);
 	protected final byte DEFAULT_WAIT_SECONDS = 10;
 	protected final byte DEFAULT_JS_ATTEMPTS = 3;
@@ -65,6 +72,8 @@ public abstract class Scraper {
 		WEB_CLIENT.getOptions().setThrowExceptionOnFailingStatusCode(true);
 		WEB_CLIENT.getOptions().setThrowExceptionOnScriptError(false);
 		WEB_CLIENT.getOptions().setPrintContentOnFailingStatusCode(false);
+		java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF); 
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
 	}
 	
 	protected void waitForJavascript(int seconds, String message) {

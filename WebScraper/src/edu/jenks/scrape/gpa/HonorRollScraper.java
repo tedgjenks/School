@@ -7,6 +7,7 @@ import com.gargoylesoftware.htmlunit.html.*;
 import com.opencsv.CSVWriter;
 
 import edu.jenks.scrap.util.SystemInfo;
+import edu.jenks.scrape.Scraper;
 import edu.jenks.scrape.data.gpa.HonorRollEntry;
 import edu.jenks.scrape.data.gpa.HonorRollEntry.HonorRollEntryCourse;
 import edu.jenks.scrape.data.gpa.Student;
@@ -18,39 +19,27 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 	
 	private static final HonorRollScraper INSTANCE = new HonorRollScraper();
 	
-	private final Properties HISTORICAL_GRADES_PROPERTIES;
-	private final String QUERY_TERM, QUERY_SEMESTER, QUERY_YEAR = "Y1", QUERY_FINAL = "F1";
-	private final int TABLE_CELL_INDEX_COURSE_NAME, TABLE_CELL_INDEX_TERM, TABLE_CELL_INDEX_SEMESTER, TABLE_CELL_INDEX_YEAR, TABLE_CELL_INDEX_FINAL;
 	private final Properties HONOR_ROLL_PROPERTIES;
 	private final Set<String> VALID_TERMS = new HashSet<>(5);
-	private final Map<String, Integer> TABLE_CELL_INDEX_TERMS_MAP = new HashMap<>(5);
-	private final CSVWriter HR_WRITER, NOT_HR_WRITER;
+	private final CSVWriter A_HR_WRITER, AB_HR_WRITER, NOT_HR_WRITER;
+	public final String QUERY_TERM, QUERY_SEMESTER, QUERY_YEAR = "Y1", QUERY_FINAL = "F1";
 	
 	public HonorRollScraper() {
 		final String historicalGradesPropertiesPath = SystemInfo.INSTANCE.RESOURCES_PATH + "PowerSchoolPages/HistoricalGrades.properties";
-		HISTORICAL_GRADES_PROPERTIES = new Properties();
 		final String honorRollPropertiesPath = SystemInfo.INSTANCE.RESOURCES_PATH + "HonorRoll.properties";
 		HONOR_ROLL_PROPERTIES = new Properties();
 		try {
 			HISTORICAL_GRADES_PROPERTIES.load(new FileInputStream(historicalGradesPropertiesPath));
 			HONOR_ROLL_PROPERTIES.load(new FileInputStream(honorRollPropertiesPath));
-			TABLE_CELL_INDEX_COURSE_NAME = Integer.parseInt(HISTORICAL_GRADES_PROPERTIES.getProperty("COURSE_NAME_INDEX"));
 			QUERY_TERM = HONOR_ROLL_PROPERTIES.getProperty("TERM");
-			final String indexSuffix = "_INDEX";
-			TABLE_CELL_INDEX_TERM = Integer.parseInt(HISTORICAL_GRADES_PROPERTIES.getProperty(QUERY_TERM + indexSuffix));
-			TABLE_CELL_INDEX_TERMS_MAP.put(QUERY_TERM, TABLE_CELL_INDEX_TERM);
 			QUERY_SEMESTER = HONOR_ROLL_PROPERTIES.getProperty("SEMESTER");
-			TABLE_CELL_INDEX_SEMESTER = Integer.parseInt(HISTORICAL_GRADES_PROPERTIES.getProperty(QUERY_SEMESTER + indexSuffix));
-			TABLE_CELL_INDEX_TERMS_MAP.put(QUERY_SEMESTER, TABLE_CELL_INDEX_SEMESTER);
-			TABLE_CELL_INDEX_YEAR = Integer.parseInt(HISTORICAL_GRADES_PROPERTIES.getProperty(QUERY_YEAR + indexSuffix));
-			TABLE_CELL_INDEX_TERMS_MAP.put(QUERY_YEAR, TABLE_CELL_INDEX_YEAR);
-			TABLE_CELL_INDEX_FINAL = Integer.parseInt(HISTORICAL_GRADES_PROPERTIES.getProperty(QUERY_FINAL + indexSuffix));
-			TABLE_CELL_INDEX_TERMS_MAP.put(QUERY_FINAL, TABLE_CELL_INDEX_FINAL);
 			VALID_TERMS.add("YR");
 			VALID_TERMS.add(QUERY_TERM);
 			VALID_TERMS.add(QUERY_SEMESTER);
-			HonorRollEntry.setMinGrade(Integer.parseInt(HONOR_ROLL_PROPERTIES.getProperty("AB_MIN_GRADE")));
-			HR_WRITER = new CSVWriter(new FileWriter(SystemInfo.INSTANCE.LOGGING_PATH + getGradeLevel() + "_AB_HonorRoll.csv", false));
+			HonorRollEntry.setMinGradeA(Integer.parseInt(HONOR_ROLL_PROPERTIES.getProperty("A_MIN_GRADE")));
+			HonorRollEntry.setMinGradeAB(Integer.parseInt(HONOR_ROLL_PROPERTIES.getProperty("AB_MIN_GRADE")));
+			A_HR_WRITER = new CSVWriter(new FileWriter(SystemInfo.INSTANCE.LOGGING_PATH + getGradeLevel() + "_A_HonorRoll.csv", false));
+			AB_HR_WRITER = new CSVWriter(new FileWriter(SystemInfo.INSTANCE.LOGGING_PATH + getGradeLevel() + "_AB_HonorRoll.csv", false));
 			NOT_HR_WRITER = new CSVWriter(new FileWriter(SystemInfo.INSTANCE.LOGGING_PATH + getGradeLevel() + "_NotAB_HonorRoll.csv", false));
 		} catch(IOException e) {
 			e.printStackTrace(System.err);
@@ -62,7 +51,8 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 	protected void close() {
 		super.close();
 		try {
-			HR_WRITER.close();
+			A_HR_WRITER.close();
+			AB_HR_WRITER.close();
 			NOT_HR_WRITER.close();
 		} catch (IOException e) {
 			LOGGER.severe(e.getMessage());
@@ -94,31 +84,33 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 		HonorRollEntry hrEntry = new HonorRollEntry();
 		DomElement element = (HtmlElement)hgPage.getElementById(getHgContentMainId());
 		DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(getHgRowTag());
+		Map<String, Integer> headerIndexes = mapHeaderIndexes(courseDataRows.get(0));
 		for(int index = courseDataRows.size() - 1; index > 0; index--) {
 			HtmlElement tableRow = courseDataRows.get(index);
 			DomNodeList<HtmlElement> tableCells = tableRow.getElementsByTagName(getHgCellTag());
-			String yearTerm = tableCells.get(0).getTextContent();
+			String yearTerm = tableCells.get(headerIndexes.get(HG_TH_YEAR_TERM_CONTENT)).getTextContent();
 			if(yearTerm.startsWith(HONOR_ROLL_PROPERTIES.getProperty("YEAR")) && VALID_TERMS.contains(yearTerm.substring(yearTerm.length() - 2))) {
-				String courseName = tableCells.get(TABLE_CELL_INDEX_COURSE_NAME).getTextContent();
-				String grade = discoverGrade(QUERY_TERM, tableCells);
+				String courseName = tableCells.get(headerIndexes.get(HG_TH_COURSE_CONTENT)).getTextContent();
+				String grade = discoverGrade(QUERY_TERM, headerIndexes, tableCells);
 				hrEntry.addCourse(courseName, grade);
 			}
 		}
 		return hrEntry;
 	}
 	
-	private String discoverGrade(String term, DomNodeList<HtmlElement> tableCells) {
-		DomNodeList<HtmlElement> gradeAnchors = tableCells.get(TABLE_CELL_INDEX_TERMS_MAP.get(term)).getElementsByTagName(getHgGradeAnchorTag());
+	private String discoverGrade(String term, Map<String, Integer> headerIndexes, DomNodeList<HtmlElement> tableCells) {
+		Integer headerIndex = null;
+		while((headerIndex = headerIndexes.get(term)) == null) { // check for missing terms
+			term = getParentTerm(term);
+		}
+		DomNodeList<HtmlElement> gradeAnchors = tableCells.get(headerIndex).getElementsByTagName(getHgGradeAnchorTag());
 		String grade;
 		switch(gradeAnchors.size()) {
 			case 0: // look at other grades
-				if(!QUERY_FINAL.equals(term))
-					grade = discoverGrade(getParentTerm(term), tableCells);
-				else
-					grade = "";
+				grade = !QUERY_FINAL.equals(term) ? discoverGrade(getParentTerm(term), headerIndexes, tableCells) : "";
 				break;
 			case 1:
-				grade = parseGradeAnchorTextContent(term, gradeAnchors.get(0).getTextContent(), tableCells);
+				grade = parseGradeAnchorTextContent(term, gradeAnchors.get(0).getTextContent(), headerIndexes, tableCells);
 				break;
 			default: // more than 1
 				grade = handleMultipleGrades(gradeAnchors);
@@ -126,15 +118,14 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 		return grade;
 	}
 	
-	private String parseGradeAnchorTextContent(String term, String textContent, DomNodeList<HtmlElement> tableCells) {
+	private String parseGradeAnchorTextContent(String term, String textContent, Map<String, Integer> headerIndexes, DomNodeList<HtmlElement> tableCells) {
 		String grade = textContent;
 		if(!MathUtil.isIntegerNumber(textContent) && !QUERY_FINAL.equals(term)) {
 			switch(textContent) {
+				case "":
 				case "_":
-					grade = discoverGrade(getParentTerm(term), tableCells);
+					grade = discoverGrade(getParentTerm(term), headerIndexes, tableCells);
 					break;
-				default:
-					LOGGER.warning("Unrecognized grade code: " + grade);
 			}
 		}
 		return grade;
@@ -181,7 +172,7 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 	}
 	
 	public void writeHonorRollEntry(Student student, HonorRollEntry hrEntry) {
-		CSVWriter writer = hrEntry.isOnHonorRoll() ? HR_WRITER : NOT_HR_WRITER;
+		CSVWriter writer = hrEntry.isOnHonorRollA() ? A_HR_WRITER : (hrEntry.isOnHonorRollAB() ? AB_HR_WRITER : NOT_HR_WRITER);
 		List<HonorRollEntryCourse> hrCourses = hrEntry.getCourses();
 		final byte nameCols = 2;
 		int arrayLength = nameCols + hrCourses.size();
@@ -197,12 +188,14 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 		final long startTime = System.currentTimeMillis();
 		LOGGER.log(Level.INFO, "Begin class rank scrape.");
 		Student logStudent = null;
+		int count = 1;
 		try {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
 			curPage = INSTANCE.navigateToClassRank(curPage);
 			curPage = INSTANCE.searchClassRank(curPage);
 			List<Student> students = INSTANCE.recordStudentsFromClassRankPage(curPage);
-			int count = 1, totalStudents = students.size();
+			int totalStudents = students.size();
+			LOGGER.info(count + " students to process from class rank.");
 			for(Student student : students) {
 				try {
 					out.println("Process student " + count + " of " + totalStudents);
@@ -211,10 +204,11 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 					curPage = INSTANCE.requestHistoricalGrades(curPage);
 					HonorRollEntry hrEntry = INSTANCE.parseHistoricalGrades(curPage, student);
 					INSTANCE.writeHonorRollEntry(student, hrEntry);
+					if(count % 10 == 0)
+						Scraper.reportEstimatedRemainingMinutes(startTime, count, totalStudents);
 					count++;
 				} catch(Exception e) {
-					//TODO Young, William Edward Peter
-					LOGGER.warning("Exception on student" + (logStudent != null ? logStudent.getFullName() : "null student"));
+					LOGGER.warning("Exception on student: " + (logStudent != null ? logStudent.getFullName() : "null student"));
 					LOGGER.warning(e.getMessage());
 					e.printStackTrace();
 				}
@@ -225,6 +219,7 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 			LOGGER.severe(t.getMessage());
 			t.printStackTrace();
 		} finally {
+			LOGGER.info(count + " students processed before close.");
 			INSTANCE.close();
 		}
 		LOGGER.log(Level.INFO, "Total time (minutes): " + (System.currentTimeMillis() - startTime) / 1000 / 60);

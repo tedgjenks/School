@@ -5,22 +5,37 @@ import java.util.*;
 import edu.jenks.util.MathUtil;
 
 public class HonorRollEntry {
-	private static int minGrade;
+	private static int minGradeA, minGradeAB;
 	
-	public static void setMinGrade(int minGradeArg) {
-		minGrade = minGradeArg;
+	public static void setMinGradeAB(int minGradeArg) {
+		minGradeAB = minGradeArg;
 	}
 	
-	private boolean onHonorRoll = true;
+	public static void setMinGradeA(int minGradeArg) {
+		minGradeA = minGradeArg;
+	}
+	
+	private boolean noGradesBelowMinGradeAB = true;
+	private boolean noGradesBelowMinGradeA = true;
+	private boolean atLeastOneGrade = false;
 	private List<HonorRollEntryCourse> courses = new ArrayList<>(4);
 	
 	public HonorRollEntry() {
-		if(minGrade == 0)
-			throw new IllegalStateException("minGrade not initialized");
+		if(minGradeA == 0 || minGradeAB == 0)
+			throw new IllegalStateException("minGrades not initialized");
 	}
 	
-	public boolean isOnHonorRoll() {
-		return onHonorRoll;
+	public void setNoHonorRoll() {
+		noGradesBelowMinGradeA = false;
+		noGradesBelowMinGradeAB = false;
+	}
+	
+	public boolean isOnHonorRollA() {
+		return noGradesBelowMinGradeA && atLeastOneGrade;
+	}
+	
+	public boolean isOnHonorRollAB() {
+		return noGradesBelowMinGradeAB && atLeastOneGrade;
 	}
 	
 	public List<HonorRollEntryCourse> getCourses() {
@@ -29,14 +44,19 @@ public class HonorRollEntry {
 	
 	public void addCourse(String name, String grade) {
 		if(MathUtil.isIntegerNumber(grade)) { // numeric grade
-			if(Integer.parseInt(grade) < minGrade)
-				onHonorRoll = false;
+			atLeastOneGrade = true;
+			int gradeInt = Integer.parseInt(grade);
+			if(gradeInt < minGradeAB)
+				setNoHonorRoll();
+			else if(gradeInt < minGradeA)
+				noGradesBelowMinGradeA = false;
 		} else { // non-numeric grade
 			switch(grade) {
 				case "FA":
-					onHonorRoll = false;
+					setNoHonorRoll();
 					break;
 				case "":
+				case "_":
 					grade = "No Grade!";
 					break;
 				default:
@@ -57,7 +77,7 @@ public class HonorRollEntry {
 
 		@Override
 		public String toString() {
-			return new StringBuilder(20).append(NAME).append("(").append(GRADE).append(")").toString();
+			return new StringBuilder(20).append(NAME).append(" - (").append(GRADE).append(")").toString();
 		}
 	}
 }

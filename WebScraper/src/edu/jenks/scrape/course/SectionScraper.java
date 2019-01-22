@@ -12,9 +12,9 @@ public class SectionScraper extends Scraper {
 	private static final String TASK_UPDATE_ROOM = "TaskUpdateRoom";
 	
 	/*** fields to set before running: ***/
-	private static final String TASK = TASK_UPDATE_ROOM;
-	private static final String CURRENT_LEAD_TEACHER = "Miller, Amsey";
-	private static final String NEW_DATA = "413";
+	private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
+	private static final String CURRENT_LEAD_TEACHER = "Shuping, Richard Todd";
+	private static final String NEW_DATA = "Sorrow, Mark";
 	
 	private static final SectionScraper INSTANCE = new SectionScraper();
 	private static final byte TEACHER_SECTION_TABLE_COL_INDEX_TERM = 1;

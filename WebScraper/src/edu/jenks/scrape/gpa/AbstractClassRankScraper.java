@@ -1,17 +1,9 @@
 package edu.jenks.scrape.gpa;
 
 //import static java.lang.System.out;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
-import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import java.io.*;
+import java.util.*;
+import com.gargoylesoftware.htmlunit.html.*;
 
 import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.scrape.Scraper;
@@ -21,7 +13,9 @@ public class AbstractClassRankScraper extends Scraper {
 	public final Properties CLASS_RANKING_REPORT_PROPERTIES;
 	public final Properties HISTORICAL_GRADES_PROPERTIES;
 	public final Properties HOME_PROPERTIES;
-	
+	public final String HG_TH_YEAR_TERM_CONTENT = "Year/Term", HG_TH_GRADE_LEVEL_CONTENT = "Grd Lvl",
+			HG_TH_COURSE_CONTENT = "Course", HG_TH_EARNED_CREDIT_CONTENT = "Earned Credit";
+		
 	public AbstractClassRankScraper() {
 		CLASS_RANKING_REPORT_PROPERTIES = new Properties();
 		HISTORICAL_GRADES_PROPERTIES = new Properties();
@@ -56,6 +50,14 @@ public class AbstractClassRankScraper extends Scraper {
 	
 	public String getHgGradeAnchorTag() {
 		return HISTORICAL_GRADES_PROPERTIES.getProperty("GRADE_ANCHOR_TAG");
+	}
+	
+	public Map<String, Integer> mapHeaderIndexes(HtmlElement headerRow) {
+		Map<String, Integer> map = new HashMap<>(20);
+		DomNodeList<HtmlElement> headerCells = headerRow.getElementsByTagName("th");
+		for(int index = headerCells.size() - 1; index >= 0; index--)
+			map.put(headerCells.get(index).getTextContent(), index);
+		return map;
 	}
 	
 	public HtmlPage searchStudent(Student student) throws IOException {
