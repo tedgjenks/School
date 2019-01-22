@@ -15,18 +15,18 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
+import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.util.LoggingUtil;
 
 public abstract class Scraper {
 	public static final Logger LOGGER = Logger.getGlobal();
-	public static final String LOG_PATH = "C:\\Users\\Jenks\\Documents\\temp\\scraper\\";
-	public static final String CREDENTIALS_PROPERTIES_PATH = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolCredentials.properties";
+	public static final String CREDENTIALS_PROPERTIES_PATH = SystemInfo.INSTANCE.RESOURCES_PATH + "PowerSchoolCredentials.properties";
 	public static final String DB_CONNECTION_ERROR = "Cannot establish DB connection";
 	public static final Properties CREDENTIALS_PROPS = new Properties();
 	private static final Properties CURRENT_TERM_PROPS = new Properties();
 	
 	protected static void initLogger() throws IOException {
-		LoggingUtil.initLocalFileLogger(LOGGER, LOG_PATH + "Scraper.log");
+		LoggingUtil.initLocalFileLogger(LOGGER, SystemInfo.INSTANCE.LOGGING_PATH + "Scraper.log");
 		LOGGER.setLevel(Level.ALL);
 	}
 	
@@ -35,13 +35,13 @@ public abstract class Scraper {
 	}
 	
 	static {
-		final String currentTermPropertiesPath = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\CurrentTerm.properties";
+		final String currentTermPropertiesPath = SystemInfo.INSTANCE.RESOURCES_PATH + "CurrentTerm.properties";
 		try {
 			initLogger();
 			initCredentials();
 			CURRENT_TERM_PROPS.load(new FileInputStream(currentTermPropertiesPath));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -64,7 +64,7 @@ public abstract class Scraper {
 		WEB_CLIENT.getOptions().setUseInsecureSSL(true);
 		WEB_CLIENT.getOptions().setThrowExceptionOnFailingStatusCode(true);
 		WEB_CLIENT.getOptions().setThrowExceptionOnScriptError(false);
-		WEB_CLIENT.getOptions().setPrintContentOnFailingStatusCode(true);
+		WEB_CLIENT.getOptions().setPrintContentOnFailingStatusCode(false);
 	}
 	
 	protected void waitForJavascript(int seconds, String message) {
@@ -79,7 +79,7 @@ public abstract class Scraper {
 			if(STUDENT_LOGS.containsKey(fullName))
 				writer = STUDENT_LOGS.get(fullName);
 			else {
-				writer = new FileWriter(LOG_PATH + fullName + ".log", true);
+				writer = new FileWriter(SystemInfo.INSTANCE.LOGGING_PATH + fullName + ".log", true);
 				STUDENT_LOGS.put(fullName, writer);
 			}
 			writer.write(message + System.lineSeparator());
@@ -106,7 +106,10 @@ public abstract class Scraper {
 	}
 	
 	protected HtmlPage authenticatePowerSchoolAdmin() throws IOException {
-		return authenticatePowerSchool(CREDENTIALS_PROPS.getProperty("urlHomeAdmin"));
+		HtmlPage curPage = authenticatePowerSchool(CREDENTIALS_PROPS.getProperty("urlHomeAdmin"));
+		if(curPage.getUrl().toString().indexOf("home.html") < 0)
+			System.out.println("PROBABLE LOGIN FAILURE!");
+		return curPage;
 	}
 	
 	protected HtmlPage authenticatePowerSchoolTeacher() throws IOException {

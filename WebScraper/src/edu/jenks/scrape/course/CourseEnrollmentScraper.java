@@ -7,6 +7,8 @@ import java.util.*;
 import java.io.*;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.opencsv.CSVWriter;
+
+import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.scrape.Scraper;
 
 /**
@@ -142,7 +144,7 @@ public class CourseEnrollmentScraper extends Scraper {
 	}
 	
 	private CSVWriter createCsvWriter() throws IOException {
-		File file = new File(LOG_PATH + "SectionReport.csv");
+		File file = new File(SystemInfo.INSTANCE.LOGGING_PATH + "SectionReport.csv");
 		file.createNewFile();
 		return new CSVWriter(new FileWriter(file));
 	}

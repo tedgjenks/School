@@ -5,34 +5,27 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.*;
 import com.gargoylesoftware.htmlunit.html.*;
-import edu.jenks.scrape.Scraper;
+
+import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.scrape.data.gpa.*;
 import static java.lang.System.out;
 
-public class ClassRankScraper extends Scraper {
+public class ClassRankScraper extends AbstractClassRankScraper {
 	
 	private static final float GPA_DELTA = 0.0005F;
 	private static final float EARNED_CREDIT_DELTA = 0.05F;
 	private static final ClassRankScraper INSTANCE = new ClassRankScraper();
 	
 	private final GpaPersister PERSISTENCE_INTERFACE =  GpaPersister.getInstance(LOGGER);
-	private final Properties CLASS_RANKING_REPORT_PROPERTIES;
 	private final Properties STORED_GRADE_PROPERTIES;
-	private final Properties HISTORICAL_GRADES_PROPERTIES;
 	
 	public ClassRankScraper() {
-		CLASS_RANKING_REPORT_PROPERTIES = new Properties();
 		STORED_GRADE_PROPERTIES = new Properties();
-		HISTORICAL_GRADES_PROPERTIES = new Properties();
-		final String classRankingReportPropertiesPath = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolPages\\ClassRankingReport.properties";
-		final String storeGradePropertiesPath = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolPages\\StoredGrade.properties";
-		final String historicalGradesPropertiesPath = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolPages\\HistoricalGrades.properties";
+		final String storeGradePropertiesPath = SystemInfo.INSTANCE.RESOURCES_PATH + "PowerSchoolPages/StoredGrade.properties";
 		try {
-			CLASS_RANKING_REPORT_PROPERTIES.load(new FileInputStream(classRankingReportPropertiesPath));
 			STORED_GRADE_PROPERTIES.load(new FileInputStream(storeGradePropertiesPath));
-			HISTORICAL_GRADES_PROPERTIES.load(new FileInputStream(historicalGradesPropertiesPath));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -41,8 +34,6 @@ public class ClassRankScraper extends Scraper {
 		LOGGER.log(Level.INFO, "Begin class rank scrape.");
 		try {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
-			if(curPage.getUrl().toString().indexOf("home.html") < 0)
-				System.out.println("PROBABLE LOGIN FAILURE!");
 			List<Student> students = INSTANCE.scrapeStudentsAndPersist(curPage);
 			INSTANCE.scrapeAndPersistHistoricalGrades(curPage, students);
 			INSTANCE.calculateAndPersistGpaFromPersistedHistoricalGrades();
@@ -240,8 +231,8 @@ public class ClassRankScraper extends Scraper {
 		curPage = searchStudent(student); // will be on students or throw exception
 		if(curPage != null) {
 			curPage = requestHistoricalGrades(curPage);
-			DomElement element = (HtmlElement)curPage.getElementById(HISTORICAL_GRADES_PROPERTIES.getProperty("CONTENT_MAIN_ID"));
-			DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(HISTORICAL_GRADES_PROPERTIES.getProperty("ROW_TAG"));
+			DomElement element = (HtmlElement)curPage.getElementById(getHgContentMainId());
+			DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(getHgRowTag());
 			courses = new ArrayList<>(50);
 			for(int index = courseDataRows.size() - 1; index > 0; index--) {
 				Course course = processCourseData(courseDataRows.get(index), student);
@@ -254,7 +245,7 @@ public class ClassRankScraper extends Scraper {
 	
 	private Course processCourseData(HtmlElement tableRow, Student student) {
 		Course course = null;
-		DomNodeList<HtmlElement> tableData = tableRow.getElementsByTagName(HISTORICAL_GRADES_PROPERTIES.getProperty("CELL_TAG"));
+		DomNodeList<HtmlElement> tableData = tableRow.getElementsByTagName(getHgCellTag());
 		float earnedCredit = Float.parseFloat(tableData.get(4).getTextContent());
 		course = new Course(student);
 		course.setYearTerm(tableData.get(0).getTextContent());
@@ -262,7 +253,7 @@ public class ClassRankScraper extends Scraper {
 		course.setCourseNumber(tableData.get(2).getTextContent());
 		course.setCourseName(tableData.get(3).getTextContent());
 		course.setEarnedCredit(earnedCredit);
-		DomNodeList<HtmlElement> gradeAnchors = tableData.get(5).getElementsByTagName(HISTORICAL_GRADES_PROPERTIES.getProperty("GRADE_ANCHOR_TAG"));
+		DomNodeList<HtmlElement> gradeAnchors = tableData.get(5).getElementsByTagName(getHgGradeAnchorTag());
 		for(int index = gradeAnchors.size() - 1; index >= 0; index--) {
 			HtmlElement gradeAnchor = gradeAnchors.get(index);
 			course.addGrade(gradeAnchor);
@@ -270,40 +261,12 @@ public class ClassRankScraper extends Scraper {
 		return course;
 	}
 	
-	private HtmlPage requestHistoricalGrades(HtmlPage curPage) throws IOException {
-		String curUrl = curPage.getUrl().toString();
-		String historicalGradesUrl = curUrl.replaceFirst("home", "previousgrades");
-		curPage = WEB_CLIENT.getPage(historicalGradesUrl);
-		return curPage;
-	}
-	
-	private HtmlPage searchStudent(Student student) throws IOException {
-		final String expectedPathComponent = "students";
-		HtmlPage curPage = null;
-		for(byte waitSeconds = DEFAULT_WAIT_SECONDS, multiplier = 2, attempts = 0; attempts < 4 && (curPage == null || curPage.getUrl().toString().indexOf(expectedPathComponent) < 0); waitSeconds *= multiplier, attempts++) {
-			curPage = WEB_CLIENT.getPage("https://powerschool.gwd50.org/admin/home.html");
-			out.println("Wait " + waitSeconds + " seconds for AngularJS on landing page: " + curPage.getUrl());
-			WEB_CLIENT.waitForBackgroundJavaScriptStartingBefore(waitSeconds * 1000);
-			//System.out.println("End wait for AngularJS on landing page");
-			HtmlTextInput searchInput = (HtmlTextInput)curPage.getElementById("studentSearchInput");
-			searchInput.setValueAttribute("student_number=" + student.getStudentId());
-			HtmlButton searchButton = (HtmlButton)curPage.getElementById("searchButton");
-			curPage = searchButton.click();
-		}
-		if(curPage.getUrl().toString().indexOf(expectedPathComponent) < 0) {
-			logStudent(student.getFullName(), "Student page not loaded from searchStudent");
-			curPage = null;
-		}
-		return curPage;
-	}
-	
-	private List<Student> scrapeStudents(HtmlPage curPage) throws IOException {
-		curPage = clickAnchorByID(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("SYS_REPORTS_ANCHOR_ID"));
-		curPage = clickAnchorByText(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("CLASS_RANKING_ANCHOR_TEXT"));
+	private List<Student> scrapeStudents(HtmlPage homePage) throws IOException {
+		HtmlPage classRankPage = navigateToClassRank(homePage);
 		//System.out.println("Class rank page: " + curPage.getUrl());
+		classRankPage = searchClassRank(classRankPage);
 		String gradeLevel = CLASS_RANKING_REPORT_PROPERTIES.getProperty("GRADE_LEVEL_ATTRIBUTE");
-		curPage = fillClassRankTable(curPage, CLASS_RANKING_REPORT_PROPERTIES.getProperty("MIN_GPA_ATTRIBUTE"), CLASS_RANKING_REPORT_PROPERTIES.getProperty("MAX_GPA_ATTRIBUTE"), gradeLevel);
-		List<Student> students = processGpaData(curPage, Byte.parseByte(gradeLevel));
+		List<Student> students = processGpaData(classRankPage, Byte.parseByte(gradeLevel));
 		return students;
 	}
 	
@@ -328,25 +291,12 @@ public class ClassRankScraper extends Scraper {
 		return student;
 	}
 	
-	private List<Student> processGpaData(HtmlPage curPage, byte gradeLevel) {
-		HtmlTableBody tableBody = (HtmlTableBody)curPage.getElementsByTagName("tbody").get(0);
-		List<HtmlTableRow> tableRows = tableBody.getRows();
+	private List<Student> processGpaData(HtmlPage classRankPage, byte gradeLevel) {
+		List<HtmlTableRow> tableRows = getClassRankRows(classRankPage);
 		List<Student> students = new ArrayList<>(40);
 		for(int index = 1; index < tableRows.size(); index ++)
 			students.add(processClassRankRow(tableRows.get(index), gradeLevel));
 		return students;
-	}
-	
-	private HtmlPage fillClassRankTable(HtmlPage curPage, String minGPA, String maxGPA, String gradeLevel) throws IOException {
-		String gradeLevelName = CLASS_RANKING_REPORT_PROPERTIES.getProperty("GRADE_LEVEL_NAME");
-		HtmlSelect gradeSelect = curPage.getElementByName(gradeLevelName);
-		gradeSelect.setSelectedAttribute(gradeLevel, true);
-		HtmlInput mingpaInput = curPage.getElementByName(CLASS_RANKING_REPORT_PROPERTIES.getProperty("MIN_GPA_NAME"));
-		mingpaInput.setValueAttribute(minGPA);
-		HtmlInput maxgpaInput = curPage.getElementByName(CLASS_RANKING_REPORT_PROPERTIES.getProperty("MAX_GPA_NAME"));
-		maxgpaInput.setValueAttribute(maxGPA);
-		HtmlButton submitBtn = (HtmlButton)curPage.getElementById(CLASS_RANKING_REPORT_PROPERTIES.getProperty("SUBMIT_BUTTON_ID"));
-		return submitBtn.click();
 	}
 	
 	protected void close() {
