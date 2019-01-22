@@ -38,7 +38,7 @@ public class MutableArray implements List {
 		if(index < 0 || index > size)
 			throw createIndexOutOfBoundsException(index, size);
 		if(size == capacity())
-			doubleCapacity();
+			increaseCapacity();
 		if(index != size) {
 			for(int backingArrayIndex = size - 1; backingArrayIndex >= index; backingArrayIndex--)
 				backingArray[backingArrayIndex + 1] = backingArray[backingArrayIndex];
@@ -97,8 +97,8 @@ public class MutableArray implements List {
 		return arrayCopy;
 	}
 	
-	private void doubleCapacity() {
-		Object[] doubledBackingArray = new Object[capacity() * 2];
+	private void increaseCapacity() {
+		Object[] doubledBackingArray = new Object[capacity() * GROWTH_FACTOR];
 		for(int index = backingArray.length - 1; index >= 0; index--)
 			doubledBackingArray[index] = backingArray[index];
 		backingArray = doubledBackingArray;
