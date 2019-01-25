@@ -244,7 +244,7 @@ public class MutableArrayTest extends Testable {
 			totalPoints += points;
 			pass = true;
 		} else
-			logFail(message, Arrays.toString(expected) + " with capactiy " + expBackingLength, Arrays.toString(actual) + " with capacity " + actBackingLength, points);
+			logFail(message, Arrays.toString(expected) + " with capacity " + expBackingLength, Arrays.toString(actual) + " with capacity " + actBackingLength, points);
 		return pass;
 	}
 	

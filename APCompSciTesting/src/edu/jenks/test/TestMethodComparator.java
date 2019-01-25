@@ -4,6 +4,10 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 
 public class TestMethodComparator implements Comparator<Method> {
+	
+	private static final byte NUM_CHARS_BEFORE_ORDER = (byte)"test".length();
+	private static final byte NUM_ORDER_DIGITS = 2;
+	private static final byte END_INDEX_ORDER_DIGITS = (byte)(NUM_CHARS_BEFORE_ORDER + NUM_ORDER_DIGITS);
 
 	@Override
 	public int compare(Method arg0, Method arg1) {
@@ -18,10 +22,10 @@ public class TestMethodComparator implements Comparator<Method> {
 	}
 	
 	public boolean methodOrdered(String name) {
-		return name.matches("^.+?\\d$");
+		return name.matches("^.+\\d{2}.+$");
 	}
 	
 	public int getOrder(String methodName) {
-		return Integer.parseInt(methodName.substring(methodName.length() - 2));
+		return Integer.parseInt(methodName.substring(NUM_CHARS_BEFORE_ORDER, END_INDEX_ORDER_DIGITS));
 	}
 }
