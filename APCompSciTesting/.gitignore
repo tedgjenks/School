@@ -2,9 +2,6 @@
 /.settings
 .classpath
 *.log
-/testing/googleDrive.properties
-/testing/*.xml
-/testing/testPackages.txt
 *.log.*
 *.log
 *java.policy
