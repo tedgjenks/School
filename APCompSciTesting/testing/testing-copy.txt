@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE projects SYSTEM "testing-config.dtd">
 <projects test-mode="false">
-  <eclipse-student-root>C:/Users/jenkst/ICS_repository/School14-15/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
-  <moji-root>C:/Users/jenkst/JavaPrograms/F2016_ICS/</moji-root>
+  <eclipse-student-root>C:/Users/Jenks/git/School/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
+  <moji-root>C:/Users/Jenks/JavaPrograms/S2018_CS/</moji-root>
   <google-drive>
-    <turnin-root>C:/Users/jenkst/Google Drive/Courses/ComputerScience/CSA/TurnIn/S2017_CSA/</turnin-root>
-    <turnin-dir-suffix>_ICS_TurnIn</turnin-dir-suffix>
+    <turnin-root>G:/My Drive/Courses/ComputerScience/CSA/TurnIn/S2019_CSA/</turnin-root>
+    <turnin-dir-suffix>_CSA_TurnIn</turnin-dir-suffix>
   </google-drive>
   <project active="false">
     <name>Banking</name>
@@ -24,7 +24,7 @@
     </files>
     <students />
   </project>
-  <project active="true">
+  <project active="false">
     <name>ClimbingClub</name>
     <package-root>edu/cb/climbingclub/</package-root>
     <test-class>edu.jenks.cb.test.ClimbingClubTest</test-class>
@@ -40,7 +40,7 @@
     </files>
     <students />
   </project>
-  <project active="true">
+  <project active="false">
     <name>BaseConverter</name>
     <package-root>edu/math/</package-root>
     <test-class>edu.jenks.math.test.BaseConverterTest</test-class>
@@ -54,7 +54,7 @@
     </files>
     <students />
   </project>
-  <project active="true">
+  <project active="false">
     <name>Matrix</name>
     <package-root>edu/barrons/matrix/</package-root>
     <test-class>edu.jenks.barrons.test.MatrixTest</test-class>
@@ -171,17 +171,27 @@
     </files>
     <students />
   </project>
-  <project active="false">
+  <project active="true">
     <name>MutableArray</name>
     <package-root>edu/array/</package-root>
     <test-class>edu.jenks.array.test.MutableArrayTest</test-class>
     <max-runtime-secs>10</max-runtime-secs>
     <deadline>
-      <due-date>11/15/2016</due-date>
+      <due-date>1/31/2019</due-date>
       <penalty>10</penalty>
     </deadline>
     <files>
       <file>MutableArray.java</file>
+    </files>
+    <students />
+  </project>
+  <project active="false">
+    <name>MidtermICS</name>
+    <package-root>edu/midterm/ics/</package-root>
+    <test-class>edu.jenks.midterm.ics.test.MidtermTest</test-class>
+    <max-runtime-secs>10</max-runtime-secs>
+    <files>
+      <file>Midterm.java</file>
     </files>
     <students />
   </project>
@@ -202,16 +212,6 @@
     <max-runtime-secs>10</max-runtime-secs>
     <files>
       <file>Rational.java</file>
-    </files>
-    <students />
-  </project>
-  <project active="false">
-    <name>MidtermICS</name>
-    <package-root>edu/midterm/ics/</package-root>
-    <test-class>edu.jenks.midterm.ics.test.MidtermTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <files>
-      <file>Midterm.java</file>
     </files>
     <students />
   </project>

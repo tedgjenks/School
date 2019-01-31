@@ -1,0 +1,1 @@
+TEST_SUFFIX=<class specific file, e.g. apcsa>

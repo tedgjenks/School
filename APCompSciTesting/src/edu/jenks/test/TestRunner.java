@@ -61,12 +61,17 @@ public class TestRunner {
 
 	}
 	
-	public static void processCommandLineArgs(String[] args) {
+	public static void processCommandLineArgs(String[] args) throws IOException {
+		Properties testProps = new Properties();
+		testProps.load(new FileInputStream("testing/testing.properties"));
+		String suffix = testProps.getProperty("TEST_SUFFIX");
 		StringBuilder sb = new StringBuilder("testing/testing-config");
-		if(args.length > 0)
-			sb.append("-").append(args[0]);
+		//if(args.length > 0)
+		if(suffix.length() > 0)
+			sb.append("-").append(suffix);
 		sb.append(".xml");
 		xmlFilePath = sb.toString();
+		out.println("Test configuration file: " + xmlFilePath);
 	}
 	
 	private static void processProject(Element project) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
