@@ -25,6 +25,9 @@
 	<subpackage name="cb.tokenpass">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="cb.wordpair">
+		<allow pkg="java.util"/>
+	</subpackage>
 	<subpackage name="cb.climbingclub">
 		<allow pkg="java.util"/>
 	</subpackage>
@@ -35,9 +38,6 @@
 		<allow pkg="java.util"/>
 	</subpackage>
 	<subpackage name="barrons">
-		<allow pkg="java.util"/>
-	</subpackage>
-	<subpackage name="phone">
 		<allow pkg="java.util"/>
 	</subpackage>
 </import-control>
