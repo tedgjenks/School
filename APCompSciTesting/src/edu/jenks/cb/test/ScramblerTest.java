@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import edu.cb.scrambler.jenks.ted.WordScrambler;
-import edu.jenks.dist.cb.scrambler.Scrambler;
+import edu.jenks.dist.cb.Scrambler;
 import edu.jenks.test.Testable;
 import edu.jenks.util.ReflectionUtil;
 
@@ -20,7 +19,7 @@ public class ScramblerTest extends Testable {
 		
 	private final List<String> SOLUTION_LIST = new ArrayList<String>();	
 	private String studentClassName;
-	private Scrambler studentScrambler, solutionScrambler = new WordScrambler();
+	private Scrambler studentScrambler, solutionScrambler = new edu.cb.jenks.ted.WordScrambler();
 	
 	public ScramblerTest() {
 		for(String word : TEST_LIST)
