@@ -12,9 +12,10 @@ public class SectionScraper extends Scraper {
 	private static final String TASK_UPDATE_ROOM = "TaskUpdateRoom";
 	
 	/*** fields to set before running: ***/
-	private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
-	private static final String CURRENT_LEAD_TEACHER = "Shuping, Richard Todd";
-	private static final String NEW_DATA = "Sorrow, Mark";
+	private static final String TASK_UPDATE_ROOM_TO_UPDATE = "307"; // if not empty, only update this room
+	private static final String TASK = TASK_UPDATE_ROOM;
+	private static final String CURRENT_LEAD_TEACHER = "Whisenant, Billy J";
+	private static final String NEW_DATA = "303";
 	
 	private static final SectionScraper INSTANCE = new SectionScraper();
 	private static final byte TEACHER_SECTION_TABLE_COL_INDEX_TERM = 1;
@@ -61,7 +62,7 @@ public class SectionScraper extends Scraper {
 					HtmlInput input = (HtmlInput)cells.get(1).getChildElements().iterator().next();
 					String currentRoom = input.getValueAttribute();
 					LOGGER.info("Room input field found with value " + currentRoom);
-					if(!room.equals(currentRoom)) {
+					if(!room.equals(currentRoom) && (TASK_UPDATE_ROOM_TO_UPDATE.length() == 0 || TASK_UPDATE_ROOM_TO_UPDATE.equals(currentRoom))) {
 						input.setValueAttribute(room);
 						LOGGER.info("Room updated to  " + room);
 						roomUpdated = true;
