@@ -11,7 +11,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.cb.scrambler.jenks.ted.WordScrambler;
+import edu.cb.jenks.ted.WordScrambler;
 
 public class WordScramblerTest {
 	

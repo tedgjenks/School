@@ -1,11 +1,11 @@
 /**
  * 
  */
-package edu.cb.scrambler.jenks.ted;
+package edu.cb.jenks.ted;
 
 import java.util.List;
 
-import edu.jenks.dist.cb.scrambler.Scrambler;
+import edu.jenks.dist.cb.Scrambler;
 
 /**
  * @author Ted Jenks
