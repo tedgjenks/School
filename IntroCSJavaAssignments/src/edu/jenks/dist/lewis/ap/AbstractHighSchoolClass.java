@@ -37,17 +37,17 @@ public abstract class AbstractHighSchoolClass {
 	public abstract Student[] getValedictorian();
 	
 	/**
-	 * @return percent of students in the honors program
+	 * @return percent (e.g. return 59 for 59%) of students in the honors program
 	 */
 	public abstract double getHonorsPercent();
 	
 	/**
-	 * @return percent of students with GPA greater than or equal to <code>HONORS_GPA</code>
+	 * @return percent (e.g. return 59 for 59%) of students with GPA greater than or equal to <code>HONORS_GPA</code>
 	 */
 	public abstract double graduateWithHonorsPercent();
 	
 	/**
-	 * @return percent of students with GPA greater than or equal to <code>HIGHEST_HONORS_GPA</code>
+	 * @return percent (e.g. return 59 for 59%) of students with GPA greater than or equal to <code>HIGHEST_HONORS_GPA</code>
 	 */
 	public abstract double graduateWithHighestHonorsPercent();
 	

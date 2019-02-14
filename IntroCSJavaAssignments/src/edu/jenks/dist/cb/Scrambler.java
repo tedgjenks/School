@@ -1,4 +1,4 @@
-package edu.jenks.dist.cb.scrambler;
+package edu.jenks.dist.cb;
 
 import java.util.List;
 
