@@ -6,16 +6,16 @@ package edu.jenks.dist.unitconversion;
 /**
  * Convertible is used to convert metric units of length.<br>
  * The following metric units are supported:<br>
- * - nm (nanometer)
- * - um (micrometer)
- * - mm (millimeter)
- * - cm (centimeter)
- * - dm (decimeter)
- * - dam (decameter)
- * - hm (hectometer)
- * - km (kilometer)
- * - Mm (megameter)
- * - Gm (gigameter)
+ * - nm (nanometer)<br>
+ * - um (micrometer)<br>
+ * - mm (millimeter)<br>
+ * - cm (centimeter)<br>
+ * - dm (decimeter)<br>
+ * - dam (decameter)<br>
+ * - hm (hectometer)<br>
+ * - km (kilometer)<br>
+ * - Mm (megameter)<br>
+ * - Gm (gigameter)<br>
  * 
  * @author Ted Jenks
  *

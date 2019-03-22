@@ -62,14 +62,14 @@ public abstract class AbstractTournament {
 	public abstract Player cancelAndReassignSlot(Player p);
 
 	/**
-	 * @return
+	 * @return <code>slots</code>
 	 */
 	public Player[] getSlots() {
 		return slots;
 	}
 
 	/**
-	 * @return
+	 * @return <code>waitingList</code>
 	 */
 	public List<String> getWaitingList() {
 		return waitingList;

@@ -12,7 +12,8 @@ public class Player {
 	private int playerNumber;
 
 	/**
-	 * 
+	 * @param name
+	 * @param playerNumber not directly tested
 	 */
 	public Player(String name, int playerNumber) {
 		this.name = name;
