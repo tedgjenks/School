@@ -27,6 +27,8 @@ public class MathAward {
 	public static final MathAward INSTANCE = new MathAward();
 	
 	public static void main(String[] args) {
+		final String prereqMessage = " Make sure that class rank ran first.";
+		LOGGER.log(Level.INFO, "Begin math award calculation." + prereqMessage);
 		try {
 			double highMathScore = 0;
 			Student mathAwardWinner = null;
@@ -42,6 +44,7 @@ public class MathAward {
 				}
 			}
 			LOGGER.info("Math award winner: " + mathAwardWinner.getFirstName() + " " + mathAwardWinner.getLastName() + " with math points: " + highMathScore);
+			LOGGER.log(Level.INFO, "End math award calculation." + prereqMessage);
 		} catch(Throwable t) {
 			LOGGER.log(Level.SEVERE, t.getMessage());
 			t.printStackTrace();
