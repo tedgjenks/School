@@ -97,6 +97,8 @@ public class TournamentTest extends Testable {
 		Player actPlayer = studentTournament.cancelAndReassignSlot(playerToRemove);
 		if(actPlayer == null || !expEqualsAct(expSlots, expWaitingList, studentTournament, method + " - first cancel", points)) {
 			continueTesting = passAll = false;
+			if(actPlayer == null)
+				logFail(method + " returned player is null");
 			return;
 		}
 		
@@ -187,7 +189,7 @@ public class TournamentTest extends Testable {
 		
 		List<String> actWaitingList = act.getWaitingList();
 		if(!expWaitingList.equals(actWaitingList)) {
-			logFail(message = " - waitingList", Arrays.toString(expWaitingList.toArray()), Arrays.toString(actWaitingList.toArray()), points);
+			logFail(message + " - waitingList", Arrays.toString(expWaitingList.toArray()), Arrays.toString(actWaitingList.toArray()), points);
 			pass = false;
 		}
 		

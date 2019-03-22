@@ -38,7 +38,7 @@ public class SentenceTest extends Testable {
 	public SentenceTest() {}
 	
 	// 20 points
-	public void testGetWords() {
+	public void test03GetWords() {
 		final String method = "getWords";
 		boolean passAll = true;
 		int points = 10;
@@ -78,7 +78,7 @@ public class SentenceTest extends Testable {
 	}
 	
 	// 20 points
-	public void testCountWords() {
+	public void test02CountWords() {
 		final String method = "countWords";
 		boolean passAll = true;
 		int points = 10;
@@ -113,7 +113,7 @@ public class SentenceTest extends Testable {
 	}
 	
 	// 20 points
-	public void testGetBlankPositions() {
+	public void test01GetBlankPositions() {
 		final String method = "getBlankPositions";
 		boolean passAll = true;
 		int points = 10;

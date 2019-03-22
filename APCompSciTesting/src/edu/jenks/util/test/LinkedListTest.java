@@ -30,7 +30,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	public void testAddTail02() {
+	public void test02AddTail() {
 		int points = 1;
 		String message = "testAddTail";
 		addToLists(TEST_ELEMENTS);
@@ -45,7 +45,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E10, E20, E30, E40, E50
-	public void testAddIndex03() {
+	public void test03AddIndex() {
 		int points = 5;
 		String message = "testAddIndex";
 		addToLists(0, "E05");
@@ -78,7 +78,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E05, E10, E15, E20, E30, E40, E50, E60
-	public void testAddFirst04() {
+	public void test04AddFirst() {
 		int points = 1;
 		String message = "testAddFirst", element = "E01";
 		SOLUTION_LIST.addFirst(element);
@@ -94,7 +94,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E00, EMid, E40, E10, E20, ELast
-	public void testAddLast18() {
+	public void test18AddLast() {
 		int points = 1;
 		String message = "testAddLast", element = "E70";
 		SOLUTION_LIST.addLast(element);
@@ -109,7 +109,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 2 points
-	public void testClear12() {
+	public void test12Clear() {
 		int points = 2;
 		String message = "testClear";
 		SOLUTION_LIST.clear();
@@ -149,7 +149,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E10, E15, E20, E30, E40, E50, E60
-	public void testContains06() {
+	public void test06Contains() {
 		int points = 5;
 		String message = "testContains";
 		boolean pass = studentList.contains("E01") && studentList.contains("E60") && studentList.contains("E15") && !studentList.contains("E70") && !studentList.contains(null);
@@ -168,7 +168,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void testGet07() {
+	public void test07Get() {
 		int points = 5;
 		String message = "testGet";
 		if("E01".equals(studentList.get(0)) && "E60".equals(studentList.get(9)) && "E10".equals(studentList.get(2)) && null == studentList.get(3)) {
@@ -196,7 +196,7 @@ public class LinkedListTest extends Testable {
 
 	// 1 point
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void testGetFirst08() {
+	public void test08GetFirst() {
 		int points = 1;
 		String message = "testGetFirst";
 		if("E01".equals(studentList.getFirst())) {
@@ -208,7 +208,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void testGetLast09() {
+	public void test09GetLast() {
 		int points = 1;
 		String message = "testGetLast";
 		if("E60".equals(studentList.getLast())) {
@@ -220,7 +220,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void testIndexOf10() {
+	public void test10IndexOf() {
 		int points = 5;
 		String message = "testIndexOf";
 		boolean pass = 9 == studentList.indexOf("E60") && 0 == studentList.indexOf("E01") && 3 == studentList.indexOf(null) && -1 == studentList.indexOf("E70");
@@ -239,7 +239,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E60, E10, null, E15, E20, E30, E40, E50, E60
-	public void testLastIndexOf11() {
+	public void test11LastIndexOf() {
 		int points = 5;
 		String message = "testLastIndexOf";
 		if(studentList.lastIndexOf("E60") == 10 && studentList.lastIndexOf("E70") == -1) {
@@ -251,7 +251,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: empty
-	public void testRemoveHead13() {
+	public void test13RemoveHead() {
 		int points = 1;
 		String message = "testRemoveHead";
 		addToLists(TEST_ELEMENTS);
@@ -268,7 +268,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E20, E30, E40, E50
-	public void testRemoveIndex14() {
+	public void test14RemoveIndex() {
 		int points = 5;
 		String message = "testRemoveIndex";
 		addToLists(TEST_ELEMENTS);
@@ -307,7 +307,7 @@ public class LinkedListTest extends Testable {
 	
 	// 2 points
 	// pre: E30, E40, E50, E20, E30, E40
-	public void testRemoveFirstByValue15() {
+	public void test15RemoveFirstByValue() {
 		int points = 2;
 		String message = "testRemoveFirstByValue";
 		addToLists(TEST_ELEMENTS);
@@ -333,7 +333,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E20, E30, E40, E10, E20, E30, E40
-	public void testRemoveLast16() {
+	public void test16RemoveLast() {
 		int points = 1;
 		String message = "testRemoveLast";
 		boolean pass = SOLUTION_LIST.removeLast().equals(studentList.removeLast());
@@ -350,7 +350,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E00, EMid, E40, E10, E20, ELast, E70
-	public void testRemoveSpecial19() {
+	public void test19RemoveSpecial() {
 		String message = "testRemoveSpecial";
 		int points = 1;
 		SOLUTION_LIST.clear();
@@ -373,7 +373,7 @@ public class LinkedListTest extends Testable {
 	
 	// 4 points
 	// pre: E20, E30, E40, E10, E20, E30
-	public void testSet17() {
+	public void test17Set() {
 		int points = 4;
 		String message = "testSet";
 		String value = "E00";
@@ -416,7 +416,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	public void testSize05() {
+	public void test05Size() {
 		int points = 1;
 		String message = "testSize";
 		if(SOLUTION_LIST.size() == studentList.size()) {
@@ -429,7 +429,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	public void testToString01() {
+	public void test01ToString() {
 		int points = 1;
 		String message = "testToString";
 		if(listsEqual()) {

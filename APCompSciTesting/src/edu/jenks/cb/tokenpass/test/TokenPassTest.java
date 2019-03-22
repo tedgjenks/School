@@ -20,7 +20,7 @@ public class TokenPassTest extends Testable {
 	
 	private static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = {int.class};
 	private static final Object[] DEFAULT_CONSTRUCTOR_VALUES = {10};
-	private static final String NEW_LINE = "\n";
+	private static final String NEW_LINE = System.lineSeparator();
 	
 	private final Random random = new Random(System.currentTimeMillis());
 	

@@ -4,15 +4,12 @@
 package edu.jenks.unitconversion.test;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 
 import edu.jenks.dist.unitconversion.Convertible;
 import edu.jenks.test.Testable;
-import edu.jenks.util.MathUtil;
-import edu.jenks.util.ReflectionUtil;
+import edu.jenks.util.*;
 
 /**
  * @author Ted
@@ -31,20 +28,10 @@ public class ConvertibleTest extends Testable {
 	private static final String KILOMETER = "km";
 	private static final String MEGAMETER = "Mm";
 	private static final String GIGAMETER = "Gm";
-	private static final Map<String, String> UNITS = new HashMap<>(22);
+	private static final String[] UNIT_ARRAY;
 	
 	static {
-		UNITS.put(NANOMETER, new String(NANOMETER));
-		UNITS.put(MICROMETER, new String(MICROMETER));
-		UNITS.put(MILLIMETER, new String(MILLIMETER));
-		UNITS.put(CENTIMETER, new String(CENTIMETER));
-		UNITS.put(DECIMETER, new String(DECIMETER));
-		UNITS.put(METER, new String(METER));
-		UNITS.put(DECAMETER, new String(DECAMETER));
-		UNITS.put(HECTOMETER, new String(HECTOMETER));
-		UNITS.put(KILOMETER, new String(KILOMETER));
-		UNITS.put(MEGAMETER, new String(MEGAMETER));
-		UNITS.put(GIGAMETER, new String(GIGAMETER));
+		UNIT_ARRAY = new String[] {NANOMETER, MICROMETER, MILLIMETER, CENTIMETER, DECIMETER, METER, DECAMETER, HECTOMETER, KILOMETER, MEGAMETER, GIGAMETER};;
 	}
 	
 	private String studentClassName;
@@ -52,32 +39,31 @@ public class ConvertibleTest extends Testable {
 	private Convertible solutionConvertible = new edu.unitconversion.jenks.ted.MetricLengthConverter();
 	private final double RELATIVE_DELTA = Math.pow(10, -3);
 	private final Random random = new Random(System.currentTimeMillis());
-	private boolean passedIntermediateCalculations = true;
-	private double numberUnits = random.nextDouble() * 1000;
+	private double numberUnits = random.nextDouble() * 1000 + .01;
 	
 	private void testConvertFromMetersHelper(String unit, int points) {
 		double actVal = studentConvertible.convertFromMeters(numberUnits, unit);
 		double expVal = solutionConvertible.convertFromMeters(numberUnits, unit);
 		String message = "convertFromMeters " + unit;
 		if(MathUtil.equalsRelative(actVal, expVal, RELATIVE_DELTA)) {
-			logPass(message, expVal, actVal);
+			logPass(message);
 			totalPoints += points;
 		} else {
 			logFail(message, expVal, actVal, points);
 			feedbackLogger.log(Level.WARNING, "Fail: " + unit + " from meters.");
-			passedIntermediateCalculations = false;
+			continueTesting = false;
 		}
 	}
 	
 	//10 points
-	public void test2ConvertFromMeters() {
-		String unit = UNITS.get(METER);
+	public void test02ConvertFromMeters() {
+		String unit = METER;
 		testConvertFromMetersHelper(unit, 2);
 		
-		unit = UNITS.get(DECIMETER);
+		unit = DECIMETER;
 		testConvertFromMetersHelper(unit, 4);
 		
-		unit = UNITS.get(DECAMETER);
+		unit = DECAMETER;
 		testConvertFromMetersHelper(unit, 4);
 	}
 	
@@ -86,23 +72,23 @@ public class ConvertibleTest extends Testable {
 		double expVal = solutionConvertible.convertToMeters(numberUnits, unit);
 		String message = "convertToMeters " + unit;
 		if(MathUtil.equalsRelative(actVal, expVal, RELATIVE_DELTA)) {
-			logPass(message, expVal, actVal);
+			logPass(message);
 			totalPoints += points;
 		} else {
 			logFail(message, expVal, actVal, points);
-			passedIntermediateCalculations = false;
+			continueTesting = false;
 		}
 	}
 	
 	//10 points
-	public void test1ConvertToMeters() {
-		String unit = UNITS.get(METER);
+	public void test01ConvertToMeters() {
+		String unit = METER;
 		testConvertToMetersHelper(unit, 2);
 		
-		unit = UNITS.get(CENTIMETER);
+		unit = CENTIMETER;
 		testConvertToMetersHelper(unit, 4);
 		
-		unit = UNITS.get(KILOMETER);
+		unit = KILOMETER;
 		testConvertToMetersHelper(unit, 4);
 	}
 	
@@ -115,78 +101,96 @@ public class ConvertibleTest extends Testable {
 		double expVal = solutionConvertible.convert(numStartingUnit, startingUnit, desiredUnit);
 		String message = "convert " + startingUnit + " to " + desiredUnit;
 		if(MathUtil.equalsRelative(actVal, expVal, RELATIVE_DELTA)) {
-			logPass(message, expVal, actVal);
+			logPass(message);
 			totalPoints += points;
 		} else {
 			logFail(message, expVal, actVal, points);
-			passedIntermediateCalculations = false;
+			continueTesting = false;
 		}
 	}
 	
 	//16 points
-	public void test3Convert() {
-		if(passedIntermediateCalculations) {
-			String startingUnit = UNITS.get(NANOMETER), desiredUnit = UNITS.get(GIGAMETER);
-			testConvertHelper(startingUnit, desiredUnit, 3);
-			
-			startingUnit = UNITS.get(GIGAMETER);
-			desiredUnit = UNITS.get(NANOMETER);
-			testConvertHelper(startingUnit, desiredUnit, 3);
-			
-			startingUnit = UNITS.get(MEGAMETER);
-			desiredUnit = UNITS.get(MICROMETER);
-			testConvertHelper(startingUnit, desiredUnit, 3);
-			
-			startingUnit = UNITS.get(MILLIMETER);
-			desiredUnit = UNITS.get(KILOMETER);
-			testConvertHelper(startingUnit, desiredUnit, 3);
-			
-			startingUnit = UNITS.get(METER);
-			desiredUnit = UNITS.get(METER);
-			testConvertHelper(startingUnit, 0, desiredUnit, 4);
-		} else
-			feedbackLogger.log(Level.WARNING, "convert method not tested due to failure of dependent methods.");
+	public void test03Convert() {
+		String startingUnit = NANOMETER, desiredUnit = GIGAMETER;
+		testConvertHelper(startingUnit, desiredUnit, 3);
+		
+		startingUnit = GIGAMETER;
+		desiredUnit = NANOMETER;
+		testConvertHelper(startingUnit, desiredUnit, 3);
+		
+		startingUnit = MEGAMETER;
+		desiredUnit = MICROMETER;
+		testConvertHelper(startingUnit, desiredUnit, 3);
+		
+		startingUnit = MILLIMETER;
+		desiredUnit = KILOMETER;
+		testConvertHelper(startingUnit, desiredUnit, 3);
+		
+		startingUnit = METER;
+		desiredUnit = METER;
+		testConvertHelper(startingUnit, 0, desiredUnit, 4);
 	}
 	
-	private void testConvertForDisplayHelper(String startingUnit, double numStartingUnit, String desiredUnit, int points) {
+	private boolean testConvertForDisplayHelper(String startingUnit, double numStartingUnit, String desiredUnit, int points) {
+		boolean pass = false;
 		String expVal = solutionConvertible.convertForDisplay(numStartingUnit, startingUnit, desiredUnit);
 		String actVal = studentConvertible.convertForDisplay(numStartingUnit, startingUnit, desiredUnit);
 		String message = "convertForDisplay";
 		if(testDisplay(expVal, actVal)) {
-			totalPoints += points;
-			logPass(message, expVal, actVal);
+			if(points > 0) {
+				totalPoints += points;
+				logPass(message);
+			}
+			pass = true;
 		} else
 			logFail(message, expVal, actVal, points);
+		return pass;
 	}
 	
-	private void testConvertForDisplayHelper(String startingUnit, String desiredUnit, int points) {
-		testConvertForDisplayHelper(startingUnit, numberUnits, desiredUnit, points);
+	private boolean testConvertForDisplayHelper(String startingUnit, String desiredUnit, int points) {
+		return testConvertForDisplayHelper(startingUnit, numberUnits, desiredUnit, points);
 	}
 	
-	// 6 points
-	public void test4ConvertForDisplay() {
-		if(passedIntermediateCalculations) {
-			String startingUnit = "bm";
-			String desiredUnit = UNITS.get(METER);
-			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
+	// 11 points
+	public void test04ConvertForDisplay() {
+		String startingUnit = "bm";
+		String desiredUnit = METER;
+		testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
-			startingUnit = UNITS.get(METER);
-			desiredUnit = "bm";
-			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
+		startingUnit = METER;
+		desiredUnit = "bm";
+		testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
-			startingUnit = UNITS.get(CENTIMETER);
-			desiredUnit = UNITS.get(KILOMETER);
-			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
+		startingUnit = CENTIMETER;
+		desiredUnit = KILOMETER;
+		testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
 
-			startingUnit = UNITS.get(KILOMETER);
-			desiredUnit = UNITS.get(CENTIMETER);
-			testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
-			
-			startingUnit = UNITS.get(METER);
-			desiredUnit = UNITS.get(METER);
-			testConvertForDisplayHelper(startingUnit, 0, desiredUnit, 2);
-		} else
-			feedbackLogger.log(Level.WARNING, "Display not tested due to failure of earlier tests.");
+		startingUnit = KILOMETER;
+		desiredUnit = CENTIMETER;
+		testConvertForDisplayHelper(startingUnit, desiredUnit, 1);
+		
+		startingUnit = METER;
+		desiredUnit = METER;
+		testConvertForDisplayHelper(startingUnit, 0, desiredUnit, 2);
+		
+		if(testAllUnits(1) && testAllUnits(-1) && testAllUnits(numberUnits) && testAllUnits(-1 * numberUnits)) {
+			logPass("Convert for display - all units");
+			totalPoints += 5;
+		}
+	}
+	
+	private boolean testAllUnits(double startingValue) {
+		boolean passAllUnits = true;
+		randomUnit:
+		for(int oIndex = UNIT_ARRAY.length - 1; oIndex >= 0; oIndex--) {
+			for(int iIndex = UNIT_ARRAY.length - 1; iIndex >= 0; iIndex--) {
+				if(!testConvertForDisplayHelper(UNIT_ARRAY[oIndex], startingValue, UNIT_ARRAY[iIndex], 0)) {
+					passAllUnits = false;
+					break randomUnit;
+				}
+			}
+		}
+		return passAllUnits;
 	}
 	
 	private boolean testDisplay(String expected, String actual) {
@@ -239,7 +243,7 @@ public class ConvertibleTest extends Testable {
 	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		studentConvertible = (Convertible)ReflectionUtil.newInstance(studentClassName);
-		totalPoints += 58;
+		totalPoints += 53;
 		feedbackLogger.log(Level.INFO, "Pass: object creation.");
 	}
 

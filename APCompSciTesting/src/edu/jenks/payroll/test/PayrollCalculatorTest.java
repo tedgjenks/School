@@ -20,7 +20,7 @@ public class PayrollCalculatorTest extends Testable {
 	private void testAndLog(String passMessage, String failMessage, int points, double expected, double actual, boolean continueOnFail) {
 		if(MathUtil.equalsRelative(expected, actual, REL_DELTA)) {
 			totalPoints += points;
-			logPass(passMessage, expected, actual);
+			logPass(passMessage);
 		} else {
 			continueTesting = continueOnFail;
 			logFail(failMessage, expected, actual, points);
@@ -30,13 +30,13 @@ public class PayrollCalculatorTest extends Testable {
 	private void testAndLog(String message, int points, String expected, String actual) {
 		if(expected.equals(actual)) {
 			totalPoints += points;
-			logPass(message, expected, actual);
+			logPass(message);
 		} else
 			logFail(message, expected, actual, points);
 	}
 	
 	//4*5
-	public void test3FormatPay() {
+	public void test03FormatPay() {
 		int points = 4;
 		String message = "formatPay";
 		double pay = 1;
@@ -66,7 +66,7 @@ public class PayrollCalculatorTest extends Testable {
 	}
 	
 	//5*4
-	public void test2CalculatePay() {
+	public void test02CalculatePay() {
 		String passMessage = "calculatePay";
 		String failMessage = passMessage + ", testing other methods aborted!";
 		int points = 5;
@@ -92,7 +92,7 @@ public class PayrollCalculatorTest extends Testable {
 	}
 	
 	//5*2
-	public void test1ConvertToHours() {
+	public void test01ConvertToHours() {
 		String passMessage = "convertToHours";
 		String failMessage = passMessage + ", testing other methods aborted!";
 		int points = 5;

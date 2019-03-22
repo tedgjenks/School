@@ -152,7 +152,7 @@ public class SelfCheckoutTest extends Testable {
 	// 5 points
 	public void test05StandardTax() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		boolean pass = true;
-		final String message = "AddBarcodedItem";
+		final String message = "StandardTax";
 		final int points = 5;
 		final double standardTaxRate = 0.06 * RANDOM.nextDouble() + .02;
 		ItemHandler ih = createSelfCheckout(standardTaxRate);
@@ -175,7 +175,7 @@ public class SelfCheckoutTest extends Testable {
 	// 8 points
 	public void test06SinTax() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		boolean pass = true;
-		final String message = "AddAlcoholItem";
+		final String message = "SinTax";
 		final int points = 8;
 		final double standardTaxRate = 0.06 * RANDOM.nextDouble() + .02;
 		final double sinTaxRate = 0.03 * RANDOM.nextDouble() + .01;

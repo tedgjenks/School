@@ -51,7 +51,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
-	public void testGetValues37() {
+	public void test37GetValues() {
 		String message = "testGetValues";
 		int points = 3;
 		Integer[] actValues = studentMap.getValues();
@@ -60,7 +60,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
-	public void testGetKeys36() {
+	public void test36GetKeys() {
 		String message = "testGetKeys";
 		int points = 3;
 		String[] actKeys = studentMap.getKeys();
@@ -83,7 +83,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
-	public void testClearAndIsEmpty40() {
+	public void test40ClearAndIsEmpty() {
 		String message = "testClearAndIsEmpty";
 		int points = 1;
 		String subMessage = message + " not empty";
@@ -117,7 +117,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
-	public void testGetArrayIndexFromKey01() {
+	public void test01GetArrayIndexFromKey() {
 		String message = "testGetArrayIndexFromKey";
 		int points = 3;
 		if(compareHash(message, points, INIT_MAP_1_7.keySet().iterator()) && compareHash(message, points, INIT_MAP_9_16.keySet().iterator())) {
@@ -141,7 +141,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 10
-	public void testGet35() {
+	public void test35Get() {
 		String message = "testGet";
 		int points = 10;
 		Integer i14 = 14;
@@ -156,7 +156,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
-	public void testContainsValue30() {
+	public void test30ContainsValue() {
 		String message = "testContainsValue";
 		int points = 3;
 		if(studentMap.containsValue(5) && !studentMap.containsValue(3)) {
@@ -167,7 +167,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 3
-	public void testContainsKey25() {
+	public void test25ContainsKey() {
 		String message = "testContainsKey";
 		int points = 3;
 		if(studentMap.containsKey("Five") && !studentMap.containsKey("Three")) {
@@ -178,7 +178,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 8
-	public void testRemove20() {
+	public void test20Remove() {
 		String message = "testRemove";
 		int points = 8;
 		boolean pass = true;
@@ -197,7 +197,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 12
-	public void testPut15() {
+	public void test15Put() {
 		String message = "testPut";
 		int points = 4;
 		boolean pass = false;
@@ -225,7 +225,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 1
-	public void testSize10() {
+	public void test10Size() {
 		String message = "testSize";
 		int points = 1;
 		int expVal = 0, actVal = studentMap.size();
@@ -239,7 +239,7 @@ public class HashtableTest extends Testable {
 	}
 	
 	// points: 1
-	public void testGetCapacity05() {
+	public void test05GetCapacity() {
 		String message = "testGetCapacity";
 		int points = 1;
 		if(INITIAL_CAPACITY == studentMap.getCapacity()) {
