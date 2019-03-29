@@ -100,7 +100,7 @@ public class MusicDownloadsTest extends Testable {
 				if(!expected.getTitle().equals(actual.getTitle()) ||
 						expected.getTimesDownloaded() != actual.getTimesDownloaded()) {
 					pass = false;
-					logFail(logMessage + " download info did not match after updateDownloads");
+					logFail(logMessage + " download info did not match after updateDownloads", expectedList, actualList, 0);
 				}
 			}
 			if(pass) {
@@ -108,7 +108,7 @@ public class MusicDownloadsTest extends Testable {
 				logPass(logMessage);
 			}
 		} else {
-			logFail(logMessage + " expected download list was not the same size as actual download list");
+			logFail(logMessage + " expected download list was not the same size as actual download list", expectedList, actualList, 0);
 			//printTitles(expectedList);
 			//printTitles(actualList);
 		}
@@ -118,11 +118,13 @@ public class MusicDownloadsTest extends Testable {
 		List<DownloadInfo> downloadList = createGivenDownloadList();
 		List<String> titles = createGivenTitles();
 		List<DownloadInfo> expectedList = createExpectedGivenDownloadList();
+		inputToStudentCode = downloadList + "; " + titles;
 		testUpdateDownloads(downloadList, titles, expectedList, "given");
 		
 		downloadList = createCustomDownloadList();
 		titles = createCustomTitles();
 		expectedList =  createExpectedCustomDownloadList();
+		inputToStudentCode = downloadList + "; " + titles;
 		testUpdateDownloads(downloadList, titles, expectedList, "custom");
 	}
 	

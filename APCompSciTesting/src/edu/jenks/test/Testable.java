@@ -116,7 +116,7 @@ public abstract class Testable implements Runnable {
 			} catch(Exception e) {
 				logException(methodName, e);
 				if(inputToStudentCode != null && inputToStudentCode.length() > 0) {
-					feedbackLogger.log(Level.SEVERE, "input: " + inputToStudentCode + System.lineSeparator());
+					feedbackLogger.log(Level.SEVERE, "input that caused Exception: " + inputToStudentCode + System.lineSeparator());
 				}
 				continueTesting = false;
 			}

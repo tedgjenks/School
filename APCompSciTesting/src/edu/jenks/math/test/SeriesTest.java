@@ -37,6 +37,7 @@ public class SeriesTest extends Testable {
 		fTerm = 1;
 		lTerm = 16;
 		cRatio = 2;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -47,6 +48,7 @@ public class SeriesTest extends Testable {
 		fTerm = 7;
 		lTerm = 7;
 		cRatio = 1000;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -57,6 +59,7 @@ public class SeriesTest extends Testable {
 		fTerm = 3;
 		lTerm = 46875;
 		cRatio = 5;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -67,6 +70,7 @@ public class SeriesTest extends Testable {
 		fTerm = 6;
 		lTerm = 24576;
 		cRatio = -8;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -77,6 +81,7 @@ public class SeriesTest extends Testable {
 		fTerm = 6;
 		lTerm = -1458;
 		cRatio = -3;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -87,6 +92,7 @@ public class SeriesTest extends Testable {
 		fTerm = 128;
 		lTerm = 1;
 		cRatio = 1f/2;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -97,6 +103,7 @@ public class SeriesTest extends Testable {
 		fTerm = 16;
 		lTerm = 1;
 		cRatio = -1f/2;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -107,6 +114,7 @@ public class SeriesTest extends Testable {
 		fTerm = 8;
 		lTerm = 1f/32;
 		cRatio = 1f/4;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -117,6 +125,7 @@ public class SeriesTest extends Testable {
 		fTerm = (float)Math.pow(3, 5);
 		lTerm = fTerm/(float)Math.pow(3, 7);
 		cRatio = 1f/3;
+		setInputForLogging(fTerm, lTerm, cRatio);
 		exp = geometricSeriesFormula(fTerm, lTerm, cRatio);
 		act = studentSeries.sumGeometric(fTerm, lTerm, cRatio);
 		if(MathUtil.equalsRelative(exp, act, RELATIVE_DELTA))
@@ -130,6 +139,10 @@ public class SeriesTest extends Testable {
 		return fTerm * (1 - Math.pow(cRatio, numTerms)) / (1 - cRatio);
 	}
 	
+	private void setInputForLogging(double fTerm, double lTerm, double common) {
+		inputToStudentCode = new StringBuilder(50).append("First term: ").append(fTerm).append("; last term: ").append(lTerm).append("; common: ").append(common).toString();
+	}
+	
 	// 25 points
 	public void testSumArithmetic() {
 		int fTerm, lTerm, cDiff, points, exp, act;
@@ -137,6 +150,7 @@ public class SeriesTest extends Testable {
 		fTerm = 1;
 		lTerm = 9;
 		cDiff = 2;
+		setInputForLogging(fTerm, lTerm, cDiff);
 		exp = arithmeticSeriesFormula(fTerm, lTerm, cDiff);
 		act = studentSeries.sumArithmetic(fTerm, lTerm, cDiff);
 		if(exp == act)
@@ -147,6 +161,7 @@ public class SeriesTest extends Testable {
 		fTerm = 20;
 		lTerm = 132;
 		cDiff = 7;
+		setInputForLogging(fTerm, lTerm, cDiff);
 		exp = arithmeticSeriesFormula(fTerm, lTerm, cDiff);
 		act = studentSeries.sumArithmetic(fTerm, lTerm, cDiff);
 		if(exp == act)
@@ -157,6 +172,7 @@ public class SeriesTest extends Testable {
 		fTerm = 132;
 		lTerm = 20;
 		cDiff = -7;
+		setInputForLogging(fTerm, lTerm, cDiff);
 		exp = arithmeticSeriesFormula(fTerm, lTerm, cDiff);
 		act = studentSeries.sumArithmetic(fTerm, lTerm, cDiff);
 		if(exp == act)
@@ -177,6 +193,7 @@ public class SeriesTest extends Testable {
 		fTerm = 80;
 		lTerm = 80;
 		cDiff = -700;
+		setInputForLogging(fTerm, lTerm, cDiff);
 		exp = arithmeticSeriesFormula(fTerm, lTerm, cDiff);
 		act = studentSeries.sumArithmetic(fTerm, lTerm, cDiff);
 		if(exp == act)
