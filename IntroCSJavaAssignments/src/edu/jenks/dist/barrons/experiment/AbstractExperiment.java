@@ -21,6 +21,8 @@ public abstract class AbstractExperiment {
 	protected List<Solution> solutions;
 	
 	/**
+	 * Persists <code>arm</code> and <code>solutions</code>, then calls <code>reset()</code>.
+	 * 
 	 * @param arm
 	 * @param solutions
 	 */
