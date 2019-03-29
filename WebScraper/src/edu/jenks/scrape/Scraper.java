@@ -15,7 +15,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
-import edu.jenks.scrap.util.SystemInfo;
+import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.util.LoggingUtil;
 
 public abstract class Scraper {

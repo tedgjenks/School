@@ -1,4 +1,4 @@
-package edu.jenks.scrap.util;
+package edu.jenks.scrape.util;
 
 import java.io.IOException;
 import java.util.Properties;

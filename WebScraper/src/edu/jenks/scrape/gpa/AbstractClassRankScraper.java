@@ -5,9 +5,9 @@ import java.io.*;
 import java.util.*;
 import com.gargoylesoftware.htmlunit.html.*;
 
-import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.scrape.Scraper;
 import edu.jenks.scrape.data.gpa.Student;
+import edu.jenks.scrape.util.SystemInfo;
 
 public class AbstractClassRankScraper extends Scraper {
 	public final Properties CLASS_RANKING_REPORT_PROPERTIES;

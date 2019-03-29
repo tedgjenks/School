@@ -6,8 +6,9 @@ import java.util.*;
 import java.util.logging.*;
 import com.gargoylesoftware.htmlunit.html.*;
 
-import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.scrape.data.gpa.*;
+import edu.jenks.scrape.util.SystemInfo;
+
 import static java.lang.System.out;
 
 public class ClassRankScraper extends AbstractClassRankScraper {

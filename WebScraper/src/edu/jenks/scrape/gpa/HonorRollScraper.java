@@ -6,10 +6,10 @@ import java.util.logging.Level;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.opencsv.CSVWriter;
 
-import edu.jenks.scrap.util.SystemInfo;
 import edu.jenks.scrape.Scraper;
 import edu.jenks.scrape.data.gpa.HonorRollEntry;
 import edu.jenks.scrape.data.gpa.HonorRollEntry.HonorRollEntryCourse;
+import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.scrape.data.gpa.Student;
 import edu.jenks.util.MathUtil;
 
