@@ -1,0 +1,4 @@
+user=
+password=
+useSSL=false
+db_url=jdbc\:mysql\://localhost\:3306/students
