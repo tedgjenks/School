@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE export SYSTEM "export-ps-map.dtd">
+<export column="header" file-location="C:\\Users\\Jenks\\Documents\\temp\\ka\\export.csv">
+	<name col-location="Student Name" type="last-comma-first" />
+	<score-col col-location="Score Best Ever" score-type="points" />
+	<score-points-available col-location="Points Possible"></score-points-available>
+	<restrict>
+		<due-date col-location="Due Date">
+			<start-date day="25" month="10" />
+			<end-date  day="25" month="10" />
+		</due-date>
+		<restrict-col-value col-location="Assignment Type">
+			<restrict-value matches="yes">Exercise</restrict-value>
+			<restrict-value matches="yes">Quiz</restrict-value>
+		</restrict-col-value>
+	</restrict>
+	<assignments col-location="Assignment Name" merge="all">
+		<ps-import file-location="C:\\Users\\Jenks\\Documents\\temp\\ka\\import.csv" />
+	</assignments>
+</export>

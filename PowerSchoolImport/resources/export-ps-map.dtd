@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT export (name+, score-col, score-points-available, restrict?, assignments)>
+<!ELEMENT name EMPTY>
+<!ELEMENT score-col EMPTY>
+<!ELEMENT score-points-available EMPTY>
+<!ELEMENT restrict (due-date?, restrict-col-value*)> <!-- children have AND relationship -->
+<!ELEMENT due-date (start-date?, end-date?)>
+<!ELEMENT start-date EMPTY>
+<!ELEMENT end-date EMPTY>
+<!ELEMENT restrict-col-value (restrict-value+)>
+<!ELEMENT restrict-value (#PCDATA)>
+<!ELEMENT assignments (ps-import+)>
+<!ELEMENT ps-import (assignment*)>
+<!ELEMENT assignment (#PCDATA)>
+
+<!ATTLIST export column (header|number) #REQUIRED>
+<!ATTLIST export file-location CDATA #REQUIRED>
+<!-- col-location is column number or header value -->
+<!ATTLIST name col-location CDATA #REQUIRED>
+<!ATTLIST name type (last-comma-first|last|first) #REQUIRED>
+<!ATTLIST score-col col-location CDATA #REQUIRED>
+<!ATTLIST score-col score-type (points|percent|per-assignment) #REQUIRED>
+<!ATTLIST score-points-available col-location CDATA #REQUIRED>
+<!ATTLIST due-date col-location CDATA #REQUIRED>
+<!ATTLIST start-date day CDATA #REQUIRED>
+<!ATTLIST start-date month CDATA #REQUIRED>
+<!ATTLIST end-date day CDATA #REQUIRED>
+<!ATTLIST end-date month CDATA #REQUIRED>
+<!ATTLIST restrict-col-value col-location CDATA #REQUIRED>
+<!ATTLIST restrict-value matches (yes|no) #REQUIRED> <!-- yes: if value is the same, then keep; no: if value is different, then keep -->
+<!ATTLIST assignments merge (all|one-to-one|map) #REQUIRED>
+<!ATTLIST ps-import file-location CDATA #REQUIRED>
+<!ATTLIST assignments col-location CDATA #REQUIRED>
