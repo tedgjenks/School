@@ -19,11 +19,7 @@ public class Sentence extends AbstractSentence{
    }
    public int countWords(){
         int numBlanks = getBlankPositions().size();
-        if(numBlanks % 2 == 0){
-            return (numBlanks * 2) + 1;
-        } else {
-            return numBlanks+1;
-        }
+        return numBlanks+1;
    }
    public String[] getWords(){
         String[] words = new String[countWords()];

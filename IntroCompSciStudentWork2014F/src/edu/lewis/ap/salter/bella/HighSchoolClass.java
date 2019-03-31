@@ -8,7 +8,6 @@ public class HighSchoolClass extends AbstractHighSchoolClass
      super(students); 
     }
     public Student[] getValedictorian() {
-        Student[] Valedictorian = new Student[70];
         double baseGPA = students[0].getGpa(); 
         int countVal = 0;
         for(int i = 0; i < students.length; i++) {
@@ -24,8 +23,10 @@ public class HighSchoolClass extends AbstractHighSchoolClass
         Student[] Valedictorians = new Student[countVal];
         int numValInArr = 0;
         for(int e = 0; e < students.length; e++ ){
+			if(students[e].getGpa() == baseGPA) {
             Valedictorians[numValInArr] = students[e];
             numValInArr++;
+			}
         }
         return Valedictorians;
     }
@@ -62,6 +63,7 @@ public class HighSchoolClass extends AbstractHighSchoolClass
         for(int i = 0; i < students.length; i++) {
             if(students[i].isHonors()) {
                 honorsStudents[countHonors] = students[i];
+				countHonors++;
             }
         }
         return honorsStudents;
