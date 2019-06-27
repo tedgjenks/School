@@ -3,11 +3,8 @@
  */
 package edu.cb.masterorder.jenks.ted;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import edu.jenks.dist.cb.masterorder.AbstractMasterOrder;
-import edu.jenks.dist.cb.masterorder.CookieOrder;
+import java.util.*;
+import edu.jenks.dist.cb.masterorder.*;
 
 /**
  * @author JenksT

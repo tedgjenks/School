@@ -22,7 +22,7 @@ public class Rational extends AbstractRational {
 	 * @param denom the denominator
 	 * @throws IllegalArgumentException if <code>denom</code> is zero.
 	 */
-	public Rational (int numer, int denom) throws IllegalArgumentException {
+	public Rational (long numer, long denom) throws IllegalArgumentException {
 		super(numer, denom);
 
 		// Make the numerator "store" the sign
@@ -49,10 +49,10 @@ public class Rational extends AbstractRational {
 	 */
 	@Override
 	public AbstractRational add(AbstractRational op2) {
-		int commonDenominator = getDenominator() * op2.getDenominator();
-		int numerator1 = getNumerator() * op2.getDenominator();
-		int numerator2 = op2.getNumerator() * getDenominator();
-		int sum = numerator1 + numerator2;
+		long commonDenominator = getDenominator() * op2.getDenominator();
+		long numerator1 = getNumerator() * op2.getDenominator();
+		long numerator2 = op2.getNumerator() * getDenominator();
+		long sum = numerator1 + numerator2;
 		return new Rational(sum, commonDenominator);
 	}
 
@@ -70,8 +70,8 @@ public class Rational extends AbstractRational {
 	 */
 	@Override
 	public AbstractRational multiply(AbstractRational op2) {
-		int numer = getNumerator() * op2.getNumerator();
-		int denom = getDenominator() * op2.getDenominator();
+		long numer = getNumerator() * op2.getNumerator();
+		long denom = getDenominator() * op2.getDenominator();
 		return new Rational (numer, denom);
 	}
 
@@ -98,10 +98,10 @@ public class Rational extends AbstractRational {
 	 */
 	@Override
 	public void reduce() {
-		int numerator = getNumerator();
-		int denominator = getDenominator();
+		long numerator = getNumerator();
+		long denominator = getDenominator();
 		if (numerator != 0) {
-			int common = gcd (Math.abs(numerator), denominator);
+			long common = gcd (Math.abs(numerator), denominator);
 			numerator = numerator / common;
 			setNumerator(numerator);
 			denominator = denominator / common;
@@ -117,9 +117,9 @@ public class Rational extends AbstractRational {
 	 */
 	public String toString () {
 		reduce();
-		int numer = getNumerator();
+		long numer = getNumerator();
 		StringBuilder result = new StringBuilder().append(numer);
-		int denominator = getDenominator();
+		long denominator = getDenominator();
 		if(denominator != 1 && numer != 0)
 			result.append("/").append(denominator);
 		return result.toString();
@@ -131,7 +131,7 @@ public class Rational extends AbstractRational {
 	@Override
 	public boolean decimalTerminates() {
 		reduce();
-		int quotient = getDenominator();
+		long quotient = getDenominator();
 		boolean onlyTerminatingFactors = true; // no factors other than 2 and 5 are found
 		if(getNumerator() != 0 && quotient != 1) {
 			for(int i = 2; i <= quotient / i && onlyTerminatingFactors; i++) {
@@ -148,7 +148,7 @@ public class Rational extends AbstractRational {
 	}
 	
 	private Rational negate(AbstractRational r) {
-		int negatedNumerator = r.getNumerator() * -1;
+		long negatedNumerator = r.getNumerator() * -1;
 		return new Rational(negatedNumerator, r.getDenominator());
 	}
 
@@ -157,17 +157,28 @@ public class Rational extends AbstractRational {
 	 */
 	@Override
 	public int compareTo(AbstractRational arg0) {
-		int retVal = 0;
-		AbstractRational arg = arg0;
-		int numerator = getNumerator(), argNumerator = arg.getNumerator();
+		long retVal = 0;
 		AbstractRational difference = subtract(arg0);
-		if(argNumerator >= 0)
-			retVal = difference.getNumerator();
-		else if(numerator >= 0)
-			retVal = 1;
-		else
-			retVal = -1 * difference.getNumerator();
-		return retVal;
+		retVal = difference.getNumerator();
+		return (int)Math.min(Math.max(retVal, Integer.MIN_VALUE), Integer.MAX_VALUE);
 	}
 	
+	public static void main(String[] args) {
+		System.out.println("start");
+		AbstractRational nR1 = new Rational(-33, 2);
+		AbstractRational nR2 = new Rational(-19, 2);
+		AbstractRational pR1 = new Rational(33, 7);
+		AbstractRational pR2 = new Rational(83, 7);
+		assert nR1.compareTo(nR2) < 0;
+		assert nR2.compareTo(nR1) > 0;
+		assert nR1.compareTo(pR1) < 0;
+		assert pR1.compareTo(nR1) > 0;
+		assert pR1.compareTo(pR2) < 0;
+		assert pR2.compareTo(pR1) > 0;
+		assert pR1.compareTo(pR1) == 0;
+		pR1 = new Rational(143, 343);
+		nR1 = new Rational(68, -193);
+		System.out.println(pR1.compareTo(nR1));
+		System.out.println("end without error");
+	}
 }

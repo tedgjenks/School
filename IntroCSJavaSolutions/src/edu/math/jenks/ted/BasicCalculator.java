@@ -1,145 +1,268 @@
-package edu.jenks.calculator;
+package edu.math.jenks.ted;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
-
-import edu.jenks.calculator.dist.Calculates;
-import edu.jenks.calculator.dist.MathematicalExpressionParser;
-import edu.jenks.util.CollectionUtil;
-import edu.jenks.util.MathUtil;
+import edu.jenks.dist.math.*;
+import edu.jenks.util.*;
 
 public class BasicCalculator implements Calculates {
 	
-	private final static Set<String> MULT_DIV_OPERATORS = new HashSet<String>(4);
-	private final static Set<String> ADD_SUB_OPERATORS = new HashSet<String>(4);
-	private final static Pattern OPERATORS_PATTERN = Pattern.compile("/\\*\\-\\+");
+	private final static String LEGAL_OPERATORS = "/\\*\\-\\+\\(\\)\\^";
+	private final static Pattern LEGAL_CHAR_PATTERN = Pattern.compile("[\\d\\." + LEGAL_OPERATORS + "]+");
+	private final static Pattern MULTIPLE_DECIMAL_POINTS = Pattern.compile("(.*\\..*){2}");
+	private final static Set<String> OPERATORS = new HashSet<>(12);
+	private final static Set<String> EXPONENT_OPERATORS = new HashSet<>(1);
+	private final static Set<String> MULTIPLICATION_OPERATORS = new HashSet<>(3);
+	private final static Set<String> ADDITION_OPERATORS = new HashSet<>(3);
+	private final static Set<String> GROUPING_OPERATORS = new HashSet<>(3);
 	
 	static {
-		MULT_DIV_OPERATORS.add("*");
-		MULT_DIV_OPERATORS.add("/");
-		ADD_SUB_OPERATORS.add("+");
-		ADD_SUB_OPERATORS.add("-");
+		OPERATORS.addAll(Arrays.asList("/", "*", "-", "+", "(", ")", "^"));
+		EXPONENT_OPERATORS.add("^");
+		MULTIPLICATION_OPERATORS.addAll(Arrays.asList("/", "*"));
+		ADDITION_OPERATORS.addAll(Arrays.asList("+", "-"));
+		GROUPING_OPERATORS.addAll(Arrays.asList("(", ")"));
 	}
 	
+	private final CurrentNeighbors CN = new CurrentNeighbors();
+
 	@Override
-	public double performCalculation(String input) throws IllegalArgumentException, ArithmeticException {
-		List<String> tokenList = MathematicalExpressionParser.tokenizeExpression(input);
-		if(!validateExpression(tokenList))
-			throw new IllegalArgumentException("Not a valid expression: " + input);
-		String value = evaluateInput(tokenList);
-		return Double.parseDouble(value);
+	public String performCalculation(String input) {
+		try {
+			List<String> tokens = tokenizeExpression(input);
+			if(tokens.isEmpty())
+				return ERROR_CODE_NO_INPUT;
+			evaluateExpressionWithParen(tokens);
+			return tokens.get(0);
+		} catch(IllegalArgumentException e) {
+			return e.getMessage();
+		}
 	}
 	
-	private static boolean validateExpression(List<String> tokens) throws IllegalArgumentException {
-		boolean pass = true;
-		int size = tokens.size();
-		int openParenCount = CollectionUtil.count(tokens, "(");
-		int closedParenCount = CollectionUtil.count(tokens, ")");
-		if(openParenCount != closedParenCount)
-			throw new IllegalArgumentException("Number of open parens ("
-					+ openParenCount + ") different from number of closed parens ("
-					+ closedParenCount + ")");
-		for(int index = 0; index < size; index++) {
-			if("(".equals(tokens.get(index)))
-				findMatchingClosedParen(tokens, index); // will throw exception if not found
+	private int findMatchingCloseParenthesis(List<String> expression, int openIndex) {
+		int openCount = 1, currentIndex = -1;
+		ListIterator<String> iterator = expression.listIterator();
+		for(; currentIndex < openIndex; currentIndex++) {
+			iterator.next();
 		}
-		for(int index = 0; pass && index < size - 1; index++) {
-			String token = tokens.get(index);
-			String nextToken = tokens.get(index + 1);
-			if(OPERATORS_PATTERN.matcher(token).matches() || "(".equals(token)) // next token number or open paren
-				pass = (MathUtil.isRealNumber(nextToken) || "(".equals(nextToken));
-			else if(MathUtil.isRealNumber(token)) // next token operator
-				pass = OPERATORS_PATTERN.matcher(nextToken).matches();
-			else if(")".equals(token)) // next token operator or closed paren
-				pass = (OPERATORS_PATTERN.matcher(nextToken).matches() || ")".equals(nextToken));
-			else
-				throw new IllegalArgumentException("Illegal token: " + token);
+		while(openCount > 0) {
+			if(!iterator.hasNext())
+				return -1;
+			String nextToken = iterator.next();
+			currentIndex++;
+			if("(".equals(nextToken))
+				openCount++;
+			else if(")".equals(nextToken))
+				openCount--;
 		}
-		String lastToken = tokens.get(size - 1);
-		pass = (MathUtil.isRealNumber(lastToken) || ")".equals(lastToken)); // last token must be number or closed paren
-		return pass;
+		return currentIndex;
 	}
 	
-	private static String evaluateInput(List<String> tokens) throws IllegalArgumentException {
-		int openParenIndex = tokens.indexOf("(");
-		while(openParenIndex >= 0) {
-			int matchingClosedParenIndex = findMatchingClosedParen(tokens, openParenIndex);
-			tokens.remove(matchingClosedParenIndex);
-			tokens.remove(openParenIndex);
-			evaluateInput(tokens.subList(openParenIndex, matchingClosedParenIndex - 1));
-			openParenIndex = tokens.indexOf("(");
+	private void evaluateExpressionWithParen(List<String> expression) {
+		int openIndex = expression.indexOf("(");
+		int closeIndex = expression.indexOf(")");
+		if(openIndex < 0 && closeIndex >= 0 || closeIndex < openIndex)
+			throw new IllegalArgumentException(ERROR_CODE_UNMATCHED_PARENTHESIS);
+		while(openIndex >= 0) {
+			closeIndex = findMatchingCloseParenthesis(expression, openIndex);
+			if(closeIndex < 0)
+				throw new IllegalArgumentException(ERROR_CODE_UNMATCHED_PARENTHESIS);
+			expression.remove(closeIndex);
+			expression.remove(openIndex);
+			evaluateExpressionWithParen(expression.subList(openIndex, closeIndex - 1));
+			openIndex = expression.indexOf("(");
 		}
-		if(tokens.size() > 1)
-			evaluateExpressionWithoutParen(tokens);
-		if(tokens.size() != 1)
-			throw new IllegalArgumentException("Input could not be evaluated (more than one token remaining).");
-		return tokens.get(0);
+		evaluateExpressionNoParen(expression);
 	}
 	
-	private static int findMatchingClosedParen(List<String> tokens, int firstOpenParenIndex) throws IllegalArgumentException {
-		int matchingClosedParenIndex = -1;
-		for(int index = firstOpenParenIndex + 1, size = tokens.size(), unmatchedOpenParenCount = 1; matchingClosedParenIndex < 0 && index <= size; index++) {
-			String token = tokens.get(index);
-			switch(token) {
-			case "(":
-				unmatchedOpenParenCount++;
-				break;
-			case ")":
-				if(--unmatchedOpenParenCount == 0)
-					matchingClosedParenIndex = index;
-				break;
+	private void evaluateOperators(List<String> expression, Set<String> operators) {
+		ListIterator<String> iterator = expression.listIterator();
+		CN.reset();
+		while(iterator.hasNext()) {
+			CN.current = iterator.next();
+			if(operators.contains(CN.current)) {
+				if(iterator.hasNext())
+					CN.next = iterator.next();
+				else
+					CN.next = null;
+				executeOperation();
+				iterator.remove();
+				iterator.previous();
+				iterator.remove();
+				iterator.previous();
+				iterator.set(CN.current);
+				iterator.next();
 			}
-		}
-		if(matchingClosedParenIndex < firstOpenParenIndex + 2)
-			throw new IllegalArgumentException("Matching closed paren not found for index " + firstOpenParenIndex);
-		return matchingClosedParenIndex;
-	}
-	
-	private static void evaluateExpressionWithoutParen(List<String> tokens) {
-		if(tokens.size() == 0)
-			throw new IllegalArgumentException("tokens empty");
-		parseOperations(tokens, MULT_DIV_OPERATORS);
-		parseOperations(tokens, ADD_SUB_OPERATORS);
-	}
-	
-	private static void parseOperations(List<String> tokens, Set<String> operations) {
-		int listSize = tokens.size();
-		for(int index = 1; index <= listSize - 1; index++) {
-			String token = tokens.get(index);
-			if(operations.contains(token)) {
-				String result = executeOperation(tokens.get(index - 1), token, tokens.get(index + 1));
-				tokens.set(index - 1, result);
-				tokens.remove(index);
-				tokens.remove(index);
-				listSize -= 2;
-				index--;
-			}
+			CN.previous = CN.current;
 		}
 	}
 	
-	private static String executeOperation(String s1, String operator, String s2) throws ArithmeticException {
-		if(!MathUtil.isRealNumber(s1) || !MathUtil.isRealNumber(s1))
-			throw new IllegalArgumentException("Parameters must be numbers.\ns1: " + s1 + "\ns2: " + s2);
-		double d1 = Double.parseDouble(s1), d2 = Double.parseDouble(s2);
+	private void executeOperation() {
+		if(CN.next == null || CN.previous == null || !MathUtil.isRealNumber(CN.previous) || !MathUtil.isRealNumber(CN.next))
+			throw new IllegalArgumentException(ERROR_CODE_OPERATOR_WITHOUT_OPERAND);
 		double result;
-		switch(operator) {
+		switch(CN.current) {
+		case "^":
+			double base = Double.parseDouble(CN.previous), exponent = Double.parseDouble(CN.next);
+			if(base == 0 && exponent == 0)
+				throw new IllegalArgumentException(ERROR_CODE_DIVISION_BY_ZERO);
+			result = Math.pow(base, exponent);
+			break;
 		case "*":
-			result = d1 * d2;
+			result = Double.parseDouble(CN.previous) * Double.parseDouble(CN.next);
 			break;
 		case "/":
-			result = d1 / d2;
+			double divisor = Double.parseDouble(CN.next);
+			if(divisor == 0)
+				throw new IllegalArgumentException(ERROR_CODE_DIVISION_BY_ZERO);
+			result = Double.parseDouble(CN.previous) / divisor;
 			break;
 		case "+":
-			result = d1 + d2;
+			result = Double.parseDouble(CN.previous) + Double.parseDouble(CN.next);
 			break;
 		case "-":
-			result = d1 - d2;
+			result = Double.parseDouble(CN.previous) - Double.parseDouble(CN.next);
 			break;
 		default:
-			throw new IllegalArgumentException("operator must be *, /, +, or -");
+			throw new IllegalArgumentException("Unhandled operator: " + CN.current);
 		}
-		return String.valueOf(result);
+		if(Double.isNaN(result))
+			throw new IllegalArgumentException(ERROR_CODE_NOT_REAL);
+		CN.current = String.valueOf(result);
+	}
+	
+	private void evaluateExpressionNoParen(List<String> expression) {
+		parseExpressionNoParen(expression);
+		evaluateOperators(expression, EXPONENT_OPERATORS);
+		evaluateOperators(expression, MULTIPLICATION_OPERATORS);
+		evaluateOperators(expression, ADDITION_OPERATORS);
+	}
+	
+	/**
+	 * Tokenize a mathematical expression.<br>
+	 * Each token is a number or an operator.<br>
+	 * 
+	 * @param input the mathematical expression to tokenize
+	 * @return a list of tokens
+	 * @throws IllegalArgumentException if input contains unsupported characters
+	 */
+	private List<String> tokenizeExpression(String input) {
+		if(input == null || (input = input.replaceAll("\\s", "")).length() == 0)
+			throw new IllegalArgumentException(ERROR_CODE_NO_INPUT);
+		if(!LEGAL_CHAR_PATTERN.matcher(input).matches())
+			throw new IllegalArgumentException(ERROR_CODE_UNSUPPORTED_CHARACTER);
+		String[] tokens = input.split("((?<=[" + LEGAL_OPERATORS + "])|(?=[" + LEGAL_OPERATORS + "]))");
+		return createList(tokens);
+	}
+	
+	/**
+	 * Check for multiple decimal points
+	 * Make implicit operations explicit
+	 * 
+	 * @param tokens
+	 * @return
+	 */
+	private List<String> createList(String[] tokens) {
+		List<String> tokenList = new LinkedList<>();
+		CN.reset();
+		for(int index = 0; index < tokens.length; index++) {
+			CN.current = tokens[index];
+			if(index + 1 < tokens.length)
+				CN.next = tokens[index + 1];
+			if(!OPERATORS.contains(CN.current)) {
+				if(MULTIPLE_DECIMAL_POINTS.matcher(CN.current).matches())
+					throw new IllegalArgumentException(ERROR_CODE_NUMBER_FORMAT);
+				if(")".equals(CN.previous)) {
+					tokenList.add("*");
+					tokenList.add(CN.current);
+				} else if("(".equals(CN.next)) {
+					tokenList.add(CN.current);
+					tokenList.add("*");
+					tokenList.add(CN.next);
+					index++;
+					CN.current = CN.next;
+				} else
+					tokenList.add(CN.current);
+			} else if(")".equals(CN.current) && "(".equals(CN.next)) {
+				tokenList.add(CN.current);
+				tokenList.add("*");
+				CN.current = CN.next;
+				tokenList.add(CN.current);
+				index++;
+			} else
+				tokenList.add(CN.current);
+			CN.previous = CN.current;
+		}
+		return tokenList;
+	}
+	
+	private void parseExpressionNoParen(List<String> expression) {
+		if(expression.isEmpty())
+			throw new IllegalArgumentException("Empty expression detected.");
+		ListIterator<String> iterator = expression.listIterator();
+		CN.reset();
+		while(iterator.hasNext()) {
+			CN.current = iterator.next();
+			if(OPERATORS.contains(CN.current)) {
+				if(iterator.hasNext()) {
+					CN.next = iterator.next();
+					iterator.previous();
+					iterator.previous();
+					iterator.next();
+					switch(CN.current) {
+					case "-":
+						parseNegative(iterator);
+						break;
+					}
+				} else if(")".equals(CN.current))
+					throw new IllegalArgumentException(ERROR_CODE_UNMATCHED_PARENTHESIS);
+				else
+					throw new IllegalArgumentException(ERROR_CODE_OPERATOR_WITHOUT_OPERAND);
+			}
+			CN.previous = CN.current;
+		}
+	}
+	
+	private void parseNegative(ListIterator<String> iterator) {
+		if("-".equals(CN.next)) {
+			CN.current = "+";
+			iterator.remove();
+			iterator.next();
+			iterator.set(CN.current);
+		} else if("+".equals(CN.next)) {
+			iterator.next();
+			iterator.remove();
+			CN.next = iterator.next();
+			iterator.previous();
+			iterator.previous();
+			iterator.next();
+		} else if((CN.previous == null || OPERATORS.contains(CN.previous)) && MathUtil.isRealNumber(CN.next)) {
+			if("^".equals(CN.previous)) {
+				iterator.remove();
+				CN.current = "-" + CN.next;
+				iterator.next();
+				iterator.set(CN.current);
+			} else {
+				CN.current = "-1";
+				iterator.set(CN.current);
+				String nextOperator = "/".equals(CN.previous) ? "/" : "*";
+				CN.previous = CN.current;
+				CN.current = nextOperator;
+				iterator.add(CN.current);
+			}
+		}
+	}
+	
+	private class CurrentNeighbors {
+		String previous, current, next;
+		
+		void reset() {
+			previous = current = next = null;
+		}
+
+		@Override
+		public String toString() {
+			return new StringBuilder(10).append(previous).append(", ").append(current).append(", ").append(next).toString();
+		}
 	}
 }

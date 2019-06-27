@@ -20,7 +20,7 @@ public class Name extends AbstractName {
 	}
 
 	/** 
-	 * Compare by last name.  If last name is the same, compare by first name.  If last name and first name are the same, increment duplicates.
+	 * Compare by last name alphabetically.  If last name is the same, compare by first name alphabetically.  If last name and first name are the same, increment duplicates.
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override

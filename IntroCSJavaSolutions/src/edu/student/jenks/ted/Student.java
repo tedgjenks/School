@@ -13,13 +13,15 @@ public class Student extends AbstractStudent {
 	private double testScore1, testScore2, testScore3;
 	
 	/**
+	 * Persist all parameters.
+	 * 
 	 * @param firstName
 	 * @param lastName
 	 * @param homeAddress
 	 * @param schoolAddress
-	 * @param testScore1
-	 * @param testScore2
-	 * @param testScore3
+	 * @param testScore1 the score for test number 1
+	 * @param testScore2 the score for test number 2
+	 * @param testScore3 the score for test number 3
 	 */
 	public Student(String firstName, String lastName, Address homeAddress, Address schoolAddress, double testScore1, double testScore2, double testScore3) {
 		super(firstName, lastName, homeAddress, schoolAddress);
@@ -67,7 +69,11 @@ public class Student extends AbstractStudent {
 	}
 
 	/**
-	 * @see edu.jenks.dist.student.AbstractStudent#toString()
+	 * <code>firstName</code> <code>lastName</code><br>
+	 * Home Address:<br>
+	 * <code>homeAddress</code><br>
+	 * School Address:<br>
+	 * <code>schoolAddress</code><br>
 	 * Test score 1: <code>testScore1</code><br>
 	 * Test score 2: <code>testScore2</code><br>
 	 * Test score 3: <code>testScore3</code><br>
@@ -76,10 +82,10 @@ public class Student extends AbstractStudent {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(100);
-		sb.append(super.toString()).append("\n");
-		sb.append("Test score 1: ").append(testScore1).append("\n");
-		sb.append("Test score 2: ").append(testScore2).append("\n");
-		sb.append("Test score 3: ").append(testScore3).append("\n");
+		sb.append(super.toString()).append(NEW_LINE);
+		sb.append("Test score 1: ").append(testScore1).append(NEW_LINE);
+		sb.append("Test score 2: ").append(testScore2).append(NEW_LINE);
+		sb.append("Test score 3: ").append(testScore3).append(NEW_LINE);
 		sb.append("Average test score: ").append(average());
 		return sb.toString();
 	}
