@@ -80,11 +80,11 @@ public abstract class AbstractMidterm {
 	/**
 	 * <p>Assign a letter grade based on <code>score</code>.
 	 * Grades:<br>
-	 * - <code>score</code> greater than or equal to 90 -> A<br>
-	 * - <code>score</code> greater than or equal to 80, less than 90 -> B<br>
-	 * - <code>score</code> greater than or equal to 70, less than 80 -> C<br>
-	 * - <code>score</code> greater than or equal to 60, less than 70 -> D<br>
-	 * - <code>score</code> less than 60 -> F
+	 * - <code>score</code> greater than or equal to 90 - A<br>
+	 * - <code>score</code> greater than or equal to 80, less than 90 - B<br>
+	 * - <code>score</code> greater than or equal to 70, less than 80 - C<br>
+	 * - <code>score</code> greater than or equal to 60, less than 70 - D<br>
+	 * - <code>score</code> less than 60 - F
 	 * @param score
 	 * @return the grade.
 	 */

@@ -17,6 +17,11 @@ import edu.jenks.util.StringUtil;
  *
  */
 public abstract class AbstractStudent {
+	/**
+	 * Start a new line in a String.
+	 */
+	public static final String NEW_LINE = System.lineSeparator();
+	
 	private String firstName, lastName;
 	private Address homeAddress, schoolAddress;
 	
@@ -77,12 +82,16 @@ public abstract class AbstractStudent {
 	}
 
 	/**
+	 * Set the score of the test indicated.
+	 * 
 	 * @param testNumber (1, 2, or 3)
 	 * @param score percent scored
 	 */
 	public abstract void setTestScore(int testNumber, double score);
 	
 	/**
+	 * Get the score of the test indicated.
+	 * 
 	 * @param testNumber (1, 2, or 3)
 	 * @return score as a percent
 	 */
@@ -102,9 +111,9 @@ public abstract class AbstractStudent {
 	 */
 	public String toString() {
 		StringBuilder sb = new StringBuilder(75);
-		sb.append(firstName).append(" ").append(lastName).append("\n");
-		sb.append("Home Address:\n").append(homeAddress).append("\n");
-		sb.append("School Address:\n").append(schoolAddress);
+		sb.append(firstName).append(" ").append(lastName).append(NEW_LINE);
+		sb.append("Home Address:").append(NEW_LINE).append(homeAddress).append(NEW_LINE);
+		sb.append("School Address:").append(NEW_LINE).append(schoolAddress);
 		return sb.toString();
 	}
 }

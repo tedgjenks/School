@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.jenks.calculator.dist;
+package edu.jenks.dist.math;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +15,7 @@ import edu.jenks.util.MathUtil;
  */
 public class MathematicalExpressionParser {
 	
-	private final static String LEGAL_OPERATORS = "/\\*\\-\\+\\(\\)";
+	private final static String LEGAL_OPERATORS = "/\\*\\-\\+\\(\\)\\^";
 	private final static String USER_REG_EXP = "[\\d\\.\\s" + LEGAL_OPERATORS + "]+";
 	private final static Pattern USER_PATTERN = Pattern.compile(USER_REG_EXP);
 	
@@ -64,18 +64,19 @@ public class MathematicalExpressionParser {
 			String token = tokens.get(index);
 			if(token.equals("-")) {
 				boolean negation = (index == 0);
+				String previousToken = index == 0 ? null : tokens.get(index - 1);
 				if(!negation) {
-					String previousToken = tokens.get(index - 1);
 					if(!")".equals(previousToken) && !MathUtil.isRealNumber(previousToken)) {
 						String nextToken = tokens.get(index + 1);
-						if(!"(".equals(nextToken) && !MathUtil.isRealNumber(nextToken))
+						boolean nextIsGroup = "(".equals(nextToken);
+						if(!nextIsGroup && !MathUtil.isRealNumber(nextToken))
 							throw new IllegalArgumentException("Negation must precede a number or group.");
 						negation = true;
 					}
 				}
 				if(negation) {
 					tokens.set(index, "-1");
-					tokens.add(index + 1, "*");
+					tokens.add(index + 1, "/".equals(previousToken) ? "/" : "*");
 				}
 			}
 		}

@@ -80,7 +80,7 @@ public class Address {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(30);
-		sb.append(streetAddress).append("\n").append(city).append(", ").append(state);
+		sb.append(streetAddress).append(AbstractStudent.NEW_LINE).append(city).append(", ").append(state);
 		sb.append(" ").append(zipCode);
 		return sb.toString();
 	}

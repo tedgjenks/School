@@ -10,24 +10,26 @@ package edu.jenks.dist.math;
 public abstract class AbstractBaseConverter {
 	
 	/**
-	 * The default expected number of correct decimal places in the converted number
-	 */
-	public static final int DECIMAL_PRECISION = 5;
-	
-	/**
-	 * The maximum number of correct decimal places in the converted number
-	 */
-	public static final int MAX_DECIMAL_PRECISION = 30;
-	
-	/**
-	 * The minimum supported radix (2 inclusive)
+	 * The minimum supported radix (inclusive)
 	 */
 	public static final int MIN_RADIX = 2;
 	
 	/**
-	 * The maximum supported radix (20 exclusive)
+	 * The maximum supported radix (exclusive)
 	 */
-	public static final int MAX_RADIX = 20;
+	public static final int MAX_RADIX = 36;
+	
+	/**
+	 * float conversions must be accurate within <code>RELATIVE_DELTA</code>
+	 */
+	public final double RELATIVE_DELTA;
+	
+	/**
+	 * @param relativeDelta float conversions must be accurate within <code>relativeDelta</code>
+	 */
+	public AbstractBaseConverter(double relativeDelta) {
+		RELATIVE_DELTA = relativeDelta;
+	}
 	
 	/**
 	 * Converts a number from one base to another base.
@@ -41,7 +43,10 @@ public abstract class AbstractBaseConverter {
 	
 	/**
 	 * Converts a floating number from one base to another base.<br>
-	 * Precision is maintained to <code>DECIMAL_PRECISION</code> decimal places
+	 * Precision is maintained to <code>DECIMAL_PRECISION</code> decimal places.<br>
+	 * If <code>currentRadix</code> can be converted exactly to <code>newRadix</code> without a repeating decimal,<br>
+	 * then perform the exact conversion.<br>
+	 * If an exact conversion would require a place value that overflows <code>int</code>, perform the approximation.
 	 * 
 	 * @param numberToConvert must be a positive floating number less than <code>Double.MAX_VALUE</code>, and digits must be legal for currentRadix.
 	 * @param currentRadix the base of numberToConvert.
@@ -65,4 +70,11 @@ public abstract class AbstractBaseConverter {
 	 * @return a binary version of decimalNumber.
 	 */
 	public abstract String convertDecimalToBinary(String decimalNumber);
+	
+	/**
+	 * @param currentRadix
+	 * @param newRadix
+	 * @return true if <code>currentRadix</code> can be represented as a nonterminating decimal in <code>newRadix</code>, otherwise false
+	 */
+	public abstract boolean willTerminate(int currentRadix, int newRadix);
 }

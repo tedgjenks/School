@@ -8,19 +8,21 @@ package edu.jenks.dist.math;
  * 
  * Rational numbers are written as one integer (numerator) divided by another nonzero integer (denominator).<br>
  * 
+ * No floating point types (e.g. double, float, etc.) were used in the making of this program.
+ * 
  * @author Ted Jenks
  *
  */
 public abstract class AbstractRational implements Comparable<AbstractRational> {
 
-	private int numerator, denominator;
+	private long numerator, denominator;
 	
 	/**
 	 * @param numerator
 	 * @param denominator
 	 * @throws IllegalArgumentException if denominator is zero.
 	 */
-	public AbstractRational(int numerator, int denominator) throws IllegalArgumentException {
+	public AbstractRational(long numerator, long denominator) throws IllegalArgumentException {
 		if(denominator == 0)
 			throw new IllegalArgumentException("The denominator cannot be zero.");
 		this.numerator = numerator;
@@ -30,21 +32,21 @@ public abstract class AbstractRational implements Comparable<AbstractRational> {
 	/**
 	 * @param numerator
 	 */
-	public void setNumerator(int numerator) {
+	public void setNumerator(long numerator) {
 		this.numerator = numerator;
 	}
 
 	/**
 	 * @param denominator
 	 */
-	public void setDenominator(int denominator) {
+	public void setDenominator(long denominator) {
 		this.denominator = denominator;
 	}
 
 	/**
 	 * @return the numerator of this rational number.
 	 */
-	public int getNumerator ()
+	public long getNumerator ()
 	{
 		return numerator;
 	}
@@ -52,7 +54,7 @@ public abstract class AbstractRational implements Comparable<AbstractRational> {
 	/**
 	 * @return the denominator of this rational number.
 	 */
-	public int getDenominator ()
+	public long getDenominator ()
 	{
 		return denominator;
 	}
@@ -123,7 +125,7 @@ public abstract class AbstractRational implements Comparable<AbstractRational> {
 	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public int gcd(int num1, int num2) throws IllegalArgumentException {
+	public long gcd(long num1, long num2) throws IllegalArgumentException {
 		if(num1 == 0 || num2 == 0)
 			throw new IllegalArgumentException("Arguments to method gcd must not be zero.");
 		if(num1 < 0)
