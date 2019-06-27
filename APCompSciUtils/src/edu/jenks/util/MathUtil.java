@@ -9,6 +9,10 @@ public class MathUtil {
 	private static final Pattern REAL_NUMBER_PATTERN = Pattern.compile("(-?\\d+)|(-?\\d*\\.\\d+)");
 	private static final Pattern INTEGER_NUMBER_PATTERN = Pattern.compile("-?\\d+");
 
+	public static boolean sameSign(long l1, long l2) {
+		return (l1 >= 0) ^ (l2 < 0);
+	}
+	
 	public static double stripInteger(double number) {
 		int wholePart = (int)number;
 		return number - wholePart;
@@ -27,11 +31,11 @@ public class MathUtil {
 	}
 	
 	public static boolean isRealNumber(String s) {
-		return REAL_NUMBER_PATTERN.matcher(s).matches();
+		return s != null && REAL_NUMBER_PATTERN.matcher(s).matches();
 	}
 	
 	public static boolean isIntegerNumber(String s) {
-		return INTEGER_NUMBER_PATTERN.matcher(s).matches();
+		return s != null && INTEGER_NUMBER_PATTERN.matcher(s).matches();
 	}
 	
 	public static int findGreatestCommonFactor(int num1, int num2) throws IllegalArgumentException {
@@ -61,6 +65,22 @@ public class MathUtil {
 			factors.add(quotient);
 		return factors;
 	}
+	
+	/**
+	 * @param smallPos a small positive integer
+	 * @param largePos greater than <code>smallPos</code>
+	 * @return true if <code>largePos</code> is a power of <code>smallPos</code>
+	 */
+	public static boolean isPower(long smallPos, long largePos) {
+		if(smallPos < 1 || smallPos > largePos)
+			throw new IllegalArgumentException("smallPos must be greater than or equal to 1 and less than or equal to largePos");
+        if (smallPos == 1) 
+            return largePos == 1; 
+        long pow = 1; 
+        while (pow < largePos) 
+            pow = pow * smallPos; 
+        return pow == largePos; 
+    }
 	
 	public static void main(String[] args) {
 		System.out.println(calculateRadixPrecision(2, 6, 10));

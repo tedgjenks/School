@@ -42,6 +42,14 @@ public class StringUtil {
 		return String.valueOf(upperChar).toLowerCase().charAt(0);
 	}
 	
+	public static String prependCharacter(String s, char c, int desiredLength) {
+		StringBuilder sb = new StringBuilder(desiredLength);
+		sb.append(s);
+		for(int numChars = desiredLength - sb.length(); numChars > 0; numChars--)
+			sb.insert(0, c);
+		return sb.toString();
+	}
+	
 	public static String prependCharacter(int i, char c, int desiredLength) {
 		StringBuilder sb = new StringBuilder(desiredLength);
 		sb.append(i);
