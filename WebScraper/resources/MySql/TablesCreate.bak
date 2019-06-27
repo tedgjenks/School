@@ -4,7 +4,7 @@ CREATE TABLE `student` (
   `l_name` varchar(100) NOT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `grade_level` tinyint(2) unsigned NOT NULL,
-  `rank` tinyint(2) unsigned NOT NULL,
+  `class_rank` tinyint(2) unsigned NOT NULL,
   `gpa_ps` decimal(5,4) unsigned NOT NULL,
   `gpa_hg` decimal(5,4) unsigned NOT NULL DEFAULT '0.0000',
   PRIMARY KEY (`student_id`)

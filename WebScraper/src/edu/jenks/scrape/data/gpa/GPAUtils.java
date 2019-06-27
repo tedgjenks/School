@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import edu.jenks.scrape.util.SystemInfo;
+
 public class GPAUtils {
 	
 	public static final String PS_STANDARD_COURSE_NUMBER_REGEX = "^\\d{6}[A-Z]{2}$";
@@ -12,7 +14,7 @@ public class GPAUtils {
 	private static final Map<String, Boolean> CURRENT_TERM_CACHE = new HashMap<>(20);
 	
 	static {
-		final String currentTermPropertiesPath = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\CurrentTerm.properties";
+		final String currentTermPropertiesPath = SystemInfo.INSTANCE.RESOURCES_PATH + "CurrentTerm.properties";
 		try {
 			CURRENT_TERM_PROPS.load(new FileInputStream(currentTermPropertiesPath));
 		} catch (IOException e) {

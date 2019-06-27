@@ -26,7 +26,7 @@ public abstract class Scraper {
 	private static final Properties CURRENT_TERM_PROPS = new Properties();
 	
 	protected static void initLogger() throws IOException {
-		LoggingUtil.initLocalFileLogger(LOGGER, SystemInfo.INSTANCE.LOGGING_PATH + "Scraper.log");
+		LoggingUtil.initLocalFileLogger(LOGGER, SystemInfo.INSTANCE.LOGGING_PATH + "scraper/Scraper.log");
 		LOGGER.setLevel(Level.ALL);
 	}
 	

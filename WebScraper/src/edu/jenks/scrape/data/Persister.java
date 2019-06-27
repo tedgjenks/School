@@ -5,9 +5,13 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+import edu.jenks.scrape.Scraper;
+import edu.jenks.scrape.data.gpa.GpaPersister;
+import edu.jenks.scrape.util.SystemInfo;
+
 public abstract class Persister {
 	
-	public static String CONNECTION_PROPERTIES_PATH = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\MySqlConnection.properties";
+	public static String CONNECTION_PROPERTIES_PATH = SystemInfo.INSTANCE.RESOURCES_PATH + "MySql/MySqlConnection.properties";
 
 	protected final Logger LOGGER;
 	protected Connection conn;
@@ -77,6 +81,14 @@ public abstract class Persister {
 		} catch (SQLException e) {
 			handleSQLException(e);
 		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		System.out.println("Start");
+		Persister instance = new GpaPersister(Scraper.LOGGER);
+		instance.connect();
+		instance.disconnect();
+		System.out.println("End without error");
 	}
 	
 }

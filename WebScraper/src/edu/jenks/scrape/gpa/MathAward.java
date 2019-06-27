@@ -4,15 +4,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.*;
 import edu.jenks.scrape.data.gpa.*;
+import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.util.LoggingUtil;
 import static java.lang.System.out;
 
 public class MathAward {
 	public static final Logger LOGGER = Logger.getGlobal();
-	public static final String LOG_PATH = "C:\\Users\\Jenks\\Documents\\temp\\scraper\\";
 	
 	protected static void initLogger() throws IOException {
-		LoggingUtil.initLocalFileLogger(LOGGER, LOG_PATH + "MathAward.log");
+		LoggingUtil.initLocalFileLogger(LOGGER, SystemInfo.INSTANCE.LOGGING_PATH + "MathAward.log");
 		LOGGER.setLevel(Level.ALL);
 	}
 	

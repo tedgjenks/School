@@ -5,20 +5,21 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 import com.opencsv.CSVReader;
-import edu.jenks.scrape.data.Assignment;
-import edu.jenks.scrape.data.AssignmentGrade;
+import edu.jenks.scrape.data.*;
+import edu.jenks.scrape.util.SystemInfo;
 
 public class KaCsvParser extends AbstractCsvParser {
 	
 	private static final String HEADER_ASSIGNMENT_NAME = "Assignment Name";
 	private static final String HEADER_STUDENT_NAME = "Student Name";
 	private static final String HEADER_BEST_SCORE = "Score Best Ever";
+	private static final String HEADER_SCORE_AT_DUE_DATE = "Score At Due Date";
 	private static final String HEADER_DUE_DATE = "Due Date";
 	private static final String HEADER_POINTS_POSSIBLE = "Points Possible";
 	private static final String HEADER_ASSIGNMENT_TYPE = "Assignment Type";
 	private static final Map<String, Integer> MONTHS = new HashMap<>(24);
-	private static final String KA_PROPERTIES_FILEPATH = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\KhanAcademy.properties";
-	private static final String STUDENT_NUMBERS_PROPERTIES_FILEPATH = "C:\\Users\\Jenks\\git\\School\\WebScraper\\resources\\PowerSchoolPages\\Alg2StudentNumbers.properties";
+	private static final String KA_PROPERTIES_FILEPATH = SystemInfo.INSTANCE.RESOURCES_PATH + "KhanAcademy.properties";
+	private static final String STUDENT_NUMBERS_PROPERTIES_FILEPATH = SystemInfo.INSTANCE.RESOURCES_PATH + "PowerSchoolPages\\Alg2StudentNumbers.properties";
 	
 	static {
 		MONTHS.put("Jan", 1);
@@ -96,6 +97,7 @@ public class KaCsvParser extends AbstractCsvParser {
 		HEADER_INDECES.put(HEADER_DUE_DATE, null);
 		HEADER_INDECES.put(HEADER_POINTS_POSSIBLE, null);
 		HEADER_INDECES.put(HEADER_ASSIGNMENT_TYPE, null);
+		HEADER_INDECES.put(HEADER_SCORE_AT_DUE_DATE, null);
 	}
 	
 	public void mergeAssignments() {
@@ -138,7 +140,9 @@ public class KaCsvParser extends AbstractCsvParser {
 			ASSIGNMENT_TYPES.add(type);
 		String combineValue = EXPORT_FILE_PROPS.getProperty("COMBINE");
 		combineAssignments = combineValue != null && Boolean.parseBoolean(combineValue);
-		Reader csvFile = new FileReader(EXPORT_FILE_PROPS.getProperty("CSV_FILEPATH") + EXPORT_FILE_PROPS.getProperty("CSV_EXPORT_FILE"));
+		String exportFile = SystemInfo.INSTANCE.LOGGING_PATH + EXPORT_FILE_PROPS.getProperty("CSV_FILEPATH") + EXPORT_FILE_PROPS.getProperty("CSV_EXPORT_FILE");
+		out.println("Export file: " + exportFile);
+		Reader csvFile = new FileReader(exportFile);
 		int year = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_YEAR"));
 		int monthAfter = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_MONTH_AFTER"));
 		int dayAfter = Integer.parseInt(EXPORT_FILE_PROPS.getProperty("DUE_DAY_AFTER"));
@@ -164,6 +168,16 @@ public class KaCsvParser extends AbstractCsvParser {
 			String headerValue = headerRow[index];
 			if(HEADER_INDECES.containsKey(headerValue))
 				HEADER_INDECES.put(headerValue, index);
+			else {
+				Iterator<String> hiIterator = HEADER_INDECES.keySet().iterator();
+				while(hiIterator.hasNext()) {
+					String key = hiIterator.next();
+					if(headerValue.contains(key)) {
+						HEADER_INDECES.put(key, index);
+						break;
+					}
+				}
+			}
 		}
 	}
 	
@@ -221,6 +235,9 @@ public class KaCsvParser extends AbstractCsvParser {
 	private boolean testDateBefore(String recordDueDate) {
 		boolean meetsDueDate = false;
 		String monthDay = recordDueDate.split(",")[0];
+		final byte expectedLength = 3;
+		if(monthDay.length() < expectedLength)
+			return false;
 		String month = monthDay.substring(0, 3);
 		if(dueDateBefore.getMonthValue() > MONTHS.get(month))
 			meetsDueDate = true;

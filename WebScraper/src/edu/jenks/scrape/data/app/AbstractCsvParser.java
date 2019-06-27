@@ -7,6 +7,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 import edu.jenks.scrape.data.*;
+import edu.jenks.scrape.util.SystemInfo;
 
 public abstract class AbstractCsvParser {
 	private static final String SECTION_KEY = "sections";
@@ -61,7 +62,7 @@ public abstract class AbstractCsvParser {
 	private File createFile(String assignmentName) throws IOException {
 		String fileName = assignmentName.replace(':', '-');
 		fileName = fileName.replace('?', ' ');
-		String path = EXPORT_FILE_PROPS.getProperty("CSV_FILEPATH") + fileName + ".csv";
+		String path = SystemInfo.INSTANCE.LOGGING_PATH + EXPORT_FILE_PROPS.getProperty("CSV_FILEPATH") + fileName + ".csv";
 		System.out.println(path);
 		File file = new File(path);
 		file.createNewFile();

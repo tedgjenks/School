@@ -59,7 +59,7 @@ public class GpaPersister extends Persister {
 		List<Student> students = new ArrayList<>(50);
 		Statement studentQuery = null;
 		try {
-			String sql = "select student_id, f_name, l_name, rank, gpa_ps, gpa_hg from student where grade_level=" + grade;
+			String sql = "select student_id, f_name, l_name, class_rank, gpa_ps, gpa_hg from student where grade_level=" + grade;
 			System.out.println(sql);
 			studentQuery = conn.createStatement();
 			ResultSet results = studentQuery.executeQuery(sql);
@@ -107,7 +107,7 @@ public class GpaPersister extends Persister {
 		Statement statement = null;
 		try {
 			statement = conn.createStatement();
-			ResultSet results = statement.executeQuery("select student_id, f_name, l_name, rank, gpa_ps, gpa_hg from student where gpa_ps != gpa_hg;");
+			ResultSet results = statement.executeQuery("select student_id, f_name, l_name, class_rank, gpa_ps, gpa_hg from student where gpa_ps != gpa_hg;");
 			loadStudentData(students, results);
 		} catch (SQLException e) {
 			handleSQLException(e);
@@ -181,7 +181,7 @@ public class GpaPersister extends Persister {
 		return courses;
 	}
 	
-	//student_id, f_name, l_name, rank, gpa_ps, gpa_hg
+	//student_id, f_name, l_name, class_rank, gpa_ps, gpa_hg
 	private void loadStudentData(List<Student> students, ResultSet results) throws SQLException {
 		while(results.next()) {
 			Student student = new Student();
@@ -200,7 +200,7 @@ public class GpaPersister extends Persister {
 		Statement studentQuery = null;
 		try {
 			studentQuery = conn.createStatement();
-			ResultSet results = studentQuery.executeQuery("select student_id, f_name, l_name, rank, gpa_ps, gpa_hg from student");
+			ResultSet results = studentQuery.executeQuery("select student_id, f_name, l_name, class_rank, gpa_ps, gpa_hg from student");
 			loadStudentData(students, results);
 			results.close();
 		} catch (SQLException e) {
@@ -257,7 +257,7 @@ public class GpaPersister extends Persister {
 	public void addStudents(List<Student> students) {
 		PreparedStatement insertStudent = null;
 		try {
-			String insertStudentSQL = "insert into student(student_id, f_name, l_name, grade_level, rank, gpa_ps) values(?,?,?,?,?,?)";
+			String insertStudentSQL = "insert into student(student_id, f_name, l_name, grade_level, class_rank, gpa_ps) values(?,?,?,?,?,?)";
 			insertStudent = conn.prepareStatement(insertStudentSQL);
 			for(int index = students.size() - 1; index >= 0; index--) {
 				Student student = students.get(index);

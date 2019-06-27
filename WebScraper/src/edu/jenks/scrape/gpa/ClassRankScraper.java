@@ -285,8 +285,8 @@ public class ClassRankScraper extends AbstractClassRankScraper {
 		student.setRank(Short.parseShort(rank.substring(0, rank.length() - 1)));
 		student.setStudentId(Long.parseLong(cells.get(1).getTextContent()));
 		String[] names = cells.get(2).getTextContent().split(",");
-		student.setLastName(names[0]);
-		student.setFirstName(names[1]);
+		student.setLastName(names[0].trim());
+		student.setFirstName(names[1].trim());
 		student.setGpaPowerSchool(Float.parseFloat(cells.get(3).getTextContent()));
 		student.setGradeLevel(gradeLevel);
 		return student;
