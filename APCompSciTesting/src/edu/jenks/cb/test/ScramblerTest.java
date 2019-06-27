@@ -1,5 +1,6 @@
 package edu.jenks.cb.test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ public class ScramblerTest extends Testable {
 	}
 	
 	@Override
-	public void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		studentScrambler = (Scrambler)ReflectionUtil.newInstance(studentClassName);
 	}
 

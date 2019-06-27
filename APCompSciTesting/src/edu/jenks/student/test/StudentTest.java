@@ -19,6 +19,7 @@ import edu.jenks.util.ReflectionUtil;
  */
 public class StudentTest extends Testable {
 	private static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = {String.class, String.class, Address.class, Address.class, double.class, double.class, double.class};
+	private static final double DELTA = .001;
 	private static String firstName = "f", lastName = "l";
 	private static Address homeAddress, schoolAddress;
 	private static double testScore1 = 45, testScore2 = 98, testScore3 = 73;
@@ -45,7 +46,7 @@ public class StudentTest extends Testable {
 		int points = 5;
 		boolean pass = solutionStudent.equals(studentStudent);
 		for(int scoreIndex = 1; pass && scoreIndex <= 3; scoreIndex++) {
-			pass = MathUtil.equals(solutionStudent.getTestScore(scoreIndex), studentStudent.getTestScore(scoreIndex), .001);
+			pass = MathUtil.equals(solutionStudent.getTestScore(scoreIndex), studentStudent.getTestScore(scoreIndex), DELTA);
 		}
 		if(pass) {
 			totalPoints += points;
@@ -59,7 +60,7 @@ public class StudentTest extends Testable {
 	public void test02Average() {
 		int points = 2;
 		double exp = solutionStudent.average(), act = studentStudent.average();
-		if(MathUtil.equals(exp, act, .001)) {
+		if(MathUtil.equals(exp, act, DELTA)) {
 			totalPoints += points;
 			logPass("Average");
 		} else
@@ -75,13 +76,29 @@ public class StudentTest extends Testable {
 		} else
 			logFail("toString", expected, actual, points);
 	}
+	
+	public void test04SetTestScore() {
+		int points = 3;
+		String message = "setTestScore";
+		double exp1 = 45.6, exp2 = 11.7, exp3 = 95.1;
+		solutionStudent.setTestScore(1, exp1);
+		solutionStudent.setTestScore(2, exp2);
+		solutionStudent.setTestScore(3, exp3);
+		if(MathUtil.equals(solutionStudent.getTestScore(1), exp1, DELTA) && 
+				MathUtil.equals(solutionStudent.getTestScore(2), exp2, DELTA) &&
+				MathUtil.equals(solutionStudent.getTestScore(3), exp3, DELTA)) {
+			logPass(message);
+			totalPoints += points;
+		} else
+			logFail(message);
+	}
 
 	/* (non-Javadoc)
 	 * @see edu.jenks.test.Testable#getPointsAvailable()
 	 */
 	@Override
 	public int getPointsAvailable() {
-		return 15;
+		return 18;
 	}
 
 	/* (non-Javadoc)

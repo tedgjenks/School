@@ -1,22 +1,25 @@
 create a 'security' folder
 create a java.policy file in the folder with contents (modify for specific device):
 
-grant codeBase "file:${{java.ext.dirs}}/*" {
+grant codeBase "file:/{java.home}/-" {
 	permission java.security.AllPermission;
 };
 
-grant codeBase "file:/C:/Program Files/Java/-" {
+grant codeBase "file:/G:/My Drive/Software/JavaLibraries/-" {
 	permission java.security.AllPermission;
 };
 
-grant codeBase "file:/D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/APCompSciTesting/bin/-" {
+grant codeBase "file:/C:/Users/tedgj/eclipse/-" {
 	permission java.security.AllPermission;
 };
 
-grant codeBase "file:/D:/TedData/EclipseWorkspaces/git14-15/gitSchool14-15/APCompSciUtils/bin/-" {
+grant codeBase "file:/C:/Users/tedgj/git/School/APCompSciTesting/bin/-" {
 	permission java.security.AllPermission;
 };
 
+grant codeBase "file:/C:/Users/tedgj/git/School/APCompSciUtils/bin/-" {
+	permission java.security.AllPermission;
+};
 
 Set TestRunner VM arguments (note the == will replace the default policy instead of appending to it):
 -Djava.security.manager -Djava.security.policy==${git_work_tree}${project_path}/security/java.policy

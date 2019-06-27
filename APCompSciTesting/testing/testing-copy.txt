@@ -2,45 +2,6 @@
 <!DOCTYPE projects SYSTEM "testing-config.dtd">
 <projects test-mode="false">
   <eclipse-student-root>C:/Users/Jenks/git/School/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
-  <moji-root>C:/Users/Jenks/JavaPrograms/F2018_CS/</moji-root>
-  <google-drive>
-    <turnin-root>G:/My Drive/Courses/ComputerScience/AdvJava/TurnIn/2018/</turnin-root>
-    <turnin-dir-suffix>_AdvJava_TurnIn</turnin-dir-suffix>
-  </google-drive>
-  <project active="false">
-    <name>Hashtable</name>
-    <package-root>edu/util/</package-root>
-    <test-class>edu.jenks.util.test.HashtableTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <deadline>
-      <due-date>1/4/2019</due-date>
-      <penalty>10</penalty>
-    </deadline>
-    <files>
-      <file>Hashtable.java</file>
-    </files>
-    <students />
-  </project>
-  <project active="false">
-    <name>LinkedList</name>
-    <package-root>edu/util/</package-root>
-    <test-class>edu.jenks.util.test.LinkedListTest</test-class>
-    <max-runtime-secs>10</max-runtime-secs>
-    <deadline>
-      <due-date>1/4/2019</due-date>
-      <penalty>10</penalty>
-    </deadline>
-    <files>
-      <file>LinkedList.java</file>
-    </files>
-    <students />
-  </project>
-</projects>
-
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE projects SYSTEM "testing-config.dtd">
-<projects test-mode="false">
-  <eclipse-student-root>C:/Users/Jenks/git/School/IntroCompSciStudentWork2014F/src/</eclipse-student-root>
   <moji-root>C:/Users/Jenks/JavaPrograms/S2018_CS/</moji-root>
   <google-drive>
     <turnin-root>G:/My Drive/Courses/ComputerScience/CSP/TurnIn/2018-2019/</turnin-root>

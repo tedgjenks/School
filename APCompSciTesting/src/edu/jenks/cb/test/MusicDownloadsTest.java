@@ -1,5 +1,6 @@
 package edu.jenks.cb.test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import edu.jenks.dist.cb.songlist.*;
 import edu.jenks.test.Testable;
@@ -161,7 +162,7 @@ public class MusicDownloadsTest extends Testable {
 	}
 
 	@Override
-	public void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		studentMusicDownloads = (AbstractMusicDownloads)ReflectionUtil.newInstance(studentClassName);
 		totalPoints += 60;
 	}

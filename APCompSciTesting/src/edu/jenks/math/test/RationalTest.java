@@ -8,15 +8,16 @@ import java.util.Random;
 
 import edu.jenks.dist.math.AbstractRational;
 import edu.jenks.test.Testable;
+import edu.jenks.util.MathUtil;
 import edu.jenks.util.ReflectionUtil;
 
 public class RationalTest extends Testable {
 	
-	private static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = {int.class, int.class};
+	private static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = {long.class, long.class};
 	
 	private String studentClassName;
 	private final Random RANDOM = new Random(System.currentTimeMillis());
-	private final Map<Integer, Boolean> DECIMAL_TERMINATES_TESTS = new HashMap<Integer, Boolean>(20);
+	private final Map<Long, Boolean> DECIMAL_TERMINATES_TESTS = new HashMap<>(20);
 	
 	public void test01Constructor() {
 		int points = 6;
@@ -164,7 +165,7 @@ public class RationalTest extends Testable {
 	
 	public void test06Add() {
 		int points = 8;
-		boolean pass = false;
+		boolean pass = true;
 		String message = "add";
 		int num1 = 1, den1 = 8, num2 = 17, den2 = 24;
 		String expected = "5/6";
@@ -172,7 +173,8 @@ public class RationalTest extends Testable {
 		AbstractRational studentRational2 = studentInstance(num2, den2);
 		AbstractRational studentRationalSum = studentRational1.add(studentRational2);
 		String actual = studentRationalSum.toString();
-		if(expected.equals(actual)) {
+		pass = expected.equals(actual);
+		for(int count = 100; pass && count > 0; count--) {
 			num1 = nonZeroRandomNumer(1000);
 			den1 = nonZeroRandomNumer(1000);
 			num2 = nonZeroRandomNumer(1000);
@@ -187,13 +189,13 @@ public class RationalTest extends Testable {
 			AbstractRational solutionRationalSum = solutionInstance(num1, den1).add(solutionInstance(num2, den2));
 			expected = solutionRationalSum.toString();
 			actual = studentRationalSum.toString();
-			if(expected.equals(actual)) {
-				pass = true;
-				totalPoints += points;
-				logPass(message);
-			}
+			if(!expected.equals(actual))
+				pass = false;	
 		}
-		if(!pass)
+		if(pass) {
+			logPass(message);
+			totalPoints += points;
+		} else
 			logFail(message, expected, actual, points);
 	}
 	
@@ -207,7 +209,8 @@ public class RationalTest extends Testable {
 		AbstractRational studentRational2 = studentInstance(num2, den2);
 		AbstractRational studentRationalDiff = studentRational1.subtract(studentRational2);
 		String actual = studentRationalDiff.toString();
-		if(expected.equals(actual)) {
+		pass = expected.equals(actual);
+		for(int count = 100; pass && count > 0; count--) {
 			num1 = nonZeroRandomNumer(1000);
 			den1 = nonZeroRandomNumer(1000);
 			num2 = nonZeroRandomNumer(1000);
@@ -222,13 +225,13 @@ public class RationalTest extends Testable {
 			AbstractRational solutionRationalDiff = solutionInstance(num1, den1).subtract(solutionInstance(num2, den2));
 			expected = solutionRationalDiff.toString();
 			actual = studentRationalDiff.toString();
-			if(expected.equals(actual)) {
-				pass = true;
-				totalPoints += points;
-				logPass(message);
-			}
+			if(!expected.equals(actual))
+				pass = false;
 		}
-		if(!pass)
+		if(pass) {
+			totalPoints += points;
+			logPass(message);
+		} else
 			logFail(message, expected, actual, points);
 	}
 	
@@ -242,7 +245,8 @@ public class RationalTest extends Testable {
 		AbstractRational studentRational2 = studentInstance(num2, den2);
 		AbstractRational studentRationalProd = studentRational1.multiply(studentRational2);
 		String actual = studentRationalProd.toString();
-		if(expected.equals(actual)) {
+		pass = expected.equals(actual);
+		for(int count = 100; pass && count > 0; count--) {
 			num1 = nonZeroRandomNumer(1000);
 			den1 = nonZeroRandomNumer(1000);
 			num2 = nonZeroRandomNumer(1000);
@@ -257,13 +261,13 @@ public class RationalTest extends Testable {
 			AbstractRational solutionRationalProd = solutionInstance(num1, den1).multiply(solutionInstance(num2, den2));
 			expected = solutionRationalProd.toString();
 			actual = studentRationalProd.toString();
-			if(expected.equals(actual)) {
-				pass = true;
-				totalPoints += points;
-				logPass(message);
-			}
+			if(!expected.equals(actual))
+				pass = false;
 		}
-		if(!pass)
+		if(pass) {
+			totalPoints += points;
+			logPass(message);
+		} else
 			logFail(message, expected, actual, points);
 	}
 	
@@ -277,7 +281,8 @@ public class RationalTest extends Testable {
 		AbstractRational studentRational2 = studentInstance(num2, den2);
 		AbstractRational studentRationalQuot = studentRational1.divide(studentRational2);
 		String actual = studentRationalQuot.toString();
-		if(expected.equals(actual)) {
+		pass = expected.equals(actual);
+		for(int count = 100; pass && count > 0; count--) {
 			num1 = nonZeroRandomNumer(1000);
 			den1 = nonZeroRandomNumer(1000);
 			num2 = nonZeroRandomNumer(1000);
@@ -292,13 +297,13 @@ public class RationalTest extends Testable {
 			AbstractRational solutionRationalQuot = solutionInstance(num1, den1).divide(solutionInstance(num2, den2));
 			expected = solutionRationalQuot.toString();
 			actual = studentRationalQuot.toString();
-			if(expected.equals(actual)) {
-				pass = true;
-				totalPoints += points;
-				logPass(message);
-			}
+			if(!expected.equals(actual))
+				pass = false;
 		}
-		if(!pass)
+		if(pass) {
+			totalPoints += points;
+			logPass(message);
+		} else
 			logFail(message, expected, actual, points);
 	}
 	
@@ -306,10 +311,10 @@ public class RationalTest extends Testable {
 		int points = 4;
 		String message = "decimalTerminates";
 		boolean pass = true;
-		int denom, numer = 1;
+		long denom, numer = 1;
 		AbstractRational studentRational;
 		boolean expected, actual;
-		Iterator<Integer> denominators = DECIMAL_TERMINATES_TESTS.keySet().iterator();
+		Iterator<Long> denominators = DECIMAL_TERMINATES_TESTS.keySet().iterator();
 		while(denominators.hasNext() && pass) {
 			denom = denominators.next();
 			expected = DECIMAL_TERMINATES_TESTS.get(denom);
@@ -322,24 +327,23 @@ public class RationalTest extends Testable {
 		}
 		
 		for(int count = 100; count > 0 && pass; count--) {
-			expected = true;
 			// power of 2
-			denom = (int)Math.pow(2, RANDOM.nextInt(10) + 1);
-			if(!testDecimalTerminates(points, expected, denom)) {
+			denom = (long)Math.pow(2, RANDOM.nextInt(10) + 1);
+			if(!testDecimalTerminates(points, denom)) {
 				logFail(message + " P2");
 				pass = false;
 			}
 			
 			// power of 5
-			denom = (int)Math.pow(5, RANDOM.nextInt(10) + 1);
-			if(!testDecimalTerminates(points, expected, denom)) {
+			denom = (long)Math.pow(5, RANDOM.nextInt(10) + 1);
+			if(!testDecimalTerminates(points, denom)) {
 				logFail(message + " P5");
 				pass = false;
 			}
 			
 			// power of 2 and 5
 			denom = (int)Math.pow(2, RANDOM.nextInt(8) + 1) * (int)Math.pow(5, RANDOM.nextInt(8) + 1);
-			if(!testDecimalTerminates(points, expected, denom)) {
+			if(!testDecimalTerminates(points, denom)) {
 				logFail(message + " P2&5");
 				pass = false;
 			}
@@ -347,7 +351,7 @@ public class RationalTest extends Testable {
 			// not power of only 2 or 5
 			expected = false;
 			denom = 410 * nonZeroRandomNumer(1000);
-			if(!testDecimalTerminates(points, expected, denom)) {
+			if(!testDecimalTerminates(points, denom)) {
 				logFail(message + " !(P2|5)");
 				pass = false;
 			}
@@ -359,10 +363,10 @@ public class RationalTest extends Testable {
 		}
 	}
 	
-	private boolean testDecimalTerminates(int points, boolean expected, int denom) {
+	private boolean testDecimalTerminates(int points, long denom) {
 		int numer = nonZeroRandomNumer(1000);
-		while(denom > 1 && numer % denom == 0)
-			numer /= denom;
+		AbstractRational solutionRational = solutionInstance(numer, denom);
+		boolean expected = solutionRational.decimalTerminates();
 		AbstractRational studentRational = studentInstance(numer, denom);
 		boolean actual = studentRational.decimalTerminates();
 		boolean pass = expected == actual;
@@ -371,9 +375,50 @@ public class RationalTest extends Testable {
 		return pass;
 	}
 	
+	public void test11CompareTo() {
+		boolean pass = true;
+		String message = "compareTo";
+		int points = 4, bound = 1000;
+		long numer1 = nonZeroRandomNumer(bound), numer2;
+		long denom1 = nonZeroRandomNumer(bound), denom2;
+		AbstractRational st1 = studentInstance(numer1, denom1);
+		AbstractRational st2 = studentInstance(numer1, denom1);
+		AbstractRational so1 = solutionInstance(1, 1);
+		AbstractRational so2 = solutionInstance(1, 1);
+		int expected = 0;
+		int actual = st1.compareTo(st2);
+		pass = actual == expected;
+		if(!pass)
+			logFail(message + "; calling: " + st2 + ", arg: " + st1, expected, actual, points);
+		for(int count = 100; pass && count > 0; count--) {
+			numer1 = nonZeroRandomNumer(bound);
+			denom1 = nonZeroRandomNumer(bound);
+			updateInstances(numer1, denom1, st1, so1);
+			numer2 = nonZeroRandomNumer(bound);
+			denom2 = nonZeroRandomNumer(bound);
+			updateInstances(numer2, denom2, st2, so2);
+			expected = so1.compareTo(so2);
+			actual = st1.compareTo(st2);
+			if(!MathUtil.sameSign(expected, actual)) {
+				pass = false;
+				logFail(message + "; calling: " + st1 + ", arg: " + st2, expected, actual, points);
+			}
+			expected = so2.compareTo(so1);
+			actual = st2.compareTo(st1);
+			if(!MathUtil.sameSign(expected, actual)) {
+				pass = false;
+				logFail(message + "; calling: " + st2 + ", arg: " + st1, expected, actual, points);
+			}
+		}
+		if(pass) {
+			logPass(message);
+			totalPoints += points;
+		}
+	}
+	
 	private int nonZeroRandomNumer(int bound) {
 		boolean negative = RANDOM.nextBoolean();
-		int numer = 1;
+		int numer = 1 + RANDOM.nextInt(bound);
 		if(negative)
 			numer *= -1;
 		return numer;
@@ -398,7 +443,7 @@ public class RationalTest extends Testable {
 		AbstractRational studentInstance = studentInstance(1, 1);
 		String message = "object creation";
 		if(studentInstance != null) {
-			totalPoints += 50;
+			totalPoints += 46;
 			initDecimalMap();
 		} else {
 			continueTesting = false;
@@ -407,19 +452,27 @@ public class RationalTest extends Testable {
 	}
 	
 	private void initDecimalMap() {
-		DECIMAL_TERMINATES_TESTS.put(1, true);
-		DECIMAL_TERMINATES_TESTS.put(2, true);
-		DECIMAL_TERMINATES_TESTS.put(3, false);
-		DECIMAL_TERMINATES_TESTS.put(4, true);
-		DECIMAL_TERMINATES_TESTS.put(5, true);
-		DECIMAL_TERMINATES_TESTS.put(6, false);
-		DECIMAL_TERMINATES_TESTS.put(7, false);
-		DECIMAL_TERMINATES_TESTS.put(8, true);
-		DECIMAL_TERMINATES_TESTS.put(9, false);
-		DECIMAL_TERMINATES_TESTS.put(10, true);
+		DECIMAL_TERMINATES_TESTS.put(1L, true);
+		DECIMAL_TERMINATES_TESTS.put(2L, true);
+		DECIMAL_TERMINATES_TESTS.put(3L, false);
+		DECIMAL_TERMINATES_TESTS.put(4L, true);
+		DECIMAL_TERMINATES_TESTS.put(5L, true);
+		DECIMAL_TERMINATES_TESTS.put(6L, false);
+		DECIMAL_TERMINATES_TESTS.put(7L, false);
+		DECIMAL_TERMINATES_TESTS.put(8L, true);
+		DECIMAL_TERMINATES_TESTS.put(9L, false);
+		DECIMAL_TERMINATES_TESTS.put(10L, true);
 	}
 	
-	private AbstractRational studentInstance(int numer, int denom) {
+	private void updateInstances(long numer, long denom, AbstractRational... ar) {
+		for(AbstractRational r : ar) {
+			r.setNumerator(numer);
+			r.setDenominator(denom);
+			r.reduce();
+		}
+	}
+	
+	private AbstractRational studentInstance(long numer, long denom) {
 		AbstractRational instance = null;
 		Object[] constructorValues = {numer, denom};
 		try {
@@ -431,7 +484,7 @@ public class RationalTest extends Testable {
 		return instance;
 	}
 	
-	private AbstractRational solutionInstance(int numer, int denom) {
+	private AbstractRational solutionInstance(long numer, long denom) {
 		return new edu.math.jenks.ted.Rational(numer, denom);
 	}
 

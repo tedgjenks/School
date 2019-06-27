@@ -2,7 +2,7 @@
  * 
  */
 package edu.jenks.math.test;
-
+import static java.lang.System.out;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,19 +17,21 @@ import edu.jenks.util.ReflectionUtil;
  *
  */
 public class BaseConverterTest extends Testable {
-	
-	private static final Random RANDOM = new Random(System.currentTimeMillis()); 
+	private static final Class<?>[] CONSTRUCTOR_PARAM_TYPES = {double.class};
+	private static final Random RANDOM = new Random(System.currentTimeMillis());
+	private static final double RELATIVE_DELTA = 0.0001;
 	
 	private String studentClassName;
-	private AbstractBaseConverter studentInstance, solutionInstance;
+	private AbstractBaseConverter studentInstance;
+	private edu.math.jenks.ted.BaseConverter solutionInstance;
 	
 	public BaseConverterTest() {
-		solutionInstance = new edu.math.jenks.ted.BaseConverter();
+		solutionInstance = new edu.math.jenks.ted.BaseConverter(RELATIVE_DELTA);
 	}
 	
-	// 16 points
+	// 14 points
 	public void test01ConvertBinaryToDecimal() {
-		int points = 8;
+		int points = 7;
 		boolean allPass = true;
 		String message = "convertBinaryToDecimal";
 		int dec = RANDOM.nextInt(9000) + 1000;
@@ -68,9 +70,9 @@ public class BaseConverterTest extends Testable {
 			continueTesting = false;
 	}
 	
-	// 16 points
+	// 14 points
 	public void test02ConvertDecimalToBinary() {
-		int points = 8;
+		int points = 7;
 		boolean allPass = true;
 		String message = "convertDecimalToBinary";
 		int dec = 1000 + RANDOM.nextInt(9000);
@@ -141,106 +143,178 @@ public class BaseConverterTest extends Testable {
 			continueTesting = false;
 	}
 	
-	private boolean equalToLastSignificatDecimal(String exp, String act) {
-		boolean equal = false;
-		int decIndexExp = exp.indexOf('.'), decIndexAct = act.indexOf('.');
+	private boolean equalToLastSignificatDecimal(String exp, String act, int currentRadix, int newRadix) {
+		int decIndexExp = exp.indexOf('.');
 		if(decIndexExp < 0)
 			throw new IllegalArgumentException("Silly Mr. Jenks - your expected float value does not have a decimal point!  What are you doing?");
-		if(decIndexAct >= 0) {
-			int endIndex = Math.min(exp.length(), decIndexExp + AbstractBaseConverter.DECIMAL_PRECISION);
-			equal = endIndex <= act.length() && exp.substring(0, endIndex).equalsIgnoreCase(act.substring(0, endIndex));
-		}
-		return equal;
+		if(solutionInstance.willTerminate(currentRadix, newRadix) && !solutionInstance.overflowsInt)
+			return exp.equals(act);
+		else
+			return act != null && act.startsWith(exp);
 	}
 	
 	public void test04ConvertBaseWithFloat() {
 		boolean allPass = true;
-		String message = "convertBaseWithFloat", logMessage, currentNumber, exp, act;
+		String message = "convertBaseWithFloat", currentNumber;
 		int points = 1, currentRadix, newRadix;
 		
 		currentNumber = "10.1";
 		currentRadix = 2;
 		newRadix = 10;
-		exp = "2.5";
 		constructInputToStudentCode(currentRadix, newRadix, currentNumber);
-		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
-		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-		if(equalToLastSignificatDecimal(exp, act)) {
-			totalPoints += points;
-			logPass(logMessage);
-		} else {
+		if(!verifyAndLogConversionWithFloat(message, currentNumber, currentRadix, newRadix, points))
 			allPass = false;
-			logFail(logMessage, exp, act, points);
+		else {
+			totalPoints += points;
+			logPass(message + " base 2 to 10");
 		}
 		
 		currentNumber = "1.5";
 		currentRadix = 10;
 		newRadix = 2;
-		exp = "1.1";
 		constructInputToStudentCode(currentRadix, newRadix, currentNumber);
-		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
-		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-		if(equalToLastSignificatDecimal(exp, act)) {
-			totalPoints += points;
-			logPass(logMessage);
-		} else {
+		if(!verifyAndLogConversionWithFloat(message, currentNumber, currentRadix, newRadix, points))
 			allPass = false;
-			logFail(logMessage, exp, act, points);
+		else {
+			totalPoints += points;
+			logPass(message + " base 10 to 2");
 		}
 		
 		// convert base 10 down
 		currentNumber = String.valueOf(1 + 100 * RANDOM.nextDouble());
 		currentRadix = 10;
 		newRadix = 3 + RANDOM.nextInt(currentRadix);
-		exp = solutionInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
 		constructInputToStudentCode(currentRadix, newRadix, currentNumber);
-		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
-		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-		if(equalToLastSignificatDecimal(exp, act)) {
-			totalPoints += points;
-			logPass(logMessage, exp, act);
-		} else {
+		if(!verifyAndLogConversionWithFloat(message, currentNumber, currentRadix, newRadix, points))
 			allPass = false;
-			logFail(logMessage, exp, act, points);
+		else {
+			totalPoints += points;
+			logPass(message + " base 10 down");
 		}
 		
 		// convert base 10 up
 		currentNumber = String.valueOf(1 + 100 * RANDOM.nextDouble());
 		currentRadix = 10;
 		newRadix = 11 + RANDOM.nextInt(AbstractBaseConverter.MAX_RADIX - 11);
-		exp = solutionInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
 		constructInputToStudentCode(currentRadix, newRadix, currentNumber);
-		act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
-		logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-		if(equalToLastSignificatDecimal(exp, act)) {
-			totalPoints += points;
-			logPass(logMessage, exp, act);
-		} else {
+		if(!verifyAndLogConversionWithFloat(message, currentNumber, currentRadix, newRadix, points))
 			allPass = false;
-			logFail(logMessage, exp, act, points);
+		else {
+			totalPoints += points;
+			logPass(message + " base 10 up");
 		}
 		
+		// convert base 3 and 4 to bases 12 and 24
+		int exactConversionPoints = 2;
+		exact:
+		for(int cRadix = 3; cRadix <= 4; cRadix++) {
+			for(int nRadix = 12; nRadix <= 24; nRadix *= 2) {
+				if(!verifyAndLogConversionWithFloat(message, buildRandomNumber(cRadix, 2, 4), cRadix, nRadix, exactConversionPoints)) {
+					allPass = false;
+					break exact;
+				}
+			}
+		}
+		if(allPass)
+			logPass(message + " base 3 and 4 to 12 and 24");
+		
+		// convert base 9 to 6
+		currentRadix = 9;
+		newRadix = 6;
+		if(!verifyAndLogConversionWithFloat(message, buildRandomNumber(currentRadix, 1, 4), currentRadix, 6, exactConversionPoints))
+			allPass = false;
+		else
+			logPass(message + " base " + currentRadix + " to " + newRadix);
+		
+		// convert base 18 to 6
+		currentRadix = 18;
+		newRadix = 6;
+		if(!verifyAndLogConversionWithFloat(message, buildRandomNumber(currentRadix, 1, 4), currentRadix, newRadix, exactConversionPoints))
+			allPass = false;
+		else
+			logPass(message + " base " + currentRadix + " to " + newRadix);
+		
+		// award exact conversion points
+		if(allPass) {
+			logPass(message + " all non-random exact conversion");
+			totalPoints += exactConversionPoints;
+		}
+		
+		// possible exact conversion, but approximation expected due to overflow
+		int allPassPoints = 4;
+		currentRadix = 25;
+		newRadix = 20;
+		String willTerminateButApproximate = message + " will terminate, but approximate to avoid integer overflow";
+		if(!verifyAndLogConversionWithFloat(willTerminateButApproximate, "fk.b5437", currentRadix, newRadix, allPassPoints))
+			allPass = false;
+		else
+			logPass(willTerminateButApproximate);
+		
 		// convert between bases 3 and MAX
+		message += " random";
 		final int minRadix = 3, maxRadix = AbstractBaseConverter.MAX_RADIX;
-		for(int count = 100; count > 0 && allPass; count--) {
-			String decNumber = String.valueOf(1 + 100 * RANDOM.nextDouble());
+		for(int count = 500; count > 0 && allPass; count--) {
 			currentRadix = minRadix + RANDOM.nextInt(maxRadix - minRadix);
-			currentNumber = solutionInstance.convertBaseWithFloat(decNumber, 10, currentRadix);
+			currentNumber = buildRandomNumber(currentRadix, 2, 5);
 			newRadix = minRadix + RANDOM.nextInt(maxRadix - minRadix);
-			exp = solutionInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
 			constructInputToStudentCode(currentRadix, newRadix, currentNumber);
-			act = studentInstance.convertBaseWithFloat(currentNumber, currentRadix, newRadix);
-			logMessage = message + ": " + currentNumber + " base " + currentRadix + ", to base " + newRadix;
-			if(!equalToLastSignificatDecimal(exp, act)) {
+			inputToStudentCode += "; " + count + " remaining.";
+			if(!verifyAndLogConversionWithFloat(message, currentNumber, currentRadix, newRadix, allPassPoints))
 				allPass = false;
-				logFail(logMessage, exp, act, points);
+		}
+		
+		if(allPass) {
+			totalPoints += allPassPoints;
+			logPass(message);
+		}
+	}
+	
+	private boolean verifyAndLogConversionWithFloat(String message, final String curNum, final int currentRadix, final int newRadix, int points) {
+		boolean pass = true;
+		String exp = solutionInstance.convertBaseWithFloat(curNum, currentRadix, newRadix);
+		String act = studentInstance.convertBaseWithFloat(curNum, currentRadix, newRadix);
+		if(!equalToLastSignificatDecimal(exp, act, currentRadix, newRadix)) {
+			if(solutionInstance.willTerminate(currentRadix, newRadix))
+				message += " exact conversion";
+			logFail(buildConvertBaseFailMessage(message, curNum, currentRadix, newRadix), exp, act, points);
+			pass = false;
+		}
+		if(exp.substring(exp.indexOf('.') + 1).length() > 15) {
+			if(solutionInstance.willTerminate(currentRadix, newRadix))
+				message += " exact conversion";
+			logInfo("Show this to Mr. Jenks! " + buildConvertBaseFailMessage(message, curNum, currentRadix, newRadix) + "; expected: " + exp);
+		}
+		return pass;
+	}
+	
+	private String buildConvertBaseFailMessage(String message, String number, int currentRadix, int newRadix) {
+		StringBuilder sb = new StringBuilder(50);
+		sb.append(message).append(": ").append(number).append(" base ").append(currentRadix).append(", to base ").append(newRadix);
+		return sb.toString();
+	}
+	
+	/**
+	 * 2 points
+	 */
+	public void test05WillTerminate() {
+		String message = "willTerminate";
+		int points = 2;
+		boolean allPass = true;
+		outer:
+		for(int curRadix = AbstractBaseConverter.MAX_RADIX; curRadix >= AbstractBaseConverter.MIN_RADIX; curRadix--) {
+			for(int newRadix = AbstractBaseConverter.MAX_RADIX; newRadix >= AbstractBaseConverter.MIN_RADIX; newRadix--) {
+				if(solutionInstance.willTerminate(curRadix, newRadix) != studentInstance.willTerminate(curRadix, newRadix)) {
+					allPass = false;
+					 break outer;
+				}
 			}
 		}
 		
 		if(allPass) {
-			totalPoints += 4;
+			totalPoints += points;
 			logPass(message);
-		}
+		} else
+			logFail(message);
 	}
 
 	/* (non-Javadoc)
@@ -268,7 +342,8 @@ public class BaseConverterTest extends Testable {
 	@Override
 	public void setUp() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		studentInstance = (AbstractBaseConverter)ReflectionUtil.newInstance(studentClassName);
+		Object[] constructorValues = {RELATIVE_DELTA};
+		studentInstance = (AbstractBaseConverter)ReflectionUtil.newInstance(studentClassName, CONSTRUCTOR_PARAM_TYPES, constructorValues);
 		totalPoints += 50;
 	}
 	
@@ -279,5 +354,21 @@ public class BaseConverterTest extends Testable {
 		sb.append("; current number: ").append(currentNumber);
 		inputToStudentCode = sb.toString();
 	}
-
+	
+	private String buildRandomNumber(int radix, int wholeDigits, int fractionDigits) {
+		StringBuilder sb = new StringBuilder(wholeDigits + fractionDigits + 1);
+		sb.append(Character.forDigit(1 + RANDOM.nextInt(radix - 1), radix)); // first digit not zero
+		for(int count = wholeDigits; count > 1; count--)
+			sb.append(Character.forDigit(RANDOM.nextInt(radix), radix));
+		sb.append(".");
+		for(int count = fractionDigits; count > 1; count--)
+			sb.append(Character.forDigit(RANDOM.nextInt(radix), radix));
+		sb.append(Character.forDigit(1 + RANDOM.nextInt(radix - 1), radix)); // last digit not zero
+		return sb.toString();
+	}
+	
+	public static void main(String[] args) {
+		BaseConverterTest bct = new BaseConverterTest();
+		out.println(bct.buildRandomNumber(3, 2, 4));
+	}
 }

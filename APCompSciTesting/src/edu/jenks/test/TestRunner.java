@@ -1,6 +1,7 @@
 package edu.jenks.test;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,7 +54,7 @@ public class TestRunner {
 					processProject(project);
 			}
 			JDOMHelper.updateXml(document, xmlFilePath);
-		} catch (JDOMException | IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+		} catch (Exception e) {
 			e.printStackTrace(System.err);
 		} finally {
 			out.println("End TestRunner");
@@ -74,7 +75,7 @@ public class TestRunner {
 		out.println("Test configuration file: " + xmlFilePath);
 	}
 	
-	private static void processProject(Element project) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
+	private static void processProject(Element project) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		Element studentsElement = project.getChild("students");
 		List<Element> students = studentsElement.getChildren("student");
 		String testClass = project.getChildText("test-class");
@@ -86,7 +87,7 @@ public class TestRunner {
 			out.println("No students for " + testClass);
 	}
 	
-	private static void processStudents(String testClass, Element project, Element studentsElement, List<Element> students) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private static void processStudents(String testClass, Element project, Element studentsElement, List<Element> students) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		ThreadGroup threadGroup = new ThreadGroup(project.getChildText(PROJECT_NAME_TAG));
 		Map<Student, String> studentFeedbackLogPath = new HashMap<Student, String>();
 		for(Element studentElement : students) {

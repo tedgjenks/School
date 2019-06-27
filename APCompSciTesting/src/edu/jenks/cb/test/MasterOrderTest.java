@@ -32,7 +32,10 @@ public class MasterOrderTest extends Testable {
 	 */
 	public MasterOrderTest() {}
 	
+	// points 10
 	public void testGetTotalBoxesByVariety() {
+		final String message = "getTotalBoxesByVariety";
+		final int points = 10;
 		List<CookieOrder> orders = studentMasterOrder.getOrders();
 		orders.clear();
 		int numberA = 0, numberB = 0;
@@ -50,21 +53,26 @@ public class MasterOrderTest extends Testable {
 		exp.put("B", numberB);
 		Map<String, Integer> act = studentMasterOrder.getTotalBoxesByVariety();
 		if(act != null && exp.size() == act.size()) {
-			Iterator keys = exp.keySet().iterator();
+			Iterator<String> keys = exp.keySet().iterator();
 			boolean pass = true;
+			Object key = null;
 			while(pass && keys.hasNext()) {
-				Object key = keys.next();
+				key = keys.next();
 				if(!exp.get(key).equals(act.get(key))) {
 					pass = false;
 				}
 			}
 			if(pass) {
-				totalPoints += 2;
-				feedbackLogger.log(Level.INFO, "Passed - getTotalBoxesByVariety");
-			} else
-				feedbackLogger.log(Level.WARNING, "Failed - getTotalBoxesByVariety");
+				totalPoints += points;
+				feedbackLogger.log(Level.INFO, "Passed - " + message);
+			} else {
+				if(key != null)
+					logFail(message, key + ": " + exp.get(key), key + ": " + act.get(key), points);
+				else
+					feedbackLogger.log(Level.WARNING, "Failed (key null) - " + message);
+			}
 		} else
-			feedbackLogger.log(Level.WARNING, "Failed - getTotalBoxesByVariety");
+			logFail(message, exp.size(), act == null ? "null map" : act.size(), 4);
 	}
 	
 	public void testRemoveVariety() {
@@ -238,7 +246,7 @@ public class MasterOrderTest extends Testable {
 			SecurityException, InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		studentMasterOrder = (AbstractMasterOrder)ReflectionUtil.newInstance(studentPackage + ".MasterOrder");
-		totalPoints += 70;
+		totalPoints += 62;
 		feedbackLogger.log(Level.INFO, "Passed - object creation.");
 	}
 

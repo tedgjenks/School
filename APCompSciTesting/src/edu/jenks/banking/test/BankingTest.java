@@ -538,7 +538,7 @@ public class BankingTest extends Testable {
 		try {
 			instance = (AbstractBanking)ReflectionUtil.newInstance(bankingClassName);
 		} catch (ClassNotFoundException | SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException e) {
+				| IllegalAccessException | IllegalArgumentException | NoSuchMethodException | InvocationTargetException e) {
 			logException("bankingInstance", e);
 		}
 		return instance;
