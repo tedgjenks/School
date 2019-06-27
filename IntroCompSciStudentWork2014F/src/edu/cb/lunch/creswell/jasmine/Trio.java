@@ -16,7 +16,7 @@ public class Trio extends AbstractTrio
    }
    public String getName() {
        
-       return sandy.getName()+"/"+salady.getName()+"/"+ slurp.getName() + "Trio";
+       return sandy.getName()+"/"+salady.getName()+"/"+ slurp.getName() + " Trio";
    }
    public double getPrice() {
        double sw=sandy.getPrice();

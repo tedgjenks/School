@@ -5,13 +5,8 @@
 <import-control pkg="edu">
 	<allow pkg="java.text"/>
 	<allow pkg="edu.jenks"/>
-	<subpackage name="util">
-		<file name="Hashtable">
-			<allow class="java.lang.reflect.Array"/>
-		</file>
-		<file name="LinkedList" >
-			<allow class="java.util.NoSuchElementException"/>
-		</file>
+	<subpackage name="barrons">
+		<allow pkg="java.util"/>
 	</subpackage>
 	<subpackage name="cb.scrambler">
 		<allow pkg="java.util"/>
@@ -34,10 +29,18 @@
 	<subpackage name="cb.masterorder">
 		<allow pkg="java.util"/>
 	</subpackage>
+	<subpackage name="math">
+		<allow pkg="java.util"/>
+	</subpackage>
 	<subpackage name="lewis.ap">
 		<allow pkg="java.util"/>
 	</subpackage>
-	<subpackage name="barrons">
-		<allow pkg="java.util"/>
+	<subpackage name="util">
+		<file name="Hashtable">
+			<allow class="java.lang.reflect.Array"/>
+		</file>
+		<file name="LinkedList" >
+			<allow class="java.util.NoSuchElementException"/>
+		</file>
 	</subpackage>
 </import-control>

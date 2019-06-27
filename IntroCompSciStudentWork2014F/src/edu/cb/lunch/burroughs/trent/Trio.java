@@ -19,7 +19,7 @@ public class Trio extends AbstractTrio
     }
     
     public double getPrice(){
-        if(sand.getPrice() > sal.getPrice() && sal.getPrice() > dr.getPrice())
+        if(sand.getPrice() > dr.getPrice() && sal.getPrice() > dr.getPrice())
             return sand.getPrice() + sal.getPrice();
         if(sand.getPrice() > sal.getPrice() && dr.getPrice() > sal.getPrice())
             return sand.getPrice() + dr.getPrice();
