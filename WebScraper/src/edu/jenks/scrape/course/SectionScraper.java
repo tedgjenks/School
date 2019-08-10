@@ -1,9 +1,10 @@
 package edu.jenks.scrape.course;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import com.gargoylesoftware.htmlunit.html.*;
 import edu.jenks.scrape.Scraper;
+import static java.lang.System.out;
 
 public class SectionScraper extends Scraper {
 	
@@ -12,14 +13,15 @@ public class SectionScraper extends Scraper {
 	private static final String TASK_UPDATE_ROOM = "TaskUpdateRoom";
 	
 	/*** fields to set before running: ***/
-	private static final String TASK_UPDATE_ROOM_TO_UPDATE = "307"; // if not empty, only update this room
-	private static final String TASK = TASK_UPDATE_ROOM;
-	private static final String CURRENT_LEAD_TEACHER = "Whisenant, Billy J";
-	private static final String NEW_DATA = "303";
+	private static final String TASK_UPDATE_ROOM_TO_UPDATE = ""; // if not empty, only update this room
+	private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
+	private static final String CURRENT_LEAD_TEACHER = "Drinkard, Troy";
+	private static final String NEW_DATA = "McMann, Stephanie M";
 	
 	private static final SectionScraper INSTANCE = new SectionScraper();
-	private static final byte TEACHER_SECTION_TABLE_COL_INDEX_TERM = 1;
-	private static final byte TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER = 4;
+	private static final String TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY = "TermKey";
+	private static final String TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER_KEY = "SectionNumberKey";
+	private static final Map<String, Integer> TABLE_COL_NUMBERS = new HashMap<>(3);
 
 	public SectionScraper() {}
 
@@ -29,7 +31,7 @@ public class SectionScraper extends Scraper {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
 			LOGGER.info("Authenticated");
 			INSTANCE.selectTerm(curPage);
-			INSTANCE.updateSections(curPage);
+			INSTANCE.updateSections(curPage); // TODO applies to all terms - make term specific
 			INSTANCE.signOut(curPage);
 		} catch(Throwable t) {
 			LOGGER.severe(t.getMessage());
@@ -87,8 +89,21 @@ public class SectionScraper extends Scraper {
 	
 	private void verifyTeacherSectionTableColumns(HtmlTableRow header) throws IOException {
 		final String message = "Teacher Section Table column verification failure";
-		assertTrue("Term".equals(header.getCell(TEACHER_SECTION_TABLE_COL_INDEX_TERM).getTextContent()), message);
-		assertTrue("Sec #".equals(header.getCell(TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER).getTextContent()), message);
+		List<HtmlTableCell> headerCells = header.getCells();
+		boolean foundTerm = false, foundSectionNumber = false;
+		for(int index = headerCells.size() - 1; index >= 0 && (!foundTerm || !foundSectionNumber); index--) {
+			String textContent = header.getCell(index).getTextContent();
+			if(!foundTerm && "Term".equals(textContent)) {
+				foundTerm = true;
+				TABLE_COL_NUMBERS.put(TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY, index);
+				out.println(TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY + ": " + index);
+			} else if(!foundSectionNumber && "Sec #".equals(textContent)) {
+				foundSectionNumber = true;
+				TABLE_COL_NUMBERS.put(TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER_KEY, index);
+				out.println(TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER_KEY + ": " + index);
+			}
+		}
+		assertTrue(foundTerm && foundSectionNumber, message);
 		LOGGER.info("Teacher section table columns verified");
 	}
 	
@@ -136,23 +151,33 @@ public class SectionScraper extends Scraper {
 	public void updateSections(HtmlPage curPage, String term) throws IOException {
 		curPage = WEB_CLIENT.getPage("https://powerschool.gwd50.org/admin/teacherschedules/menu.html");
 		curPage = INSTANCE.clickAnchorByText(curPage, CURRENT_LEAD_TEACHER);
+		WEB_CLIENT.waitForBackgroundJavaScriptStartingBefore(DEFAULT_WAIT_SECONDS * 1000);
 		System.out.println(curPage.getUrl());
-		HtmlTable table = (HtmlTable)curPage.getElementById("teacherSectionTable");
-		List<HtmlTableRow> rows = table.getRows();
+		final String teacherSectionTable = "teacherSectionTable";
+		HtmlTable table = (HtmlTable)curPage.getElementById(teacherSectionTable);
+		if(table == null) {
+			LOGGER.severe("table with id " + teacherSectionTable + " not found! Aborting!");
+			return;
+		}
+		HtmlTableHeader tableHead = table.getHeader();
+		List<HtmlTableRow> rows = tableHead.getRows();
+		out.println(rows.size() + " rows in " + "table header");
 		verifyTeacherSectionTableColumns(rows.get(0));
+		rows = table.getBodies().get(0).getRows();
+		out.println(rows.size() + " rows in " + "table body");
 		short sectionsUpdated = 0;
 		short termMatches = 0;
-		for(int rowIndex = rows.size() - 2; rowIndex > 0; rowIndex--) {
+		for(int rowIndex = rows.size() - 2; rowIndex >= 0; rowIndex--) {
 			HtmlTableRow tableRow = rows.get(rowIndex);
-			HtmlTableCell tableCell = tableRow.getCell(TEACHER_SECTION_TABLE_COL_INDEX_TERM);
+			HtmlTableCell tableCell = tableRow.getCell(TABLE_COL_NUMBERS.get(TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY));
 			String termContent = tableCell.getTextContent();
 			if(term == null || term.equals(termContent)) {
 				termMatches++;
-				HtmlTableCell sectionCell = tableRow.getCell(TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER);
+				HtmlTableCell sectionCell = tableRow.getCell(TABLE_COL_NUMBERS.get(TEACHER_SECTION_TABLE_COL_INDEX_SECTION_NUMBER_KEY));
 				HtmlAnchor anchor = (HtmlAnchor)sectionCell.getFirstElementChild();
 				//TODO verify lead teacher before processing section
 				LOGGER.info("Process section " + anchor.getTextContent());
-				if(anchor.getNextElementSibling() == null) { //TODO fix for coteach sections
+				//if(anchor.getNextElementSibling() == null) { //TODO fix for coteach sections
 					boolean taskSuccess = false;
 					switch(TASK) {
 					case TASK_ADD_COTEACHER:
@@ -169,7 +194,7 @@ public class SectionScraper extends Scraper {
 					}
 					if(taskSuccess)
 						sectionsUpdated++;
-				}
+				//}
 			}
 		}
 		LOGGER.info("Terms matching " + term + ": " + termMatches + " out of " + rows.size() + " total rows.");
