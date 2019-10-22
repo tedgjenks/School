@@ -30,7 +30,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	public void test02AddTail() {
+	public void test10AddTail() {
 		int points = 1;
 		String message = "testAddTail";
 		addToLists(TEST_ELEMENTS);
@@ -45,7 +45,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E10, E20, E30, E40, E50
-	public void test03AddIndex() {
+	public void test15AddIndex() {
 		int points = 5;
 		String message = "testAddIndex";
 		addToLists(0, "E05");
@@ -78,7 +78,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E05, E10, E15, E20, E30, E40, E50, E60
-	public void test04AddFirst() {
+	public void test20AddFirst() {
 		int points = 1;
 		String message = "testAddFirst", element = "E01";
 		SOLUTION_LIST.addFirst(element);
@@ -94,7 +94,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E00, EMid, E40, E10, E20, ELast
-	public void test18AddLast() {
+	public void test95AddLast() {
 		int points = 1;
 		String message = "testAddLast", element = "E70";
 		SOLUTION_LIST.addLast(element);
@@ -108,30 +108,23 @@ public class LinkedListTest extends Testable {
 		}
 	}
 	
-	// 2 points
-	public void test12Clear() {
-		int points = 2;
-		String message = "testClear";
-		SOLUTION_LIST.clear();
-		studentList.clear();
-		if(listsEqual()) {
-			logPass(message);
-			totalPoints += (points - 1);
-		} else {
-			continueTesting = false;
-			logFail(message, 0, studentList.size(), points);
-		}
+	public void test65NoSuchElementAfterClear() {
+		String message = "NoSuchElementAfterClear";
 		boolean passException = false;
 		try {
+			inputToStudentCode = message = " - getFirst";
 			studentList.getFirst();
 		} catch(NoSuchElementException e) {
 			try {
+				inputToStudentCode = message = " - getLast";
 				studentList.getLast();
 			} catch(NoSuchElementException e2) {
 				try {
+					inputToStudentCode = message = " - removeLast";
 					studentList.removeLast();
 				} catch(NoSuchElementException e3) {
 					try {
+						inputToStudentCode = message = " - remove()";
 						studentList.remove();
 					} catch(NoSuchElementException e4) {
 						passException = true;
@@ -139,7 +132,6 @@ public class LinkedListTest extends Testable {
 				}
 			}
 		}
-		message += " NoSuchElementException";
 		if(passException) {
 			logPass(message);
 			totalPoints++;
@@ -147,19 +139,38 @@ public class LinkedListTest extends Testable {
 			logFail(message);
 	}
 	
+	// 2 points
+	public void test60Clear() {
+		int points = 1;
+		String message = "testClear";
+		SOLUTION_LIST.clear();
+		studentList.clear();
+		if(listsEqual()) {
+			logPass(message);
+			totalPoints += points;
+		} else {
+			continueTesting = false;
+			logFail(message, 0, studentList.size(), points);
+		}
+	}
+	
 	// 5 points
 	// pre: E01, E05, E10, E15, E20, E30, E40, E50, E60
-	public void test06Contains() {
+	public void test30Contains() {
 		int points = 5;
 		String message = "testContains";
 		boolean pass = studentList.contains("E01") && studentList.contains("E60") && studentList.contains("E15") && !studentList.contains("E70") && !studentList.contains(null);
 		if(pass) {
 			addToLists(3, null);
-			pass = studentList.contains(null);	
+			pass = studentList.contains(null);
 		} 
 		if(pass) {
 			totalPoints += points;
 			logPass(message);
+			if(!listsEqual()) {
+				logFail("Lists no longer equal");
+				continueTesting = false;
+			}
 		} else {
 			logFail(message);
 			continueTesting = false;
@@ -168,14 +179,18 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void test07Get() {
+	public void test35Get() {
 		int points = 5;
 		String message = "testGet";
 		if("E01".equals(studentList.get(0)) && "E60".equals(studentList.get(9)) && "E10".equals(studentList.get(2)) && null == studentList.get(3)) {
 			totalPoints += (points - 1);
 			logPass(message);
-		} else
+		} else {
+			studentList.get(9);
 			logFail(message);
+		}
+		
+		message += " IndexOutOfBoundsException";
 		boolean passExceptionTest = false;
 		try {
 			studentList.get(-1);
@@ -186,7 +201,6 @@ public class LinkedListTest extends Testable {
 				passExceptionTest = true;
 			}
 		}
-		message += " IndexOutOfBoundsException";
 		if(passExceptionTest) {
 			logPass(message);
 			totalPoints++;
@@ -196,7 +210,7 @@ public class LinkedListTest extends Testable {
 
 	// 1 point
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void test08GetFirst() {
+	public void test40GetFirst() {
 		int points = 1;
 		String message = "testGetFirst";
 		if("E01".equals(studentList.getFirst())) {
@@ -208,7 +222,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void test09GetLast() {
+	public void test45GetLast() {
 		int points = 1;
 		String message = "testGetLast";
 		if("E60".equals(studentList.getLast())) {
@@ -220,7 +234,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E10, null, E15, E20, E30, E40, E50, E60
-	public void test10IndexOf() {
+	public void test50IndexOf() {
 		int points = 5;
 		String message = "testIndexOf";
 		boolean pass = 9 == studentList.indexOf("E60") && 0 == studentList.indexOf("E01") && 3 == studentList.indexOf(null) && -1 == studentList.indexOf("E70");
@@ -239,7 +253,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E60, E10, null, E15, E20, E30, E40, E50, E60
-	public void test11LastIndexOf() {
+	public void test55LastIndexOf() {
 		int points = 5;
 		String message = "testLastIndexOf";
 		if(studentList.lastIndexOf("E60") == 10 && studentList.lastIndexOf("E70") == -1) {
@@ -251,7 +265,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: empty
-	public void test13RemoveHead() {
+	public void test70RemoveHead() {
 		int points = 1;
 		String message = "testRemoveHead";
 		addToLists(TEST_ELEMENTS);
@@ -268,7 +282,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E20, E30, E40, E50
-	public void test14RemoveIndex() {
+	public void test75RemoveIndex() {
 		int points = 5;
 		String message = "testRemoveIndex";
 		addToLists(TEST_ELEMENTS);
@@ -307,7 +321,7 @@ public class LinkedListTest extends Testable {
 	
 	// 2 points
 	// pre: E30, E40, E50, E20, E30, E40
-	public void test15RemoveFirstByValue() {
+	public void test80RemoveFirstByValue() {
 		int points = 2;
 		String message = "testRemoveFirstByValue";
 		addToLists(TEST_ELEMENTS);
@@ -333,7 +347,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E20, E30, E40, E10, E20, E30, E40
-	public void test16RemoveLast() {
+	public void test85RemoveLast() {
 		int points = 1;
 		String message = "testRemoveLast";
 		boolean pass = SOLUTION_LIST.removeLast().equals(studentList.removeLast());
@@ -350,7 +364,7 @@ public class LinkedListTest extends Testable {
 	
 	// 1 point
 	// pre: E00, EMid, E40, E10, E20, ELast, E70
-	public void test19RemoveSpecial() {
+	public void test97RemoveSpecial() {
 		String message = "testRemoveSpecial";
 		int points = 1;
 		SOLUTION_LIST.clear();
@@ -373,7 +387,7 @@ public class LinkedListTest extends Testable {
 	
 	// 4 points
 	// pre: E20, E30, E40, E10, E20, E30
-	public void test17Set() {
+	public void test90Set() {
 		int points = 4;
 		String message = "testSet";
 		String value = "E00";
@@ -403,7 +417,10 @@ public class LinkedListTest extends Testable {
 			try {
 				studentList.set(SOLUTION_LIST.size(), value);
 			} catch(IndexOutOfBoundsException e2) {
-				passException = true;
+				passException = listsEqual();
+				if(!passException) {
+					message += " - IndexOutOfBounds";
+				}
 			}
 		}
 		if(passException) {
@@ -416,7 +433,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	public void test05Size() {
+	public void test25Size() {
 		int points = 1;
 		String message = "testSize";
 		if(SOLUTION_LIST.size() == studentList.size()) {
@@ -429,7 +446,7 @@ public class LinkedListTest extends Testable {
 	}
 	
 	// 1 point
-	public void test01ToString() {
+	public void test05ToString() {
 		int points = 1;
 		String message = "testToString";
 		if(listsEqual()) {
