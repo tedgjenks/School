@@ -171,6 +171,13 @@ public class ClassRankScraper extends AbstractClassRankScraper {
 		}
 	}
 	
+	/**
+	 * Scrape students from class rank.  Store student and class rank in the DB.
+	 * 
+	 * @param curPage
+	 * @return
+	 * @throws IOException
+	 */
 	private List<Student> scrapeStudentsAndPersist(HtmlPage curPage) throws IOException {
 		List<Student> students = scrapeStudents(curPage);
 		LOGGER.info("Students scraped from class rank.");
@@ -232,11 +239,14 @@ public class ClassRankScraper extends AbstractClassRankScraper {
 		curPage = searchStudent(student); // will be on students or throw exception
 		if(curPage != null) {
 			curPage = requestHistoricalGrades(curPage);
-			DomElement element = (HtmlElement)curPage.getElementById(getHgContentMainId());
-			DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(getHgRowTag());
+			HtmlElement element = (HtmlElement)curPage.getElementById(getHgContentMainId());
+			HtmlTable table = (HtmlTable)element.getElementsByTagName("table").get(0);
+			HtmlTableHeader header = table.getHeader();
+			final Map<String, Integer> headerIndexes = mapHeaderIndexes(header);
+			List<HtmlTableRow> courseDataRows = table.getBodies().get(0).getRows();
 			courses = new ArrayList<>(50);
 			for(int index = courseDataRows.size() - 1; index > 0; index--) {
-				Course course = processCourseData(courseDataRows.get(index), student);
+				Course course = processCourseData(courseDataRows.get(index), student, headerIndexes);
 				if(course != null)
 					courses.add(course);
 			}
@@ -244,17 +254,18 @@ public class ClassRankScraper extends AbstractClassRankScraper {
 		return courses;
 	}
 	
-	private Course processCourseData(HtmlElement tableRow, Student student) {
+	private Course processCourseData(HtmlElement tableRow, final Student student, final Map<String, Integer> headerIndexes) {
 		Course course = null;
 		DomNodeList<HtmlElement> tableData = tableRow.getElementsByTagName(getHgCellTag());
-		float earnedCredit = Float.parseFloat(tableData.get(4).getTextContent());
+		float earnedCredit = Float.parseFloat(tableData.get(headerIndexes.get(HISTORICAL_GRADES_PROPERTIES.getProperty("EARNED_CREDIT_HEADER_NAME"))).getTextContent());
 		course = new Course(student);
-		course.setYearTerm(tableData.get(0).getTextContent());
-		course.setGradeLevel(tableData.get(1).getTextContent());
-		course.setCourseNumber(tableData.get(2).getTextContent());
-		course.setCourseName(tableData.get(3).getTextContent());
+		
+		course.setYearTerm(tableData.get(headerIndexes.get(HISTORICAL_GRADES_PROPERTIES.getProperty("TERM_HEADER_NAME"))).getTextContent());
+		course.setGradeLevel(tableData.get(headerIndexes.get(HISTORICAL_GRADES_PROPERTIES.getProperty("GRADE_LEVEL_HEADER_NAME"))).getTextContent());
+		course.setCourseNumber(tableData.get(headerIndexes.get(HISTORICAL_GRADES_PROPERTIES.getProperty("COURSE_NUMBER_HEADER_NAME"))).getTextContent());
+		course.setCourseName(tableData.get(headerIndexes.get(HISTORICAL_GRADES_PROPERTIES.getProperty("COURSE_NAME_HEADER_NAME"))).getTextContent());
 		course.setEarnedCredit(earnedCredit);
-		DomNodeList<HtmlElement> gradeAnchors = tableData.get(5).getElementsByTagName(getHgGradeAnchorTag());
+		DomNodeList<HtmlElement> gradeAnchors = tableData.get(headerIndexes.get(HISTORICAL_GRADES_PROPERTIES.getProperty("FINAL_GRADE_HEADER_NAME"))).getElementsByTagName(getHgGradeAnchorTag());
 		for(int index = gradeAnchors.size() - 1; index >= 0; index--) {
 			HtmlElement gradeAnchor = gradeAnchors.get(index);
 			course.addGrade(gradeAnchor);

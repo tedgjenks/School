@@ -52,9 +52,9 @@ public class AbstractClassRankScraper extends Scraper {
 		return HISTORICAL_GRADES_PROPERTIES.getProperty("GRADE_ANCHOR_TAG");
 	}
 	
-	public Map<String, Integer> mapHeaderIndexes(HtmlElement headerRow) {
+	public Map<String, Integer> mapHeaderIndexes(HtmlElement header) {
 		Map<String, Integer> map = new HashMap<>(20);
-		DomNodeList<HtmlElement> headerCells = headerRow.getElementsByTagName("th");
+		DomNodeList<HtmlElement> headerCells = header.getElementsByTagName("th");
 		for(int index = headerCells.size() - 1; index >= 0; index--)
 			map.put(headerCells.get(index).getTextContent(), index);
 		return map;
