@@ -23,10 +23,16 @@ public class StringUtil {
 		return sb.toString();
 	}
 	
+	/**
+	 * @param numChars
+	 * @param lowUnicode inclusive
+	 * @param highUnicode inclusive
+	 * @return
+	 */
 	public static String buildRandomString(int numChars, int lowUnicode, int highUnicode) {
 		StringBuilder sb = new StringBuilder(numChars);
 		Random random = new Random(System.currentTimeMillis());
-		final int diff = highUnicode - lowUnicode;
+		final int diff = highUnicode - lowUnicode + 1;
 		for(int count = numChars; count > 0; count--) {
 			char c = Character.toChars((random.nextInt(diff) + lowUnicode))[0];
 			sb.append(c);
