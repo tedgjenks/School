@@ -68,6 +68,7 @@ public abstract class AbstractBanking {
 	
 	/**
 	 * <p>Assesses fees and applies interest to the checking and savings accounts for each customer.</p>
+	 * Use the savings balance to cover a negative checking balance - checking balance would not be above zero in this case.<br>
 	 * The overdraft fee is applied for every overdraft.<br>
 	 * If the combined balances are less than the minimum to avoid fees, banking fees are deducted from the checking account.<br>
 	 * Continuously compounding interest is applied to each account based on the APR and days. Interest is calculated after fees are assessed.<br>

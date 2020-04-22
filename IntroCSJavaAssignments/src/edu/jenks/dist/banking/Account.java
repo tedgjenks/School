@@ -64,7 +64,7 @@ public abstract class Account {
 	
 	/**
 	 * @param depositAmount this is added to the balance.
-	 * @return
+	 * @return amountDeposited
 	 */
 	public double deposit(double depositAmount) {
 		balance += depositAmount;
@@ -74,6 +74,7 @@ public abstract class Account {
 	/**
 	 * <p>Continuously compounding interest is applied to this account.</p>
 	 * [initial balance]*e^([yearly rate] * [time in years])<br>
+	 * No interest should be paid on a nonpositive balance<br>
 	 * 
 	 * @param days
 	 */
