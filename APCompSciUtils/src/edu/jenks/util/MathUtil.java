@@ -8,6 +8,10 @@ public class MathUtil {
 	
 	private static final Pattern REAL_NUMBER_PATTERN = Pattern.compile("(-?\\d+)|(-?\\d*\\.\\d+)");
 	private static final Pattern INTEGER_NUMBER_PATTERN = Pattern.compile("-?\\d+");
+	
+	public static double log(double input, int base) {
+		return Math.log(input) / Math.log(base);
+	}
 
 	public static boolean sameSign(long l1, long l2) {
 		return (l1 >= 0) ^ (l2 < 0);

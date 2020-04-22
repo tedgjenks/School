@@ -9,6 +9,11 @@ import java.util.Random;
  */
 public class StringUtil {
 	
+	private static final Random RANDOM = new Random(System.currentTimeMillis());
+	private static final byte MIN_ASCII = 0, MAX_ASCII = 127;
+	private static final int TOTAL_ASCII_CHARS = MAX_ASCII - MIN_ASCII + 1;
+	public static final byte FIRST_ASCII_DIGIT = 48, FIRST_ASCII_UPPER_ALPHA = 65, FIRST_ASCII_LOWER_ALPHA = 97;
+	
 	/**
 	 * Builds a String with the same characters of a specified length.
 	 * 
@@ -31,13 +36,40 @@ public class StringUtil {
 	 */
 	public static String buildRandomString(int numChars, int lowUnicode, int highUnicode) {
 		StringBuilder sb = new StringBuilder(numChars);
-		Random random = new Random(System.currentTimeMillis());
-		final int diff = highUnicode - lowUnicode + 1;
-		for(int count = numChars; count > 0; count--) {
-			char c = Character.toChars((random.nextInt(diff) + lowUnicode))[0];
-			sb.append(c);
-		}
+		for(int count = numChars; count > 0; count--)
+			sb.append(getRandomCharacterIncludeRange(lowUnicode, highUnicode));
 		return sb.toString();
+	}
+	
+	public static char getRandomCharacterIncludeRange(int lowUnicode, int highUnicode) {
+		final int diff = highUnicode - lowUnicode + 1;
+		return Character.toChars((RANDOM.nextInt(diff) + lowUnicode))[0];
+	}
+	
+	/**
+	 * @param lowLegalAscii
+	 * @param highLegalAscii
+	 * @param lowAscii
+	 * @param highAscii
+	 * @param singleExclusions should not be between <code>lowAscii</code> and <code>highAscii</code> and should be ascending
+	 * @return
+	 */
+	public static char getRandomAsciiCharacterExcludeRange(int lowLegalAscii, int highLegalAscii, int lowAscii, int highAscii, int... singleExclusions) {
+		final int numExcluded = highAscii - lowAscii + 1;
+		final int totalCharPool = (highLegalAscii - lowLegalAscii + 1) - numExcluded - singleExclusions.length;
+		int randomChar = RANDOM.nextInt(totalCharPool) + lowLegalAscii;
+		if(randomChar >= lowAscii)
+			randomChar += numExcluded;
+		boolean underSingleExclusion = true;
+		for(int index = 0; underSingleExclusion && index < singleExclusions.length; index++) {
+			if(randomChar >= singleExclusions[index]) {
+				randomChar++;
+				if(randomChar >= lowAscii)
+					randomChar += numExcluded;
+			} else
+				underSingleExclusion = false;
+		}
+		return (char)randomChar;
 	}
 	
 	public static char convertToUpperCase(char lowerChar) {
