@@ -209,8 +209,8 @@ public class Hashtable<K, V> implements Map<K, V> {
 		currentLoadFactor = (float)size / entries.length;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return Hashtable(num elements) 0: LinkedList; 1: LinkedList; ...
 	 */
 	@Override
 	public String toString() {
