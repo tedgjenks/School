@@ -3,7 +3,7 @@ package edu.cb.scrambler.jenks.ted.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.cb.jenks.ted.WordScrambler;
+import edu.cb.scrambler.jenkst.ted.WordScrambler;
 
 import static java.lang.System.out;
 

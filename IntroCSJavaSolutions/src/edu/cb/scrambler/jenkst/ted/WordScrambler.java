@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cb.jenks.ted;
+package edu.cb.scrambler.jenkst.ted;
 
 import java.util.List;
 
