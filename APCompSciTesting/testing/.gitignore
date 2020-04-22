@@ -1,2 +1,4 @@
 /*.properties
-/*.xml
+testing-config-apcsa.xml
+testing-config-apcsp.xml
+testing-config-ptc.xml
