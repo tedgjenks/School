@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT projects (project*)>
+<!ELEMENT project (name, students)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT students (student*)>
+<!ELEMENT student (last-name, first-name, high-score, date-time)>
+<!ELEMENT last-name (#PCDATA)>
+<!ELEMENT first-name (#PCDATA)>
+<!ELEMENT high-score (#PCDATA)>
+<!ELEMENT date-time (#PCDATA)>

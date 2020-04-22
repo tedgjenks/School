@@ -145,6 +145,7 @@ public class TestRunner {
 		StringBuilder sb = new StringBuilder(project.getChildText(PACKAGE_ROOT_TAG).replace('/', '.'));
 		sb.append(student.getLastName().toLowerCase()).append(".").append(student.getFirstName().toLowerCase());
 		tester.studentPackage = sb.toString();
+		tester.setProjectName(project.getChild("name").getText());
 	}
 	
 	private static String initFeedbackLogger(Testable tester, Element project, Student student) throws IOException {

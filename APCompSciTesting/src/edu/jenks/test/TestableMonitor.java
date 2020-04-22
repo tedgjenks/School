@@ -42,6 +42,7 @@ public class TestableMonitor implements Runnable {
 			System.out.println(activeCount + " threads running at time expired in " + THREAD_NAME);
 			THREAD_GROUP.stop();
 		}
+		HighScoreRecorder.getInstance().alphabetizeProjectsAndStudents();
 		System.out.println(THREAD_NAME + " monitor end.");
 	}
 

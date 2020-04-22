@@ -1,21 +1,12 @@
 package edu.jenks.test;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.util.*;
+import java.util.logging.*;
 import edu.jenks.google.drive.Student;
-import edu.jenks.util.LoggingUtil;
-import edu.jenks.util.StringUtil;
+import edu.jenks.util.*;
 
 public abstract class Testable implements Runnable {
 	
@@ -32,6 +23,7 @@ public abstract class Testable implements Runnable {
 	private Thread thread;
 	private ThreadGroup threadGroup;
 	private Student student;
+	private String projectName;
 	
 	public abstract int getPointsAvailable();
 	public abstract Map<String, String> buildStudentClassNameToSuperclassName();
@@ -90,18 +82,35 @@ public abstract class Testable implements Runnable {
 		}
 		feedbackLogger.log(Level.INFO, "Total for " + studentPackage + ":" + System.lineSeparator() + finalPoints + " points." + System.lineSeparator() + LoggingUtil.ASTERISKS + System.lineSeparator());
 		if(getPointsAvailable() == finalPoints)
-			feedbackLogger.log(Level.INFO, "Congratulations!  You earned all available points!");
+			feedbackLogger.log(Level.INFO, LogPool.getAllPointsMessage());
 		else {
 			double pointsAvailableAfterPenalty = getPointsAvailable() - penaltyPoints - finalPoints;
-			if(finalPoints == 0)
-				feedbackLogger.log(Level.INFO, "KABOOM!  Your object(s) exploded!");
-			else if(finalPoints / getPointsAvailable() <= .5)
-				feedbackLogger.log(Level.INFO, "Congratulations - here is your participation trophy!");
-			if(pointsAvailableAfterPenalty > 0)
-				feedbackLogger.log(Level.INFO, "You can earn another " + pointsAvailableAfterPenalty + " points.");
+			feedbackLogger.log(Level.INFO, LogPool.getSomePointsMessage(finalPoints, getPointsAvailable(), pointsAvailableAfterPenalty));
 		}
 		String percent = NumberFormat.getPercentInstance().format(finalPoints / getPointsAvailable());
 		logGradesMessage(Level.INFO, student.getLastName() + ", " + student.getFirstName() + ": " + finalPoints + " -> " + percent);
+		HighScoreRecorder.LeaderBoard lb = HighScoreRecorder.getInstance().recordScore(student, projectName, percent.substring(0, percent.length() - 1));
+		if(lb != null)
+			logLeaderBoard(lb);
+	}
+	
+	private void logLeaderBoard(HighScoreRecorder.LeaderBoard leaderBoard) {
+		if(leaderBoard == null)
+			return;
+		StringBuilder sb = new StringBuilder(100);
+		if(leaderBoard.LEADING_STUDENTS.size() > 0) {
+			if(leaderBoard.POINT_DEFICIT > 0)
+				sb.append("You are ").append(leaderBoard.POINT_DEFICIT).append(" points behind the next student.");
+			else
+				sb.append("You submitted your program after the next student ahead of you.");
+			sb.append(System.lineSeparator());
+			sb.append("The following students are ahead of you:").append(System.lineSeparator());
+			for(Student student : leaderBoard.LEADING_STUDENTS)
+				sb.append(student.getFirstName()).append(" ").append(student.getLastName()).append(System.lineSeparator());
+			
+		} else
+			sb.append("Way to go, Top Dog, nobody is ahead of you!");
+		feedbackLogger.log(Level.INFO, sb.toString());
 	}
 	
 	public void test() {
@@ -116,14 +125,14 @@ public abstract class Testable implements Runnable {
 			} catch(Exception e) {
 				logException(methodName, e);
 				if(inputToStudentCode != null && inputToStudentCode.length() > 0) {
-					feedbackLogger.log(Level.SEVERE, "input that caused Exception: " + inputToStudentCode + System.lineSeparator());
+					feedbackLogger.log(Level.SEVERE, "Your cretinous code blew up - input that caused Exception: " + inputToStudentCode + System.lineSeparator());
 				}
 				continueTesting = false;
 			}
 			feedbackLogger.log(Level.FINE, "End test of " + methodName);
 		}
 		if(!continueTesting)
-			feedbackLogger.warning("Testing aborted due to prerequisite failure!");
+			feedbackLogger.warning("Testing aborted due to prerequisite failure - no more tests for you!");
 	}
 	
 	private Method[] findAndOrderTestMethods() {
@@ -246,4 +255,11 @@ public abstract class Testable implements Runnable {
 	public void setThreadGroup(ThreadGroup threadGroup) {
 		this.threadGroup = threadGroup;
 	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	
 }

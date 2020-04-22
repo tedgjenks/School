@@ -24,7 +24,7 @@ public class BankingTest extends Testable {
 	
 	public BankingTest() {}
 	
-	public void test13PerformMaintenanceAll() {
+	public void test14PerformMaintenanceAll() {
 		String message = "Perform maintenance all";
 		AbstractBanking banking = bankingInstance();
 		banking.setBankingFee(30);
@@ -75,7 +75,7 @@ public class BankingTest extends Testable {
 		return checkingReset && savingsReset;
 	}
 	
-	public void test12PerformMaintenanceOverdraftFees() {
+	public void test13PerformMaintenanceOverdraftFees() {
 		String message = "Perform maintenance overdraft fees";
 		AbstractBanking banking = bankingInstance();
 		initCustomers(banking);
@@ -102,7 +102,7 @@ public class BankingTest extends Testable {
 		testCustBalance(message + " linked savings", cust2, -330, 0); // -180
 	}
 	
-	public void test11PerformMaintenanceBankingFees() {
+	public void test12PerformMaintenanceBankingFees() {
 		String message = "Perform maintenance banking fees";
 		AbstractBanking banking = bankingInstance();
 		initCustomers(banking);
@@ -119,7 +119,7 @@ public class BankingTest extends Testable {
 		testCustBalance(message + " linked savings under", customers.get(4), -5, 0); // 15
 	}
 	
-	public void test10PerformMaintenanceNoFees() {
+	public void test11PerformMaintenanceNoFees() {
 		String message = "Perform maintenance no fees";
 		AbstractBanking banking = bankingInstance();
 		initCustomers(banking);
@@ -156,7 +156,7 @@ public class BankingTest extends Testable {
 		banking.addCustomer("Corky", checking, savings);
 	}
 	
-	public void test09CustomerCompareTo() {
+	public void test10CustomerCompareTo() {
 		int points = 2;
 		String message = "Customer compareTo";
 		String[] names = {"Bozo", "Al", "Cookie"};
@@ -182,7 +182,7 @@ public class BankingTest extends Testable {
 			logFail(message, nameList.toString(), custList.toString(), points);
 	}
 	
-	public void test08CustomerToString() {
+	public void test09CustomerToString() {
 		int points = 1;
 		String message = "Customer toString()";
 		String expVal = "Al";
@@ -197,7 +197,7 @@ public class BankingTest extends Testable {
 		}
 	}
 	
-	public void test07PayInterest() {
+	public void test08PayInterest() {
 		testPayInterest("checking", checkingInstance(100, 5));
 		testPayInterest("savings", savingsInstance(100, 5));
 	}
@@ -221,7 +221,7 @@ public class BankingTest extends Testable {
 		return pass;
 	}
 	
-	public void test06Transfer() {
+	public void test07Transfer() {
 		AbstractCheckingAccount checking = checkingInstance(100, 0);
 		AbstractSavingsAccount savings = savingsInstance(200, 0);
 		savings.setMaxMonthlyTransactions(3);
@@ -265,7 +265,7 @@ public class BankingTest extends Testable {
 		return pass;
 	}
 	
-	public void test05SavingsTransactions() {
+	public void test06SavingsTransactions() {
 		boolean pass = true;
 		int points = 1;
 		String message = "Savings transactions";
@@ -311,7 +311,7 @@ public class BankingTest extends Testable {
 			totalPoints += points;
 	}
 	
-	public void test04LinkedOverdraftWithdraw() {
+	public void test05LinkedOverdraftWithdraw() {
 		int points = 1;
 		String message = "Linked overdraft withdraw";
 		AbstractCheckingAccount checking = checkingInstance(100, 5);
@@ -380,7 +380,7 @@ public class BankingTest extends Testable {
 		}
 	}
 	
-	public void test02Overdraft() {
+	public void test04Overdraft() {
 		int points = 2;
 		// withdraw with overdraft (500 from 70 + 500)
 		AbstractCheckingAccount checking = checkingInstance(70, 5);
