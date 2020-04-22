@@ -26,6 +26,15 @@ enum HonorRollType {
 	}
 }
 
+class ScraperComparator implements Comparator<String[]> {
+
+	@Override
+	public int compare(String[] o1, String[] o2) {
+		return o1[0].compareTo(o2[0]);
+	}
+	
+}
+
 /**
  * Audit A and A/B honor roll from files in the form DO_HR_gradelevel.csv<br>
  * Format student names
@@ -39,6 +48,9 @@ public class AuditHonorRoll {
 	//public static final byte A_HR = 1;
 	//public static final byte AB_HR = 2;
 	private static final AuditHonorRoll INSTANCE = new AuditHonorRoll();
+	private static final byte DO_NAME_COLUMN = 0;
+	private static final byte DO_HR_COLUMN = 3;
+	private static final Comparator<String[]> SCRAPER_COMPARATOR = new ScraperComparator();
 	
 	protected static void initLogger() throws IOException {
 		LoggingUtil.initLocalFileLogger(LOGGER, SystemInfo.INSTANCE.LOGGING_PATH + "Audit.log");
@@ -78,11 +90,11 @@ public class AuditHonorRoll {
 				INSTANCE.loadScraperHonorRoll(grade, HonorRollType.AB);
 				INSTANCE.compareDoHonorRoll(grade);
 			}
+			out.println("End audit without error.");
 		} catch(Exception e) {
 			LOGGER.severe(e.getMessage());
 			e.printStackTrace(System.err);
 		}
-		out.println("End audit without error.");
 	}
 	
 	private final Map<String, HonorRollRecord> SCRAPER_HR_9 = new HashMap<>(50);
@@ -106,13 +118,13 @@ public class AuditHonorRoll {
 	}
 	
 	public void compareDoHonorRoll(int grade) throws IOException {
-		CSVReader reader = null;
+		CSVReader doReader = null;
 		try {
 			Map<String, HonorRollRecord> scraperMap = getScraperMap(grade);
-			reader = new CSVReader(new FileReader(buildDoFilePath(grade)));
-			for(String[] record : reader.readAll()) {
-				String fullName = record[0];
-				HonorRollType doHrType = record[2].indexOf('B') >= 0 ? HonorRollType.AB : HonorRollType.A;
+			doReader = new CSVReader(new FileReader(buildDoFilePath(grade)));
+			for(String[] record : doReader.readAll()) {
+				String fullName = record[DO_NAME_COLUMN];
+				HonorRollType doHrType = record[DO_HR_COLUMN].indexOf('B') >= 0 ? HonorRollType.AB : HonorRollType.A;
 				HonorRollRecord scraperHrRecord = scraperMap.remove(fullName);
 				if(scraperHrRecord == null) {
 					StringBuilder message = new StringBuilder(100);
@@ -140,7 +152,7 @@ public class AuditHonorRoll {
 			LOGGER.severe(e.getMessage());
 			e.printStackTrace(System.err);
 		} finally {
-			reader.close();
+			doReader.close();
 		}
 	}
 	
@@ -170,6 +182,7 @@ public class AuditHonorRoll {
 			final String filePathNoComma = buildScraperFilePath(grade, hrType, true);
 			writer = new CSVWriter(new FileWriter(filePathNoComma));
 			List<String[]> records = reader.readAll();
+			Collections.sort(records, SCRAPER_COMPARATOR);
 			for(String[] record : records) {
 				String[] writeRecord = new String[record.length - 1];
 				Map<String, HonorRollRecord> scraperMap = getScraperMap(grade);

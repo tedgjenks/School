@@ -3,6 +3,7 @@ package edu.jenks.scrape.course;
 import java.io.IOException;
 import java.util.*;
 import com.gargoylesoftware.htmlunit.html.*;
+
 import edu.jenks.scrape.Scraper;
 import static java.lang.System.out;
 
@@ -15,8 +16,8 @@ public class SectionScraper extends Scraper {
 	/*** fields to set before running: ***/
 	private static final String TASK_UPDATE_ROOM_TO_UPDATE = ""; // if not empty, only update this room
 	private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
-	private static final String CURRENT_LEAD_TEACHER = "Drinkard, Troy";
-	private static final String NEW_DATA = "McMann, Stephanie M";
+	private static final String CURRENT_LEAD_TEACHER = "McCurry, Nancy";
+	private static final String NEW_DATA = "Deal, Leah";
 	
 	private static final SectionScraper INSTANCE = new SectionScraper();
 	private static final String TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY = "TermKey";
@@ -24,12 +25,18 @@ public class SectionScraper extends Scraper {
 	private static final Map<String, Integer> TABLE_COL_NUMBERS = new HashMap<>(3);
 
 	public SectionScraper() {}
+	
+	/*private void debug(HtmlPage curPage) {
+		DomElement e = curPage.getElementById("currentscope");
+		out.println("currentscope DomElement: " + e);
+	}*/
 
 	public static void main(String[] args) throws IOException {
 		LOGGER.info("Begin sections scrape.");
 		try {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
 			LOGGER.info("Authenticated");
+			//INSTANCE.debug(curPage);
 			INSTANCE.selectTerm(curPage);
 			INSTANCE.updateSections(curPage); // TODO applies to all terms - make term specific
 			INSTANCE.signOut(curPage);

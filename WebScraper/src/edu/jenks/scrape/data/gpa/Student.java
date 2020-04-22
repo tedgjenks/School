@@ -9,7 +9,28 @@ public class Student {
 	private short rank;
 	private float gpaPowerSchool;
 	private float gpaHistoricalGrades;
+	private boolean avid;
 	
+	public boolean isAvid() {
+		return avid;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Student))
+			return false;
+		else if (studentId != 0) {
+			return studentId == ((Student)obj).studentId;
+		} else {
+			Student student = ((Student)obj);
+			return lastName.equals(student.lastName) && firstName.equals(student.firstName);
+		}
+	}
+
+	public void setAvid(boolean avid) {
+		this.avid = avid;
+	}
+
 	public String getFullName() {
 		return new StringBuilder(50).append(getLastName()).append(", ").append(getFirstName()).toString();
 	}

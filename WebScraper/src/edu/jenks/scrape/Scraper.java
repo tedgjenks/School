@@ -146,6 +146,8 @@ public abstract class Scraper {
 	}
 	
 	protected void selectTerm(HtmlPage curPage) throws IOException {
+		LOGGER.info("Click term...");
+		waitForJavascript(20, "Waiting for home page...");
 		clickAnchorByID(curPage, "termContext");
 		LOGGER.info("Term clicked.");
 		final String termOption = CURRENT_TERM_PROPS.getProperty("TERM_OPTION");
@@ -163,6 +165,8 @@ public abstract class Scraper {
 	
 	protected HtmlPage clickAnchorByID(HtmlPage curPage, String id) throws IOException {
 		HtmlAnchor link = (HtmlAnchor)curPage.getElementById(id);
+		if(link == null)
+			throw new IllegalArgumentException("Anchor not found for id: " + id);
 		return link.click();
 	}
 	

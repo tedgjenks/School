@@ -9,12 +9,19 @@ import com.opencsv.CSVWriter;
 import edu.jenks.scrape.Scraper;
 import edu.jenks.scrape.data.gpa.HonorRollEntry;
 import edu.jenks.scrape.data.gpa.HonorRollEntry.HonorRollEntryCourse;
+import edu.jenks.scrape.report.PLTW_ByGradeWithAVID;
 import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.scrape.data.gpa.Student;
 import edu.jenks.util.MathUtil;
 
 import static java.lang.System.out;
 
+/**
+ * Check HonorRoll.properties and ClassRankingReport.properties
+ * 
+ * @author tedgj
+ *
+ */
 public class HonorRollScraper extends AbstractClassRankScraper {
 	
 	private static final HonorRollScraper INSTANCE = new HonorRollScraper();
@@ -80,19 +87,21 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 		return students;
 	}
 	
-	public HonorRollEntry parseHistoricalGrades(HtmlPage hgPage, Student student) {
+	public HonorRollEntry parseHistoricalGrades(HtmlPage hgPage, Student student, PLTW_ByGradeWithAVID pltwReport) {
 		HonorRollEntry hrEntry = new HonorRollEntry();
 		DomElement element = (HtmlElement)hgPage.getElementById(getHgContentMainId());
+		Map<String, Integer> headerIndexes = mapHeaderIndexes(element.getElementsByTagName("thead").get(0));
 		DomNodeList<HtmlElement> courseDataRows = element.getElementsByTagName(getHgRowTag());
-		Map<String, Integer> headerIndexes = mapHeaderIndexes(courseDataRows.get(0));
 		for(int index = courseDataRows.size() - 1; index > 0; index--) {
 			HtmlElement tableRow = courseDataRows.get(index);
 			DomNodeList<HtmlElement> tableCells = tableRow.getElementsByTagName(getHgCellTag());
 			String yearTerm = tableCells.get(headerIndexes.get(HG_TH_YEAR_TERM_CONTENT)).getTextContent();
-			if(yearTerm.startsWith(HONOR_ROLL_PROPERTIES.getProperty("YEAR")) && VALID_TERMS.contains(yearTerm.substring(yearTerm.length() - 2))) {
+			if(yearTerm.startsWith(HONOR_ROLL_PROPERTIES.getProperty("YEAR"))) {
 				String courseName = tableCells.get(headerIndexes.get(HG_TH_COURSE_CONTENT)).getTextContent();
 				String grade = discoverGrade(QUERY_TERM, headerIndexes, tableCells);
-				hrEntry.addCourse(courseName, grade);
+				pltwReport.addIfPLTW(student, courseName, grade);
+				if(VALID_TERMS.contains(yearTerm.substring(yearTerm.length() - 2)))
+					hrEntry.addCourse(courseName, grade);
 			}
 		}
 		return hrEntry;
@@ -188,32 +197,36 @@ public class HonorRollScraper extends AbstractClassRankScraper {
 		final long startTime = System.currentTimeMillis();
 		LOGGER.log(Level.INFO, "Begin class rank scrape.");
 		Student logStudent = null;
-		int count = 1;
+		int count = 0;
 		try {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
 			curPage = INSTANCE.navigateToClassRank(curPage);
 			curPage = INSTANCE.searchClassRank(curPage);
 			List<Student> students = INSTANCE.recordStudentsFromClassRankPage(curPage);
 			int totalStudents = students.size();
-			LOGGER.info(count + " students to process from class rank.");
+			LOGGER.info(totalStudents + " students to process from class rank.");
+			PLTW_ByGradeWithAVID pltwReport = new PLTW_ByGradeWithAVID();
 			for(Student student : students) {
 				try {
+					count++;
 					out.println("Process student " + count + " of " + totalStudents);
 					logStudent = student;
 					curPage = INSTANCE.searchStudent(student);
 					curPage = INSTANCE.requestHistoricalGrades(curPage);
-					HonorRollEntry hrEntry = INSTANCE.parseHistoricalGrades(curPage, student);
+					HonorRollEntry hrEntry = INSTANCE.parseHistoricalGrades(curPage, student, pltwReport);
 					INSTANCE.writeHonorRollEntry(student, hrEntry);
 					if(count % 10 == 0)
 						Scraper.reportEstimatedRemainingMinutes(startTime, count, totalStudents);
-					count++;
 				} catch(Exception e) {
 					LOGGER.warning("Exception on student: " + (logStudent != null ? logStudent.getFullName() : "null student"));
 					LOGGER.warning(e.getMessage());
 					e.printStackTrace();
+					//break;
 				}
 			}
 			INSTANCE.signOut(curPage);
+			out.println("Total in pltw: " + pltwReport.countStudentsPLTW());
+			out.println("Total AVID in pltw " + pltwReport.countStudentsPLTW_AVID());
 		} catch(Throwable t) {
 			LOGGER.severe("Error on student " + (logStudent != null ? logStudent.getFullName() : "null student"));
 			LOGGER.severe(t.getMessage());
