@@ -20,7 +20,7 @@ public class ScramblerTest extends Testable {
 		
 	private final List<String> SOLUTION_LIST = new ArrayList<String>();	
 	private String studentClassName;
-	private Scrambler studentScrambler, solutionScrambler = new edu.cb.jenks.ted.WordScrambler();
+	private Scrambler studentScrambler, solutionScrambler = new edu.cb.scrambler.jenkst.ted.WordScrambler();
 	
 	public ScramblerTest() {
 		for(String word : TEST_LIST)

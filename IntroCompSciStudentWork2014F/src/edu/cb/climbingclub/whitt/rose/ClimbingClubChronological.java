@@ -41,16 +41,11 @@ public class ClimbingClubChronological extends AbstractClimbingClub {
 	public int distinctPeakNames() {
 		List<String> a = new ArrayList<String>();
 		for (int i = 0; i < getClimbList().size(); i++) {
-			a.add(getClimbList().get(i).getPeakName());
-		}
-		System.out.println(a);
-		int count = 0;
-		for (int i = 0; i < a.size(); i++) {
-			if (Collections.frequency(a, a.get(i)) == 1) {
-				count++;
+			if (a.contains(getClimbList().get(i).getPeakName()) == false) {
+				a.add(getClimbList().get(i).getPeakName());
 			}
 		}
-		return count;
+		return a.size();
 	}
 	
 	

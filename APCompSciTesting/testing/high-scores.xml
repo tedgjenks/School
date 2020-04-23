@@ -52,6 +52,30 @@
     <name>ClimbingClub</name>
     <students>
       <student>
+        <last-name>Macias</last-name>
+        <first-name>Marcus</first-name>
+        <high-score>100</high-score>
+        <date-time>2020-04-23T06:37:46.6138834</date-time>
+      </student>
+      <student>
+        <last-name>Page</last-name>
+        <first-name>Javin</first-name>
+        <high-score>80</high-score>
+        <date-time>2020-04-22T15:55:34.321893</date-time>
+      </student>
+      <student>
+        <last-name>Rhodes</last-name>
+        <first-name>Maddux</first-name>
+        <high-score>100</high-score>
+        <date-time>2020-04-23T06:37:46.579468</date-time>
+      </student>
+      <student>
+        <last-name>Sweezy</last-name>
+        <first-name>Kenneth</first-name>
+        <high-score>0</high-score>
+        <date-time>2020-04-22T15:55:34.2829971</date-time>
+      </student>
+      <student>
         <last-name>Tran</last-name>
         <first-name>Don</first-name>
         <high-score>100</high-score>
@@ -60,8 +84,8 @@
       <student>
         <last-name>Whitt</last-name>
         <first-name>Rose</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-21T15:48:57.5920164</date-time>
+        <high-score>100</high-score>
+        <date-time>2020-04-22T15:55:34.3159088</date-time>
       </student>
     </students>
   </project>
@@ -191,6 +215,17 @@
         <first-name>Rose</first-name>
         <high-score>90</high-score>
         <date-time>2020-04-20T15:47:47.8151152</date-time>
+      </student>
+    </students>
+  </project>
+  <project>
+    <name>Scrambler</name>
+    <students>
+      <student>
+        <last-name>Whitt</last-name>
+        <first-name>Rose</first-name>
+        <high-score>0</high-score>
+        <date-time>2020-04-22T15:55:34.1917577</date-time>
       </student>
     </students>
   </project>
