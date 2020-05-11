@@ -28,6 +28,7 @@ public class GPAUtils {
 		case 'W': return 1;
 		case 'H': return .5F;
 		case 'D': return 2;
+		case 'Q': return .25F;
 		default: return 0;
 		}
 	}

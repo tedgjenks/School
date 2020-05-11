@@ -20,7 +20,7 @@ public class TokenPass extends AbstractTokenPass {
 	
 	/** 
 	 * Creates the board array to be of size <code>playerCount</code> and fills it with
-	 * random integer values from 1 to 10, inclusive. <br/>
+	 * random integer values from 1 to 10, inclusive. <br>
 	 * Initializes currentPlayer to a random integer value in the range between 0 and <code>playerCount-1</code>, inclusive.
 	 * @param playerCount the number of players
 	 */

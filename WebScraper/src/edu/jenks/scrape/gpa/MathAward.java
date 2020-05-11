@@ -1,3 +1,4 @@
+//TODO fix design; use properties for SQL course constraints
 package edu.jenks.scrape.gpa;
 
 import java.io.IOException;
@@ -8,6 +9,12 @@ import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.util.LoggingUtil;
 import static java.lang.System.out;
 
+/**
+ * Run class rank for top 30 12th grade students.
+ * 
+ * @author tedgj
+ *
+ */
 public class MathAward {
 	public static final Logger LOGGER = Logger.getGlobal();
 	
@@ -53,7 +60,7 @@ public class MathAward {
 		}
 	}
 	
-	private final GpaPersister PERSISTENCE_INTERFACE =  GpaPersister.getInstance(LOGGER);
+	private final MathGpaPersister PERSISTENCE_INTERFACE =  MathGpaPersister.getInstance(LOGGER);
 	
 	private float processCourses(Student student) {
 		List<Course> courses = INSTANCE.PERSISTENCE_INTERFACE.getMathCoursesByStudent(student);

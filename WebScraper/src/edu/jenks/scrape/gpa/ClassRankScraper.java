@@ -224,7 +224,10 @@ public class ClassRankScraper extends AbstractClassRankScraper {
 					}
 				} else if(includeCourseInGpa(course)) {
 					//logStudent(student.getFullName(), "Failed course: " + course.getCourseName());
-					totalEarnedCredits += GPAUtils.calcExpectedEarnedCredit(course.getCourseNumber());
+					float expEarnedCredit = GPAUtils.calcExpectedEarnedCredit(course.getCourseNumber());
+					if(expEarnedCredit <= 0)
+						logStudent(student.getFullName(), "Zero credit for : " + course.getCourseName() + " " + course.getCourseNumber());
+					totalEarnedCredits += expEarnedCredit;
 				} else {
 					//logStudent(student.getFullName(), "Ignored course: " + course.getCourseName());
 				}

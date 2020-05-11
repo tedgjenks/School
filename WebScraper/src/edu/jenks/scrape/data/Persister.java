@@ -5,8 +5,6 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
 
-import edu.jenks.scrape.Scraper;
-import edu.jenks.scrape.data.gpa.GpaPersister;
 import edu.jenks.scrape.util.SystemInfo;
 
 public abstract class Persister {
@@ -21,11 +19,11 @@ public abstract class Persister {
 		LOGGER = logger;
 	}
 	
-	protected void handleSQLException(SQLException e) {
+	public void handleSQLException(SQLException e) {
 		handleSQLException(e, null);
 	}
 	
-	protected void handleSQLException(SQLException e, String message) {
+	public void handleSQLException(SQLException e, String message) {
 		StringBuilder sb = new StringBuilder(200);
 		sb.append(e.getMessage()).append(System.lineSeparator());
 		if(message != null)
@@ -62,7 +60,7 @@ public abstract class Persister {
 		}
 	}
 	
-	protected PreparedStatement openPreparedStatement(String sql) throws SQLException {
+	public PreparedStatement openPreparedStatement(String sql) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(sql);
 		openStatements.add(ps);
 		return ps;
@@ -82,13 +80,5 @@ public abstract class Persister {
 			handleSQLException(e);
 		}
 	}
-	
-	public static void main(String[] args) throws Exception {
-		System.out.println("Start");
-		Persister instance = new GpaPersister(Scraper.LOGGER);
-		instance.connect();
-		instance.disconnect();
-		System.out.println("End without error");
-	}
-	
+
 }
