@@ -334,6 +334,12 @@
     <name>TokenPass</name>
     <students>
       <student>
+        <last-name>Hollingsworth</last-name>
+        <first-name>James</first-name>
+        <high-score>81</high-score>
+        <date-time>2020-05-19T08:08:16.3453244</date-time>
+      </student>
+      <student>
         <last-name>Macias</last-name>
         <first-name>Marcus</first-name>
         <high-score>100</high-score>
