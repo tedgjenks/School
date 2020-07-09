@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT parsing-rules (relative-paths, dates?, headers, rules)>
+<!ELEMENT relative-paths EMPTY>
+<!ATTLIST relative-paths ka-path CDATA #REQUIRED>
+<!ATTLIST relative-paths ps-path CDATA #FIXED "ka/psImport/">
+<!ELEMENT dates (date?, date?)>
+<!ATTLIST dates header-due-date CDATA #FIXED "Due Date">
+<!ELEMENT date EMPTY>
+<!ATTLIST date date-bound (begin|end) "begin">
+<!ATTLIST date date-year CDATA #REQUIRED>
+<!ATTLIST date date-month CDATA #REQUIRED>
+<!ATTLIST date date-day CDATA #REQUIRED>
+<!ELEMENT headers EMPTY>
+<!ATTLIST headers assignment-name CDATA #FIXED "Assignment Name">
+<!ATTLIST headers student-name CDATA #FIXED "Student Name">
+<!ATTLIST headers completion-date CDATA #FIXED "Most Recent Completion Date">
+<!ATTLIST headers assignment-type CDATA #FIXED "Assignment Type">
+<!ELEMENT rules (rule+)>
+<!ELEMENT rule (completion-rule|points-rule)>
+<!ATTLIST rule assignment-type (Challenge|Project|Exercise) "Challenge">
+<!ELEMENT completion-rule EMPTY>
+<!ATTLIST completion-rule header-completion CDATA #FIXED "Most Recent Completion Date">
+<!ATTLIST completion-rule completion-points CDATA "4">
+<!ELEMENT points-rule (curve?)>
+<!ATTLIST points-rule header-best-score CDATA #FIXED "Score Best Ever">
+<!ATTLIST points-rule header-points-possible CDATA #FIXED "Points Possible">
+<!ELEMENT curve EMPTY>
+<!ATTLIST curve min-score-percent CDATA "50">
+<!ATTLIST curve point-value CDATA ".5">

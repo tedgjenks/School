@@ -4,16 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import static java.lang.System.out;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlButton;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.html.*;
 
 import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.util.LoggingUtil;
@@ -116,7 +108,8 @@ public abstract class Scraper {
 	
 	protected HtmlPage authenticatePowerSchoolAdmin() throws IOException {
 		HtmlPage curPage = authenticatePowerSchool(CREDENTIALS_PROPS.getProperty("urlHomeAdmin"));
-		if(curPage.getUrl().toString().indexOf("home.html") < 0)
+		DomElement titleElement = curPage.getElementsByTagName("title").get(0);
+		if(!"Start Page".contentEquals(titleElement.getTextContent()))
 			System.out.println("PROBABLE LOGIN FAILURE!");
 		return curPage;
 	}
@@ -166,7 +159,7 @@ public abstract class Scraper {
 	protected HtmlPage clickAnchorByID(HtmlPage curPage, String id) throws IOException {
 		HtmlAnchor link = (HtmlAnchor)curPage.getElementById(id);
 		if(link == null)
-			throw new IllegalArgumentException("Anchor not found for id: " + id);
+			throw new IllegalArgumentException("Anchor not found for id: '" + id + "'");
 		return link.click();
 	}
 	

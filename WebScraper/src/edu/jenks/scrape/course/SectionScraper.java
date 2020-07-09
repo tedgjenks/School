@@ -14,10 +14,11 @@ public class SectionScraper extends Scraper {
 	private static final String TASK_UPDATE_ROOM = "TaskUpdateRoom";
 	
 	/*** fields to set before running: ***/
-	private static final String TASK_UPDATE_ROOM_TO_UPDATE = ""; // if not empty, only update this room
-	private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
-	private static final String CURRENT_LEAD_TEACHER = "McCurry, Nancy";
-	private static final String NEW_DATA = "Deal, Leah";
+	private static final String TASK_UPDATE_ROOM_TO_UPDATE = "204"; // if not empty, only update this room
+	//private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
+	private static final String TASK = TASK_UPDATE_ROOM;
+	private static final String CURRENT_LEAD_TEACHER = "Wallace, Dale";
+	private static final String NEW_DATA = "512";
 	
 	private static final SectionScraper INSTANCE = new SectionScraper();
 	private static final String TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY = "TermKey";

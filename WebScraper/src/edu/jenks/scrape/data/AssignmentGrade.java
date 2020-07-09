@@ -6,9 +6,9 @@ public class AssignmentGrade implements Comparable<AssignmentGrade> {
 
 	private final byte SECTION;
 	private final String STUDENT_NAME;
-	private int bestScore;
+	private double bestScore;
 	
-	public AssignmentGrade(byte section, String studentName, int bestScore) {
+	public AssignmentGrade(byte section, String studentName, double bestScore) {
 		SECTION = section;
 		STUDENT_NAME = studentName;
 		this.bestScore = bestScore;
@@ -26,7 +26,7 @@ public class AssignmentGrade implements Comparable<AssignmentGrade> {
 		return STUDENT_NAME;
 	}
 	
-	public void setBestScore(int bestScore) {
+	public void setBestScore(double bestScore) {
 		this.bestScore = bestScore;
 	}
 	
@@ -34,7 +34,7 @@ public class AssignmentGrade implements Comparable<AssignmentGrade> {
 		return SECTION;
 	}
 
-	public int getBestScore() {
+	public double getBestScore() {
 		return bestScore;
 	}
 
