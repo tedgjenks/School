@@ -38,6 +38,7 @@
 	<subpackage name="util">
 		<file name="Hashtable">
 			<allow class="java.lang.reflect.Array"/>
+			<allow class="edu.util.jenks.ted.LinkedList"/>
 		</file>
 		<file name="LinkedList" >
 			<allow class="java.util.NoSuchElementException"/>
