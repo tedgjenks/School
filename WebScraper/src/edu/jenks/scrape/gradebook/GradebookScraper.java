@@ -71,8 +71,8 @@ public class GradebookScraper extends Scraper {
 		//int month = Integer.parseInt(kaProps.getProperty("DUE_MONTH"));
 		//int day = Integer.parseInt(kaProps.getProperty("DUE_DAY"));
 		//LocalDate date = LocalDate.of(year, month, day);
-		kaReader =  new KaCsvParser();
-		kaReader.loadAssignments();
+		//kaReader =  new KaCsvParser();
+		//kaReader.loadAssignments();
 	}
 	
 	protected void close() {

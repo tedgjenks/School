@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE parsing-rules SYSTEM "khan-academy-rules.dtd" >
 <parsing-rules>
+  <sections section-list="3,4"/>
   <relative-paths ka-path="ka/ka_gd_export.csv"/>
   <dates>
-  	<date date-bound="begin" date-month="5" date-day="8" date-year="2020"/>
+  	<date date-bound="begin" date-month="1" date-day="27" date-year="2021"/>
+  	<date date-bound="end" date-month="1" date-day="27" date-year="2021"/>
   </dates>
   <headers/>
   <rules>
     <rule assignment-type="Challenge">
-      <completion-rule completion-points="4"/>
+      <completion-rule completion-points="1"/>
     </rule>
     <rule assignment-type="Project">
-      <completion-rule completion-points="5"/>
+      <completion-rule completion-points="100"/>
     </rule>
     <rule assignment-type="Exercise">
+      <points-rule>
+      	<curve/>
+      </points-rule>
+    </rule>
+    <rule assignment-type="Quiz">
       <points-rule>
       	<curve/>
       </points-rule>

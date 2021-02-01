@@ -13,11 +13,25 @@ import edu.jenks.scrape.data.app.scoring.KaScoring;
 import edu.jenks.scrape.util.SystemInfo;
 import edu.jenks.xml.*;
 
+/**
+ * 1) Set file for student names and IDs in constructor
+ * 2) Verify completion points for challenges in XML file
+ * 3) Export from Khan Academy (path in XML file)
+ * 4) Specify dates in XML file
+ * 
+ * @author tedgj
+ *
+ */
 public class KaCsvParser extends AbstractCsvParser {
 	
 	private static final Map<String, Integer> MONTHS = new HashMap<>(24);
 	private static final String KA_RULES_FILEPATH = SystemInfo.INSTANCE.RESOURCES_PATH + "game_dev_ka_rules.xml";
 	private static final Set<String> UNRECOGNIZED_STUDENT_NAMES = new HashSet<>(5);
+	private static final Set<String> ASSIGNMENT_TYPES = new HashSet<>(4);
+	private static String psPath, exportFile;
+	private static LocalDate dueDateAfter, dueDateBefore;
+	private static String assignmentNameColLabel, studentNameColLabel, dueDateColLabel, assignmentTypeColLabel;
+	private static String[] sections;
 	
 	static {
 		MONTHS.put("Jan", 1);
@@ -34,45 +48,85 @@ public class KaCsvParser extends AbstractCsvParser {
 		MONTHS.put("Dec", 12);
 	}
 	
-	public static KaCsvParser initParser() throws IOException, JDOMException {
-		KaCsvParser kaReader =  new KaCsvParser();
+	public static KaCsvParser initParser(String sectionDataPath) throws IOException, JDOMException {
+		KaCsvParser kaReader =  new KaCsvParser(sectionDataPath);
 		kaReader.loadExportFileProps();
 		kaReader.loadAssignments();
 		//kaReader.debugStudent("Hall, Braden");
 		return kaReader;
 	}
 	
-	public static void main(String[] args) {
+	public static void loadRules() throws JDOMException, IOException {
+		Document document = JDOMHelper.buildDocument(KA_RULES_FILEPATH);
+		Element rootElement = document.getRootElement();
+		sections = rootElement.getChild("sections").getAttributeValue("section-list").split(",");
+		out.println("Sections: " + Arrays.toString(sections));
+		List<Element> rules = rootElement.getChild("rules").getChildren("rule");
+		for(Element rule : rules)
+			ASSIGNMENT_TYPES.add(rule.getAttributeValue("assignment-type"));
+		loadDates(rootElement);
+		Element relativePaths = rootElement.getChild("relative-paths");
+		psPath = relativePaths.getAttributeValue("ps-path");
+		exportFile = SystemInfo.INSTANCE.LOGGING_PATH + relativePaths.getAttributeValue("ka-path");
+		out.println("Export file: " + exportFile);
+		Element headers = rootElement.getChild("headers");
+		assignmentNameColLabel = headers.getAttributeValue("assignment-name");
+		studentNameColLabel = headers.getAttributeValue("student-name");
+		assignmentTypeColLabel = headers.getAttributeValue("assignment-type");
+		KaScoring.init(rootElement);
+	}
+	
+	private static void loadDates(Element rootElement) { // TODO implement dates
+		Element datesE = rootElement.getChild("dates");
+		if(datesE != null) {
+			dueDateColLabel = datesE.getAttributeValue("header-due-date");
+			List<Element> dates = datesE.getChildren("date");
+			for(Element dateE : dates) {
+				int year = Integer.parseInt(dateE.getAttributeValue("date-year"));
+				int month = Integer.parseInt(dateE.getAttributeValue("date-month"));
+				int day = Integer.parseInt(dateE.getAttributeValue("date-day"));
+				if("end".contentEquals(dateE.getAttributeValue("date-bound")))
+					dueDateBefore = LocalDate.of(year, month, day);
+				else
+					dueDateAfter = LocalDate.of(year, month, day);
+			}
+		}
+	}
+	
+	public static void main(String[] args) throws JDOMException, IOException {
 		System.out.println("Begin");
+		loadRules();
 		KaCsvParser kaReader = null;
-		try {
-			kaReader = initParser();
-			//kaReader.mergeAssignments();
-			kaReader.generateImportFiles();
-			System.out.println("End without exception!");
-		} catch(IOException | JDOMException e) {
-			e.printStackTrace();
-		} finally {
-			if(kaReader != null) {
-				try {
-					kaReader.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+		//final String[] SECTIONS = {"1"};
+		//final String[] SECTIONS = {"1v"};
+		//final String[] SECTIONS = {"3", "4"};
+		for(String section : sections) {
+			try {
+				//SystemInfo.INSTANCE.LOGGING_PATH + "ps/pst_gd_4.csv"
+				kaReader = initParser(SystemInfo.INSTANCE.LOGGING_PATH + "ps/pst_gd_" + section + ".csv");
+				//kaReader.mergeAssignments();
+				kaReader.generateImportFiles();
+				System.out.println("End without exception!");
+			} catch(IOException | JDOMException e) {
+				e.printStackTrace();
+			} finally {
+				if(kaReader != null) {
+					try {
+						kaReader.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
 	}
 	
-	private LocalDate dueDateAfter, dueDateBefore;
 	private final Map<String, Assignment> ASSIGNMENTS = new HashMap<>(100);
 	public final Map<String, Integer> HEADER_INDECES = new HashMap<>(8); // header name to row index
-	private final Set<String> ASSIGNMENT_TYPES = new HashSet<>(4);
-	private String psPath;
-	private String assignmentNameColLabel, studentNameColLabel, dueDateColLabel, assignmentTypeColLabel;
 	//private boolean combineAssignments = false;
 
-	public KaCsvParser() throws IOException {
-		super(SystemInfo.INSTANCE.LOGGING_PATH + "ps/pst_gd_1.csv"); // TODO allow for multiple files
+	public KaCsvParser(String sectionDataPath) throws IOException {
+		super(sectionDataPath);
 		/*HEADER_INDECES.put(HEADER_ASSIGNMENT_NAME, null);
 		HEADER_INDECES.put(HEADER_STUDENT_NAME, null);
 		HEADER_INDECES.put(HEADER_BEST_SCORE, null);
@@ -134,40 +188,8 @@ public class KaCsvParser extends AbstractCsvParser {
 	
 	@Override
 	protected void loadExportFileProps() throws IOException, JDOMException {
-		Document document = JDOMHelper.buildDocument(KA_RULES_FILEPATH);
-		Element rootElement = document.getRootElement();
-		List<Element> rules = rootElement.getChild("rules").getChildren("rule");
-		for(Element rule : rules)
-			ASSIGNMENT_TYPES.add(rule.getAttributeValue("assignment-type"));
-		loadDates(rootElement);
-		Element relativePaths = rootElement.getChild("relative-paths");
-		psPath = relativePaths.getAttributeValue("ps-path");
-		String exportFile = SystemInfo.INSTANCE.LOGGING_PATH + relativePaths.getAttributeValue("ka-path");
-		out.println("Export file: " + exportFile);
 		Reader csvFile = new FileReader(exportFile);
 		csvReader = new CSVReader(csvFile);
-		Element headers = rootElement.getChild("headers");
-		assignmentNameColLabel = headers.getAttributeValue("assignment-name");
-		studentNameColLabel = headers.getAttributeValue("student-name");
-		assignmentTypeColLabel = headers.getAttributeValue("assignment-type");
-		KaScoring.init(rootElement, this);
-	}
-	
-	private void loadDates(Element rootElement) { // TODO implement dates
-		Element datesE = rootElement.getChild("dates");
-		if(datesE != null) {
-			dueDateColLabel = datesE.getAttributeValue("header-due-date");
-			List<Element> dates = datesE.getChildren("date");
-			for(Element dateE : dates) {
-				int year = Integer.parseInt(dateE.getAttributeValue("date-year"));
-				int month = Integer.parseInt(dateE.getAttributeValue("date-month"));
-				int day = Integer.parseInt(dateE.getAttributeValue("date-day"));
-				if("end".contentEquals(dateE.getAttributeValue("date-bound")))
-					dueDateBefore = LocalDate.of(year, month, day);
-				else
-					dueDateAfter = LocalDate.of(year, month, day);
-			}
-		}
 	}
 	
 	public void generateImportFiles() throws IOException {
@@ -205,21 +227,21 @@ public class KaCsvParser extends AbstractCsvParser {
 				continue;
 			}
 			int assignmentTypeIndex = HEADER_INDECES.get(assignmentTypeColLabel);
-				String dueDate = null;
-				if(dueDateColLabel != null)
-					dueDate = record[HEADER_INDECES.get(dueDateColLabel)];
-				String assignmentType = record[assignmentTypeIndex];
-				if(processRecord(dueDate) && (ASSIGNMENT_TYPES.isEmpty() || ASSIGNMENT_TYPES.contains(assignmentType))) {
-					String assignmentName = record[HEADER_INDECES.get(assignmentNameColLabel)];
-					if(!ASSIGNMENTS.containsKey(assignmentName))
-						ASSIGNMENTS.put(assignmentName, new Assignment(assignmentName));
-					Assignment assignment = ASSIGNMENTS.get(assignmentName);
-					KaScoring scoring = KaScoring.getInstance(assignmentType);
-					byte section = studentPsData.SECTION;
-					double score = scoring.getScore(record);
-					assignment.addAssignment(section, studentName, score);
-					processedCount++;
-				}
+			String dueDate = null;
+			if(dueDateColLabel != null)
+				dueDate = record[HEADER_INDECES.get(dueDateColLabel)];
+			String assignmentType = record[assignmentTypeIndex];
+			if(processRecord(dueDate) && (ASSIGNMENT_TYPES.isEmpty() || ASSIGNMENT_TYPES.contains(assignmentType))) {
+				String assignmentName = record[HEADER_INDECES.get(assignmentNameColLabel)];
+				if(!ASSIGNMENTS.containsKey(assignmentName))
+					ASSIGNMENTS.put(assignmentName, new Assignment(assignmentName));
+				Assignment assignment = ASSIGNMENTS.get(assignmentName);
+				KaScoring scoring = KaScoring.getInstance(assignmentType);
+				String section = studentPsData.SECTION;
+				double score = scoring.getScore(this, record);
+				assignment.addAssignment(section, studentName, score);
+				processedCount++;
+			}
 			totalCount++;
 		}
 		System.out.println("KA records meeting due date: " + processedCount + " out of " + totalCount);

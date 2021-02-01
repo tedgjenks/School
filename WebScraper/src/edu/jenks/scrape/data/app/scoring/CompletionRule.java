@@ -2,6 +2,8 @@ package edu.jenks.scrape.data.app.scoring;
 
 import org.jdom2.Element;
 
+import edu.jenks.scrape.data.app.KaCsvParser;
+
 public class CompletionRule extends KaScoring {
 
 	private final int COMPLETION_POINTS;
@@ -13,7 +15,7 @@ public class CompletionRule extends KaScoring {
 	}
 
 	@Override
-	public double getScore(String[] record) {
+	public double getScore(KaCsvParser parser, String[] record) {
 		String completionDate = record[parser.HEADER_INDECES.get(COMPLETION_DATE_LABEL)];
 		return completionDate.isBlank() ? 0 : COMPLETION_POINTS;
 	}

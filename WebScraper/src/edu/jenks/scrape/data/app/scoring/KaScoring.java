@@ -9,10 +9,8 @@ import edu.jenks.scrape.data.app.KaCsvParser;
 public abstract class KaScoring {
 
 	protected static Map<String, KaScoring> TYPE_SCORING_MAP = new HashMap<>(10);
-	protected static KaCsvParser parser; 
 	
-	public static void init(Element root, KaCsvParser parserArg) {
-		parser = parserArg;
+	public static void init(Element root) {
 		List<Element> rules = root.getChild("rules").getChildren("rule");
 		for(Element rule : rules) {
 			String assignmentType = rule.getAttributeValue("assignment-type");
@@ -35,6 +33,6 @@ public abstract class KaScoring {
 	}
 	
 	protected KaScoring() {}
-	
-	public abstract double getScore(String[] record);
+
+	public abstract double getScore(KaCsvParser parser, String[] record);
 }

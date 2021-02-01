@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT parsing-rules (relative-paths, dates?, headers, rules)>
+<!ELEMENT parsing-rules (sections, relative-paths, dates?, headers, rules)>
+<!ELEMENT sections EMPTY>
+<!ATTLIST sections section-list CDATA #REQUIRED>
 <!ELEMENT relative-paths EMPTY>
 <!ATTLIST relative-paths ka-path CDATA #REQUIRED>
 <!ATTLIST relative-paths ps-path CDATA #FIXED "ka/psImport/">
@@ -17,7 +19,7 @@
 <!ATTLIST headers assignment-type CDATA #FIXED "Assignment Type">
 <!ELEMENT rules (rule+)>
 <!ELEMENT rule (completion-rule|points-rule)>
-<!ATTLIST rule assignment-type (Challenge|Project|Exercise) "Challenge">
+<!ATTLIST rule assignment-type (Challenge|Project|Exercise|Quiz) "Challenge">
 <!ELEMENT completion-rule EMPTY>
 <!ATTLIST completion-rule header-completion CDATA #FIXED "Most Recent Completion Date">
 <!ATTLIST completion-rule completion-points CDATA "4">

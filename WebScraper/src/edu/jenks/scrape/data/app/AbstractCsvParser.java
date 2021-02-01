@@ -20,8 +20,8 @@ public abstract class AbstractCsvParser {
 	protected abstract void loadExportFileProps() throws IOException, JDOMException;
 
 	protected void generateImportFile(Assignment assignment, String importFilePath) throws IOException {
-		Map<Byte, CSVWriter> SECTION_WRITER_MAP = new HashMap<>(4);
-		for(Byte section : STUDENT_PS_DATA.getSections()) {
+		Map<String, CSVWriter> SECTION_WRITER_MAP = new HashMap<>(4);
+		for(String section : STUDENT_PS_DATA.getSections()) {
 			File file = createFile(importFilePath, section + assignment.getName());
 			CSVWriter writer = new CSVWriter(new FileWriter(file));
 			writer.writeNext(new String[] {"STUDENT NUMBER", "STUDENT NAME", "SCORE"});
@@ -34,9 +34,12 @@ public abstract class AbstractCsvParser {
 		Collections.sort(gradesList);
 		for(AssignmentGrade grade : gradesList) {
 			String name = grade.getStudentName();
-			String number = String.valueOf(STUDENT_PS_DATA.getStudentPsData(name).ID);
-			CSVWriter writer = SECTION_WRITER_MAP.get(grade.getSection());
-			writer.writeNext(new String[] {number, name, String.valueOf(grade.getBestScore())});
+			StudentPsData studentPsData = STUDENT_PS_DATA.getStudentPsData(name);
+			if(studentPsData != null) {
+				String number = String.valueOf(studentPsData.ID);
+				CSVWriter writer = SECTION_WRITER_MAP.get(grade.getSection());
+				writer.writeNext(new String[] {number, name, String.valueOf(grade.getBestScore())});
+			}
 		}
 		for(CSVWriter writer : SECTION_WRITER_MAP.values())
 			writer.close();

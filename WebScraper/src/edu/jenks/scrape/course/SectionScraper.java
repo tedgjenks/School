@@ -11,14 +11,15 @@ public class SectionScraper extends Scraper {
 	
 	private static final String TASK_ADD_COTEACHER = "TaskAddCoteacher";
 	private static final String TASK_UPDATE_LEAD_TEACHER = "TaskUpdateLeadTeacher";
+	private static final String TASK_UPDATE_COTEACHER = "TaskUpdateCoTeacher";
 	private static final String TASK_UPDATE_ROOM = "TaskUpdateRoom";
 	
 	/*** fields to set before running: ***/
-	private static final String TASK_UPDATE_ROOM_TO_UPDATE = "204"; // if not empty, only update this room
+	private static final String TASK_UPDATE_ROOM_TO_UPDATE = ""; // if not empty, only update this room
 	//private static final String TASK = TASK_UPDATE_LEAD_TEACHER;
-	private static final String TASK = TASK_UPDATE_ROOM;
-	private static final String CURRENT_LEAD_TEACHER = "Wallace, Dale";
-	private static final String NEW_DATA = "512";
+	private static final String TASK = TASK_UPDATE_COTEACHER;
+	private static final String CURRENT_LEAD_TEACHER = "Botchie, Stephan";
+	private static final String NEW_DATA = "Sanders, Aimee";
 	
 	private static final SectionScraper INSTANCE = new SectionScraper();
 	private static final String TEACHER_SECTION_TABLE_COL_INDEX_TERM_KEY = "TermKey";
@@ -38,7 +39,7 @@ public class SectionScraper extends Scraper {
 			HtmlPage curPage = INSTANCE.authenticatePowerSchoolAdmin();
 			LOGGER.info("Authenticated");
 			//INSTANCE.debug(curPage);
-			INSTANCE.selectTerm(curPage);
+			//INSTANCE.selectTerm(curPage);
 			INSTANCE.updateSections(curPage); // TODO applies to all terms - make term specific
 			INSTANCE.signOut(curPage);
 		} catch(Throwable t) {
@@ -131,6 +132,36 @@ public class SectionScraper extends Scraper {
 		return submitPage(sectionPage);
 	}
 	
+	private boolean updateCoTeacher(HtmlPage sectionPage) throws IOException {
+		HtmlTableRow sectionCoRow = null;
+		int counter = 1;
+		do {
+			sectionCoRow = (HtmlTableRow)sectionPage.getElementById("staffGridController_" + counter);
+			if(sectionCoRow != null) {
+				//sectionLeadRow.setAttribute("aria-selected", "true");
+				//sectionLeadRow.setAttribute("editable", "1");
+				List<HtmlTableCell> cells = sectionCoRow.getCells();
+				boolean match = false;
+				for(int index = cells.size() - 1; index >= 0 && !match; index--) {
+					if(CURRENT_LEAD_TEACHER.contentEquals(cells.get(index).getTextContent().trim())) {
+						match = true;
+						sectionPage = sectionCoRow.click();
+						HtmlSelect sectionCoSelect = null;
+						for(byte waitSeconds = DEFAULT_WAIT_SECONDS, multiplier = 2, attempts = 0; attempts < DEFAULT_JS_ATTEMPTS && sectionCoSelect == null; waitSeconds *= multiplier, attempts++) {
+							System.out.println("Wait " + waitSeconds + " seconds for AngularJS on updateLeadTeacher: " + sectionPage.getUrl());
+							WEB_CLIENT.waitForBackgroundJavaScriptStartingBefore(waitSeconds * 1000);
+							System.out.println("End wait for AngularJS on updateLeadTeacher");
+							sectionCoSelect = (HtmlSelect)sectionPage.getElementById("staffGridController_" + counter + "_staff");
+						}
+						sectionCoSelect.setSelectedAttribute(sectionCoSelect.getOptionByText(NEW_DATA), true);
+						return submitPage(sectionPage);
+					}					
+				}
+			}
+		} while(sectionCoRow != null);
+		return false;
+	}
+	
 	private boolean addCoTeacherToSection(HtmlPage sectionPage) throws IOException {
 		HtmlSelect selectStaff = null;
 		for(byte waitSeconds = DEFAULT_WAIT_SECONDS, multiplier = 2, attempts = 0; attempts < DEFAULT_JS_ATTEMPTS && selectStaff == null; waitSeconds *= multiplier, attempts++) {
@@ -197,6 +228,8 @@ public class SectionScraper extends Scraper {
 					case TASK_UPDATE_ROOM:
 						taskSuccess = updateRoom(anchor.click());
 						break;
+					case TASK_UPDATE_COTEACHER:
+						taskSuccess = updateCoTeacher(anchor.click());
 					default:
 						LOGGER.severe("Task " + TASK + " not supported!");
 					}

@@ -2,6 +2,8 @@ package edu.jenks.scrape.data.app.scoring;
 
 import org.jdom2.Element;
 
+import edu.jenks.scrape.data.app.KaCsvParser;
+
 public class PointsRule extends KaScoring {
 
 	private final String BEST_SCORE_LABEL;
@@ -23,7 +25,7 @@ public class PointsRule extends KaScoring {
 	}
 
 	@Override
-	public double getScore(String[] record) {
+	public double getScore(KaCsvParser parser, String[] record) {
 		String scoreText = record[parser.HEADER_INDECES.get(BEST_SCORE_LABEL)];
 		double score = 0;
 		if(!scoreText.isBlank()) {

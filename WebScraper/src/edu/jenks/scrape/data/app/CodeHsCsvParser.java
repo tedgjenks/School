@@ -72,7 +72,7 @@ public class CodeHsCsvParser extends AbstractCsvParser {
 			for(int colIndex = record.length - 1; colIndex > 0; colIndex--) {
 				String gradeData = record[colIndex];
 				Assignment assignment = COLINDEX_ASSIGNMENT_MAP.get(colIndex);
-				assignment.addAssignment((byte)1, studentName, MathUtil.isRealNumber(gradeData) ? (byte)Double.parseDouble(gradeData) : 0);
+				assignment.addAssignment("1", studentName, MathUtil.isRealNumber(gradeData) ? (byte)Double.parseDouble(gradeData) : 0);
 			}
 		}
 	}

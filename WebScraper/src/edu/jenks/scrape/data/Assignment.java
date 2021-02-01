@@ -34,7 +34,7 @@ public class Assignment {
 		return ASSIGNMENT_GRADES.values().iterator();
 	}
 	
-	public void addAssignment(byte section, String studentName, double score) {
+	public void addAssignment(String section, String studentName, double score) {
 		if(ASSIGNMENT_GRADES.containsKey(studentName)) {
 			AssignmentGrade ag = ASSIGNMENT_GRADES.get(studentName);
 			if(score > ag.getBestScore())
