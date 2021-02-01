@@ -133,12 +133,15 @@ public class Hashtable<K, V> implements Map<K, V> {
 			list = new LinkedList<Entry<K, V>>();
 			entries[index] = list;
 		} else {
-			int listIndex = list.indexOf(newEntry);
+			/*int listIndex = list.indexOf(newEntry);
 			if(listIndex >= 0) {
 				oldValue = list.remove(listIndex).VALUE;
 				size--;
 				rehash = false;
-			}
+			}*/
+			oldValue = remove(key);
+			if(oldValue != null)
+				rehash = false;
 		}
 		list.add(newEntry);
 		size++;
