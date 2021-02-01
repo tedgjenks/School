@@ -161,8 +161,12 @@ public abstract class Testable implements Runnable {
 		if(message != null)
 			sb.append(" - ").append(message);
 		Throwable t = e.getCause();
-		if(t != null)
-			sb.append("; CAUSE: ").append(t.toString());
+		if(t != null) {
+			String throwableCause = t.toString();
+			sb.append("; CAUSE: ").append(throwableCause);
+			if(ThreadDeath.class.getName().contentEquals(throwableCause))
+				sb.append("; You probably have an infinite loop!  I am exhausted from running millions of iterations of your code - give me a break!");
+		}
 		sb.append(System.lineSeparator()).append(notice).append("End unhandled exception").append(notice).append(System.lineSeparator());
 		feedbackLogger.log(Level.WARNING, sb.toString());
 	}

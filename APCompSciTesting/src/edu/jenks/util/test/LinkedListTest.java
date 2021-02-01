@@ -156,6 +156,7 @@ public class LinkedListTest extends Testable {
 	
 	// 5 points
 	// pre: E01, E05, E10, E15, E20, E30, E40, E50, E60
+	// note: add null data - may break student code in previous methods
 	public void test30Contains() {
 		int points = 5;
 		String message = "testContains";

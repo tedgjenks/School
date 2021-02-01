@@ -2,472 +2,117 @@
 <!DOCTYPE projects SYSTEM "high-scores.dtd">
 <projects>
   <project>
-    <name>ArrayTester</name>
+    <name>Coins</name>
     <students>
       <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>71</high-score>
-        <date-time>2020-04-23T16:41:46.7427205</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
+        <last-name>Craig</last-name>
+        <first-name>Cameron</first-name>
         <high-score>100</high-score>
-        <date-time>2020-04-01T06:37:14.2396542</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>61</high-score>
-        <date-time>2020-04-09T14:30:39.0393469</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-01T16:47:15.4338763</date-time>
+        <date-time>2020-11-06T11:01:06.0302562</date-time>
       </student>
       <student>
         <last-name>Sweezy</last-name>
         <first-name>Kenneth</first-name>
-        <high-score>89</high-score>
-        <date-time>2020-04-01T06:37:13.5689704</date-time>
+        <high-score>84</high-score>
+        <date-time>2020-11-06T11:01:06.0871045</date-time>
       </student>
       <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
+        <last-name>Villareal</last-name>
+        <first-name>Raja</first-name>
         <high-score>100</high-score>
-        <date-time>2020-03-31T14:41:58.1991506</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-16T16:10:49.4512812</date-time>
+        <date-time>2020-11-06T14:06:46.2906963</date-time>
       </student>
     </students>
   </project>
   <project>
-    <name>ClimbingClub</name>
+    <name>Hashtable</name>
     <students>
       <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>80</high-score>
-        <date-time>2020-04-23T16:54:09.2066493</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-23T06:37:46.6138834</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>80</high-score>
-        <date-time>2020-04-22T15:55:34.321893</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-23T06:37:46.579468</date-time>
-      </student>
-      <student>
-        <last-name>Sweezy</last-name>
-        <first-name>Kenneth</first-name>
-        <high-score>0</high-score>
-        <date-time>2020-04-22T15:55:34.2829971</date-time>
-      </student>
-      <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-22T09:30:43.5411516</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-22T15:55:34.3159088</date-time>
-      </student>
-    </students>
-  </project>
-  <project>
-    <name>Lunch</name>
-    <students>
-      <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-17T11:29:05.5054081</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>80</high-score>
-        <date-time>2020-04-16T09:03:18.7489433</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>89</high-score>
-        <date-time>2020-04-16T14:53:40.1176693</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-16T09:03:18.7828528</date-time>
-      </student>
-      <student>
-        <last-name>Sweezy</last-name>
-        <first-name>Kenneth</first-name>
-        <high-score>67</high-score>
-        <date-time>2020-04-15T15:49:34.2135622</date-time>
-      </student>
-      <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-16T09:03:18.7888372</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-20T12:34:30.9308691</date-time>
-      </student>
-    </students>
-  </project>
-  <project>
-    <name>MasterOrder</name>
-    <students>
-      <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-17T11:29:05.4130433</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-27T06:59:01.7054875</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-18T07:34:39.4008634</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-18T07:34:39.4341102</date-time>
-      </student>
-      <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-17T17:33:13.0650023</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-17T15:42:10.8451225</date-time>
-      </student>
-    </students>
-  </project>
-  <project>
-    <name>MusicDownloads</name>
-    <students>
-      <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-04T12:49:34.1141433</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-02T15:28:38.9045309</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>72</high-score>
-        <date-time>2020-04-09T14:30:38.9388778</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-01T20:31:18.044403</date-time>
+        <last-name>Craig</last-name>
+        <first-name>Cameron</first-name>
+        <high-score>59</high-score>
+        <date-time>2020-12-08T11:28:27.3027132</date-time>
       </student>
       <student>
         <last-name>Sweezy</last-name>
         <first-name>Kenneth</first-name>
         <high-score>100</high-score>
-        <date-time>2020-04-03T15:57:29.4817413</date-time>
+        <date-time>2020-12-07T10:59:32.4179063</date-time>
       </student>
       <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
+        <last-name>Villareal</last-name>
+        <first-name>Raja</first-name>
         <high-score>100</high-score>
-        <date-time>2020-04-01T15:21:24.5925842</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>90</high-score>
-        <date-time>2020-04-20T15:47:47.8151152</date-time>
+        <date-time>2020-12-03T11:13:49.0917567</date-time>
       </student>
     </students>
   </project>
   <project>
-    <name>Scrambler</name>
+    <name>LinkedList</name>
     <students>
       <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-23T17:17:42.830986</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-24T08:50:32.4706186</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-25T12:27:49.9622634</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-25T12:27:50.0183125</date-time>
+        <last-name>Craig</last-name>
+        <first-name>Cameron</first-name>
+        <high-score>54</high-score>
+        <date-time>2020-10-08T15:04:58.0810047</date-time>
       </student>
       <student>
         <last-name>Sweezy</last-name>
         <first-name>Kenneth</first-name>
-        <high-score>0</high-score>
-        <date-time>2020-04-24T16:26:31.4489898</date-time>
+        <high-score>84</high-score>
+        <date-time>2020-10-13T11:27:40.8298967</date-time>
       </student>
       <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
+        <last-name>Villareal</last-name>
+        <first-name>Raja</first-name>
         <high-score>100</high-score>
-        <date-time>2020-04-23T15:57:07.6049084</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>85</high-score>
-        <date-time>2020-04-24T16:26:31.5017194</date-time>
+        <date-time>2020-10-08T10:29:36.5114174</date-time>
       </student>
     </students>
   </project>
   <project>
-    <name>Sentence</name>
+    <name>PhoneNumber</name>
     <students>
       <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-26T15:50:42.464063</date-time>
+        <last-name>Craig</last-name>
+        <first-name>Cameron</first-name>
+        <high-score>65</high-score>
+        <date-time>2020-11-10T10:14:13.2034178</date-time>
       </student>
       <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-18T15:30:31.0878076</date-time>
+        <last-name>Sweezy</last-name>
+        <first-name>Kenneth</first-name>
+        <high-score>96</high-score>
+        <date-time>2020-11-10T11:27:41.9843504</date-time>
       </student>
       <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
+        <last-name>Villareal</last-name>
+        <first-name>Raja</first-name>
         <high-score>100</high-score>
-        <date-time>2020-03-19T15:15:52.0698779</date-time>
+        <date-time>2020-11-09T11:12:00.6342395</date-time>
       </student>
+    </students>
+  </project>
+  <project>
+    <name>Xor</name>
+    <students>
       <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
+        <last-name>Craig</last-name>
+        <first-name>Cameron</first-name>
         <high-score>100</high-score>
-        <date-time>2020-03-18T16:14:00.861488</date-time>
-      </student>
-      <student>
-        <last-name>Savelyev</last-name>
-        <first-name>Denis</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-18T16:00:52.8992757</date-time>
+        <date-time>2020-11-10T10:31:35.4096032</date-time>
       </student>
       <student>
         <last-name>Sweezy</last-name>
         <first-name>Kenneth</first-name>
         <high-score>100</high-score>
-        <date-time>2020-03-19T12:38:04.6587065</date-time>
+        <date-time>2020-10-27T10:47:46.6125176</date-time>
       </student>
       <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
+        <last-name>Villareal</last-name>
+        <first-name>Raja</first-name>
         <high-score>100</high-score>
-        <date-time>2020-03-18T15:41:25.6717287</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-18T16:00:52.859382</date-time>
-      </student>
-    </students>
-  </project>
-  <project>
-    <name>TokenPass</name>
-    <students>
-      <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>81</high-score>
-        <date-time>2020-05-19T08:08:16.3453244</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-05-03T11:08:15.0285837</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>86</high-score>
-        <date-time>2020-05-11T10:45:52.1340905</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>95</high-score>
-        <date-time>2020-05-03T11:08:14.9829359</date-time>
-      </student>
-      <student>
-        <last-name>Sweezy</last-name>
-        <first-name>Kenneth</first-name>
-        <high-score>75</high-score>
-        <date-time>2020-05-01T16:45:19.2847104</date-time>
-      </student>
-      <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-05-01T16:29:43.6542062</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>95</high-score>
-        <date-time>2020-05-04T12:29:53.8703224</date-time>
-      </student>
-    </students>
-  </project>
-  <project>
-    <name>Tournament</name>
-    <students>
-      <student>
-        <last-name>Hollingsworth</last-name>
-        <first-name>James</first-name>
-        <high-score>95</high-score>
-        <date-time>2020-03-26T15:50:42.4211771</date-time>
-      </student>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-27T12:32:15.8132634</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>72</high-score>
-        <date-time>2020-03-30T14:55:24.6135567</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-27T16:14:25.8384202</date-time>
-      </student>
-      <student>
-        <last-name>Savelyev</last-name>
-        <first-name>Denis</first-name>
-        <high-score>70</high-score>
-        <date-time>2020-03-27T16:05:53.3173475</date-time>
-      </student>
-      <student>
-        <last-name>Sweezy</last-name>
-        <first-name>Kenneth</first-name>
-        <high-score>70</high-score>
-        <date-time>2020-03-27T12:22:11.3080018</date-time>
-      </student>
-      <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-27T12:22:11.347895</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-03-26T15:50:42.3872675</date-time>
-      </student>
-    </students>
-  </project>
-  <project>
-    <name>WordPair</name>
-    <students>
-      <student>
-        <last-name>Macias</last-name>
-        <first-name>Marcus</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-29T06:17:12.6592671</date-time>
-      </student>
-      <student>
-        <last-name>Page</last-name>
-        <first-name>Javin</first-name>
-        <high-score>45</high-score>
-        <date-time>2020-05-03T11:08:15.1171998</date-time>
-      </student>
-      <student>
-        <last-name>Rhodes</last-name>
-        <first-name>Maddux</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-29T06:17:12.7185393</date-time>
-      </student>
-      <student>
-        <last-name>Sweezy</last-name>
-        <first-name>Kenneth</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-28T17:04:11.6000046</date-time>
-      </student>
-      <student>
-        <last-name>Tran</last-name>
-        <first-name>Don</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-28T17:04:11.6408959</date-time>
-      </student>
-      <student>
-        <last-name>Whitt</last-name>
-        <first-name>Rose</first-name>
-        <high-score>100</high-score>
-        <date-time>2020-04-27T15:37:12.0755907</date-time>
+        <date-time>2020-10-13T11:34:08.4329717</date-time>
       </student>
     </students>
   </project>
